@@ -1707,6 +1707,11 @@
         <Member Name="inactive" Value="1" />
         <Member Name="unknownFutureValue" Value="2" />
       </EnumType>
+      <EnumType Name="meetingChatHistoryDefaultMode">
+        <Member Name="none" Value="0" />
+        <Member Name="all" Value="1" />
+        <Member Name="unknownFutureValue" Value="2" />
+      </EnumType>
       <EnumType Name="meetingChatMode">
         <Member Name="enabled" Value="0" />
         <Member Name="disabled" Value="1" />
@@ -7195,6 +7200,7 @@
         <Property Name="proxy" Type="Edm.String" />
       </ComplexType>
       <ComplexType Name="publicationFacet">
+        <Property Name="checkedOutBy" Type="graph.identitySet" />
         <Property Name="level" Type="Edm.String" />
         <Property Name="versionId" Type="Edm.String" />
       </ComplexType>
@@ -7599,6 +7605,14 @@
       </ComplexType>
       <ComplexType Name="servicePrincipalIdentity" BaseType="graph.identity" OpenType="true">
         <Property Name="appId" Type="Edm.String" />
+      </ComplexType>
+      <ComplexType Name="serviceProvisioningError" Abstract="true">
+        <Property Name="createdDateTime" Type="Edm.DateTimeOffset" />
+        <Property Name="isResolved" Type="Edm.Boolean" />
+        <Property Name="serviceInstance" Type="Edm.String" />
+      </ComplexType>
+      <ComplexType Name="serviceProvisioningXmlError" BaseType="graph.serviceProvisioningError">
+        <Property Name="errorDetail" Type="Edm.String" />
       </ComplexType>
       <ComplexType Name="serviceUpdateMessageViewpoint">
         <Property Name="isArchived" Type="Edm.Boolean" />
@@ -9855,6 +9869,7 @@
         <Property Name="modifiedDateTime" Type="Edm.DateTimeOffset" />
         <Property Name="sessionControls" Type="graph.conditionalAccessSessionControls" />
         <Property Name="state" Type="graph.conditionalAccessPolicyState" Nullable="false" />
+        <Property Name="templateId" Type="Edm.String" />
       </EntityType>
       <EntityType Name="conditionalAccessRoot" BaseType="graph.entity">
         <NavigationProperty Name="authenticationContextClassReferences" Type="Collection(graph.authenticationContextClassReference)" ContainsTarget="true" />
@@ -11138,6 +11153,7 @@
         <Property Name="renewedDateTime" Type="Edm.DateTimeOffset" />
         <Property Name="securityEnabled" Type="Edm.Boolean" />
         <Property Name="securityIdentifier" Type="Edm.String" />
+        <Property Name="serviceProvisioningErrors" Type="Collection(graph.serviceProvisioningError)" />
         <Property Name="theme" Type="Edm.String" />
         <Property Name="unseenCount" Type="Edm.Int32" />
         <Property Name="visibility" Type="Edm.String" />
@@ -12298,6 +12314,7 @@
         <Property Name="lobbyBypassSettings" Type="graph.lobbyBypassSettings" />
         <Property Name="participants" Type="graph.meetingParticipants" />
         <Property Name="recordAutomatically" Type="Edm.Boolean" />
+        <Property Name="shareMeetingChatHistoryDefault" Type="graph.meetingChatHistoryDefaultMode" />
         <Property Name="startDateTime" Type="Edm.DateTimeOffset" />
         <Property Name="subject" Type="Edm.String" />
         <Property Name="videoTeleconferenceId" Type="Edm.String" />
@@ -12409,6 +12426,7 @@
         <Property Name="onPremisesSyncEnabled" Type="Edm.Boolean" />
         <Property Name="phones" Type="Collection(graph.phone)" />
         <Property Name="proxyAddresses" Type="Collection(Edm.String)" Nullable="false" />
+        <Property Name="serviceProvisioningErrors" Type="Collection(graph.serviceProvisioningError)" />
         <Property Name="surname" Type="Edm.String" />
         <NavigationProperty Name="directReports" Type="Collection(graph.directoryObject)" />
         <NavigationProperty Name="manager" Type="graph.directoryObject" />
@@ -13959,6 +13977,7 @@
         <Property Name="responsibilities" Type="Collection(Edm.String)" />
         <Property Name="schools" Type="Collection(Edm.String)" />
         <Property Name="securityIdentifier" Type="Edm.String" />
+        <Property Name="serviceProvisioningErrors" Type="Collection(graph.serviceProvisioningError)" />
         <Property Name="showInAddressList" Type="Edm.Boolean" />
         <Property Name="signInActivity" Type="graph.signInActivity" />
         <Property Name="signInSessionsValidFromDateTime" Type="Edm.DateTimeOffset" />
@@ -18358,6 +18377,15 @@
       </Action>
       <Action Name="retire" IsBound="true">
         <Parameter Name="bindingParameter" Type="graph.managedDevice" />
+      </Action>
+      <Action Name="retryServiceProvisioning" IsBound="true">
+        <Parameter Name="bindingParameter" Type="graph.group" Nullable="false" />
+      </Action>
+      <Action Name="retryServiceProvisioning" IsBound="true">
+        <Parameter Name="bindingParameter" Type="graph.orgContact" Nullable="false" />
+      </Action>
+      <Action Name="retryServiceProvisioning" IsBound="true">
+        <Parameter Name="bindingParameter" Type="graph.user" Nullable="false" />
       </Action>
       <Action Name="return" IsBound="true">
         <Parameter Name="bindingParameter" Type="graph.educationSubmission" />
@@ -37647,6 +37675,8 @@
       </ComplexType>
       <EntityType Name="alert" BaseType="graph.entity">
         <Property Name="actorDisplayName" Type="Edm.String" />
+        <Property Name="additionalData" Type="microsoft.graph.security.dictionary" />
+        <Property Name="alertPolicyId" Type="Edm.String" />
         <Property Name="alertWebUrl" Type="Edm.String" />
         <Property Name="assignedTo" Type="Edm.String" />
         <Property Name="category" Type="Edm.String" />
@@ -37849,6 +37879,7 @@
         <Property Name="determination" Type="microsoft.graph.security.alertDetermination" />
         <Property Name="displayName" Type="Edm.String" />
         <Property Name="incidentWebUrl" Type="Edm.String" />
+        <Property Name="lastModifiedBy" Type="Edm.String" />
         <Property Name="lastUpdateDateTime" Type="Edm.DateTimeOffset" Nullable="false" />
         <Property Name="redirectIncidentId" Type="Edm.String" />
         <Property Name="severity" Type="microsoft.graph.security.alertSeverity" Nullable="false" />
