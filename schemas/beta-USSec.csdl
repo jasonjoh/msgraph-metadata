@@ -1168,6 +1168,15 @@
         <Member Name="newsPost" Value="2" />
         <Member Name="unknownFutureValue" Value="3" />
       </EnumType>
+      <EnumType Name="partnerTenantType">
+        <Member Name="microsoftSupport" Value="1" />
+        <Member Name="syndicatePartner" Value="2" />
+        <Member Name="breadthPartner" Value="3" />
+        <Member Name="breadthPartnerDelegatedAdmin" Value="4" />
+        <Member Name="resellerPartnerDelegatedAdmin" Value="5" />
+        <Member Name="valueAddedResellerPartnerDelegatedAdmin" Value="6" />
+        <Member Name="unknownFutureValue" Value="7" />
+      </EnumType>
       <EnumType Name="permissionClassificationType">
         <Member Name="low" Value="1" />
         <Member Name="medium" Value="2" />
@@ -4569,6 +4578,13 @@
       <ComplexType Name="servicePrincipalIdentity" BaseType="graph.identity" OpenType="true">
         <Property Name="appId" Type="Edm.String" />
       </ComplexType>
+      <ComplexType Name="servicePrincipalLockConfiguration">
+        <Property Name="allProperties" Type="Edm.Boolean" />
+        <Property Name="credentialsWithUsageSign" Type="Edm.Boolean" />
+        <Property Name="credentialsWithUsageVerify" Type="Edm.Boolean" />
+        <Property Name="isEnabled" Type="Edm.Boolean" Nullable="false" />
+        <Property Name="tokenEncryptionKeyId" Type="Edm.Boolean" />
+      </ComplexType>
       <ComplexType Name="settingTemplateValue">
         <Property Name="defaultValue" Type="Edm.String" />
         <Property Name="description" Type="Edm.String" />
@@ -5636,6 +5652,7 @@
       </EntityType>
       <EntityType Name="activityBasedTimeoutPolicy" BaseType="graph.stsPolicy" />
       <EntityType Name="admin">
+        <NavigationProperty Name="people" Type="graph.peopleAdminSettings" ContainsTarget="true" />
         <NavigationProperty Name="sharepoint" Type="graph.sharepoint" ContainsTarget="true" />
       </EntityType>
       <EntityType Name="adminConsentRequestPolicy" BaseType="graph.entity">
@@ -5781,6 +5798,7 @@
         <Property Name="requestSignatureVerification" Type="graph.requestSignatureVerification" />
         <Property Name="requiredResourceAccess" Type="Collection(graph.requiredResourceAccess)" Nullable="false" />
         <Property Name="serviceManagementReference" Type="Edm.String" />
+        <Property Name="servicePrincipalLockConfiguration" Type="graph.servicePrincipalLockConfiguration" />
         <Property Name="signInAudience" Type="Edm.String" />
         <Property Name="spa" Type="graph.spaApplication" />
         <Property Name="tags" Type="Collection(Edm.String)" Nullable="false" />
@@ -7131,6 +7149,7 @@
         <Property Name="sendInvitationMessage" Type="Edm.Boolean" />
         <Property Name="status" Type="Edm.String" />
         <NavigationProperty Name="invitedUser" Type="graph.user" />
+        <NavigationProperty Name="invitedUserSponsors" Type="Collection(graph.directoryObject)" />
       </EntityType>
       <EntityType Name="ipApplicationSegment" BaseType="graph.applicationSegment">
         <Property Name="destinationHost" Type="Edm.String" />
@@ -7433,6 +7452,7 @@
         <Property Name="marketingNotificationEmails" Type="Collection(Edm.String)" Nullable="false" />
         <Property Name="onPremisesLastSyncDateTime" Type="Edm.DateTimeOffset" />
         <Property Name="onPremisesSyncEnabled" Type="Edm.Boolean" />
+        <Property Name="partnerTenantType" Type="graph.partnerTenantType" />
         <Property Name="postalCode" Type="Edm.String" />
         <Property Name="preferredLanguage" Type="Edm.String" />
         <Property Name="privacyProfile" Type="graph.privacyProfile" />
@@ -7446,6 +7466,7 @@
         <NavigationProperty Name="branding" Type="graph.organizationalBranding" ContainsTarget="true" />
         <NavigationProperty Name="certificateBasedAuthConfiguration" Type="Collection(graph.certificateBasedAuthConfiguration)" />
         <NavigationProperty Name="extensions" Type="Collection(graph.extension)" ContainsTarget="true" />
+        <NavigationProperty Name="partnerInformation" Type="graph.partnerInformation" ContainsTarget="true" />
         <NavigationProperty Name="settings" Type="graph.organizationSettings" ContainsTarget="true" />
       </EntityType>
       <EntityType Name="organizationalBranding" BaseType="graph.organizationalBrandingProperties">
@@ -7487,7 +7508,6 @@
       </EntityType>
       <EntityType Name="organizationSettings" BaseType="graph.entity">
         <NavigationProperty Name="itemInsights" Type="graph.itemInsightsSettings" ContainsTarget="true" />
-        <NavigationProperty Name="profileCardProperties" Type="Collection(graph.profileCardProperty)" ContainsTarget="true" />
       </EntityType>
       <EntityType Name="orgContact" BaseType="graph.directoryObject" OpenType="true">
         <Property Name="addresses" Type="Collection(graph.physicalOfficeAddress)" />
@@ -7561,6 +7581,19 @@
         <NavigationProperty Name="taskGroups" Type="Collection(graph.outlookTaskGroup)" ContainsTarget="true" />
         <NavigationProperty Name="tasks" Type="Collection(graph.outlookTask)" ContainsTarget="true" />
       </EntityType>
+      <EntityType Name="partnerInformation">
+        <Key>
+          <PropertyRef Name="partnerTenantId" />
+        </Key>
+        <Property Name="commerceUrl" Type="Edm.String" />
+        <Property Name="companyName" Type="Edm.String" />
+        <Property Name="companyType" Type="graph.partnerTenantType" />
+        <Property Name="helpUrl" Type="Edm.String" />
+        <Property Name="partnerTenantId" Type="Edm.String" Nullable="false" />
+        <Property Name="supportEmails" Type="Collection(Edm.String)" />
+        <Property Name="supportTelephones" Type="Collection(Edm.String)" />
+        <Property Name="supportUrl" Type="Edm.String" />
+      </EntityType>
       <EntityType Name="passwordAuthenticationMethod" BaseType="graph.authenticationMethod">
         <Property Name="createdDateTime" Type="Edm.DateTimeOffset" />
         <Property Name="password" Type="Edm.String" />
@@ -7570,6 +7603,9 @@
         <Property Name="creationDateTime" Type="Edm.DateTimeOffset" />
         <Property Name="displayName" Type="Edm.String" />
         <NavigationProperty Name="device" Type="graph.device" />
+      </EntityType>
+      <EntityType Name="peopleAdminSettings" BaseType="graph.entity">
+        <NavigationProperty Name="profileCardProperties" Type="Collection(graph.profileCardProperty)" ContainsTarget="true" />
       </EntityType>
       <EntityType Name="permission" BaseType="graph.entity">
         <Property Name="expirationDateTime" Type="Edm.DateTimeOffset" />
@@ -8094,6 +8130,7 @@
         <Property Name="ipAddress" Type="Edm.String" />
         <Property Name="lastUpdatedDateTime" Type="Edm.DateTimeOffset" />
         <Property Name="location" Type="graph.signInLocation" />
+        <Property Name="mitreTechniqueId" Type="Edm.String" />
         <Property Name="requestId" Type="Edm.String" />
         <Property Name="riskDetail" Type="graph.riskDetail" />
         <Property Name="riskEventType" Type="Edm.String" />
@@ -8317,6 +8354,7 @@
         <Property Name="keyIds" Type="Collection(Edm.String)" />
         <Property Name="lastUpdatedDateTime" Type="Edm.DateTimeOffset" />
         <Property Name="location" Type="graph.signInLocation" />
+        <Property Name="mitreTechniqueId" Type="Edm.String" />
         <Property Name="requestId" Type="Edm.String" />
         <Property Name="riskDetail" Type="graph.riskDetail" />
         <Property Name="riskEventType" Type="Edm.String" />
@@ -10907,6 +10945,7 @@
         </EntitySet>
         <EntitySet Name="invitations" EntityType="microsoft.graph.invitation">
           <NavigationPropertyBinding Path="invitedUser" Target="users" />
+          <NavigationPropertyBinding Path="invitedUserSponsors" Target="directoryObjects" />
         </EntitySet>
         <EntitySet Name="oauth2PermissionGrants" EntityType="microsoft.graph.oAuth2PermissionGrant" />
         <EntitySet Name="onPremisesPublishingProfiles" EntityType="microsoft.graph.onPremisesPublishingProfile" />
