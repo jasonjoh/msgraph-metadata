@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <?xml-stylesheet type='text/xsl' href='preprocess_csdl.xsl'?>
 <edmx:Edmx Version="4.0" xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx">
   <edmx:DataServices>
@@ -81,7 +81,23 @@
         <Property Name="name" Type="Edm.String" Nullable="false" />
         <NavigationProperty Name="tasks" Type="Collection(graph.plannerTask)" ContainsTarget="true" />
       </EntityType>
+      <EntityType Name="orgContact" BaseType="graph.directoryObject" OpenType="true">
+        <Property Name="serviceProvisioningErrors" Type="Collection(graph.serviceProvisioningError)">
+          <Annotation Term="Org.OData.Capabilities.V1.ReadRestrictions">
+            <Record>
+              <PropertyValue Property="Readable" Bool="true" />
+            </Record>
+          </Annotation>
+        </Property>
+      </EntityType>
       <EntityType Name="group" BaseType="graph.directoryObject" OpenType="true">
+        <Property Name="serviceProvisioningErrors" Type="Collection(graph.serviceProvisioningError)">
+          <Annotation Term="Org.OData.Capabilities.V1.ReadRestrictions">
+            <Record>
+              <PropertyValue Property="Readable" Bool="true" />
+            </Record>
+          </Annotation>
+        </Property>
         <NavigationProperty Name="members" Type="Collection(graph.directoryObject)">
           <Annotation Term="Org.OData.Core.V1.Description" String="Users and groups that are members of this group. HTTP Methods: GET (supported for all groups), POST (supported for Microsoft 365 groups, security groups and mail-enabled security groups), DELETE (supported for Microsoft 365 groups and security groups) Nullable." />
           <Annotation Term="Org.OData.Validation.V1.DerivedTypeConstraint" xmlns:edm="http://docs.oasis-open.org/odata/ns/edm">
@@ -219,6 +235,13 @@
             </Record>
           </Annotation>
         </Property>
+        <Property Name="serviceProvisioningErrors" Type="Collection(graph.serviceProvisioningError)">
+          <Annotation Term="Org.OData.Capabilities.V1.ReadRestrictions">
+            <Record>
+              <PropertyValue Property="Readable" Bool="true" />
+            </Record>
+          </Annotation>
+        </Property>
         <NavigationProperty Name="planner" Type="graph.plannerUser" ContainsTarget="true">
           <Annotation Term="Org.OData.Capabilities.V1.UpdateRestrictions">
             <Record>
@@ -333,6 +356,18 @@
               <String>microsoft.graph.servicePrincipal</String>
               <String>microsoft.graph.administrativeUnit</String>
               <String>microsoft.graph.device</String>
+            </Collection>
+          </Annotation>
+          <Annotation Term="Org.OData.Core.V1.ExplicitOperationBindings" xmlns:edm="http://docs.oasis-open.org/odata/ns/edm">
+            <Collection>
+              <String>microsoft.graph.getByIds</String>
+              <String>microsoft.graph.getAvailableExtensionProperties</String>
+              <String>microsoft.graph.validateProperties</String>
+              <String>microsoft.graph.restore</String>
+              <String>microsoft.graph.getMemberObjects</String>
+              <String>microsoft.graph.getMemberGroups</String>
+              <String>microsoft.graph.checkMemberObjects</String>
+              <String>microsoft.graph.checkMemberGroups</String>
             </Collection>
           </Annotation>
         </NavigationProperty>
@@ -606,7 +641,7 @@
       </EntityType>
       <EntityType Name="connectedOrganization" BaseType="graph.entity">
         <Property Name="description" Type="Edm.String" />
-        <NavigationProperty Name="internalSponsors" Type="Collection(graph.directoryObject)" ContainsTarget="true">
+        <NavigationProperty Name="internalSponsors" Type="Collection(graph.directoryObject)">
           <Annotation Term="Org.OData.Capabilities.V1.NavigationRestrictions">
             <Record>
               <PropertyValue Property="Referenceable" Bool="true" />
@@ -882,6 +917,11 @@
           </Record>
         </Annotation>
       </Function>
+      <Function Name="delta" IsBound="true">
+        <Parameter Name="bindingparameter" Type="Collection(graph.directoryObject)" Nullable="false" />
+        <ReturnType Type="Collection(graph.directoryObject)" Nullable="false" />
+        <Annotation Term="Org.OData.Core.V1.RequiresExplicitBinding" xmlns:edm="http://docs.oasis-open.org/odata/ns/edm" />
+      </Function>
       <Action Name="accept" IsBound="true">
         <Parameter Name="bindingParameter" Type="graph.event" />
         <Parameter Name="SendResponse" Type="Edm.Boolean" />
@@ -1056,6 +1096,13 @@
           </Record>
         </Annotation>
       </Annotations>
+      <Annotations Target="microsoft.graph.externalConnectors.externalConnection/schema">
+        <Annotation Term="Org.OData.Capabilities.V1.DeleteRestrictions">
+          <Record>
+            <PropertyValue Property="Deletable" Bool="false" />
+          </Record>
+        </Annotation>
+      </Annotations>
       <Annotations Target="microsoft.graph.educationSchool/administrativeUnit">
         <Annotation Term="Org.OData.Capabilities.V1.UpdateRestrictions">
           <Record>
@@ -1190,7 +1237,21 @@
         <Property Name="description" Type="Edm.String" />
         <Property Name="displayName" Type="Edm.String" Nullable="false" />
       </EntityType>
-      <Annotations Target="microsoft.graph.directoryObject" />
+      <Annotations Target="microsoft.graph.directoryObject">
+        <Annotation Term="Org.OData.Core.V1.ExplicitOperationBindings" xmlns:edm="http://docs.oasis-open.org/odata/ns/edm">
+          <Collection>
+            <String>microsoft.graph.getByIds</String>
+            <String>microsoft.graph.delta</String>
+            <String>microsoft.graph.getAvailableExtensionProperties</String>
+            <String>microsoft.graph.validateProperties</String>
+            <String>microsoft.graph.restore</String>
+            <String>microsoft.graph.getMemberObjects</String>
+            <String>microsoft.graph.getMemberGroups</String>
+            <String>microsoft.graph.checkMemberObjects</String>
+            <String>microsoft.graph.checkMemberGroups</String>
+          </Collection>
+        </Annotation>
+      </Annotations>
     </Schema>
   </edmx:DataServices>
 </edmx:Edmx>
