@@ -8357,14 +8357,14 @@
         <Property Name="identitySources" Type="Collection(graph.identitySource)" />
         <Property Name="modifiedDateTime" Type="Edm.DateTimeOffset" />
         <Property Name="state" Type="graph.connectedOrganizationState" />
-        <NavigationProperty Name="externalSponsors" Type="Collection(graph.directoryObject)" ContainsTarget="true">
+        <NavigationProperty Name="externalSponsors" Type="Collection(graph.directoryObject)">
           <Annotation Term="Org.OData.Capabilities.V1.NavigationRestrictions">
             <Record>
               <PropertyValue Property="Referenceable" Bool="true" />
             </Record>
           </Annotation>
         </NavigationProperty>
-        <NavigationProperty Name="internalSponsors" Type="Collection(graph.directoryObject)" ContainsTarget="true">
+        <NavigationProperty Name="internalSponsors" Type="Collection(graph.directoryObject)">
           <Annotation Term="Org.OData.Capabilities.V1.NavigationRestrictions">
             <Record>
               <PropertyValue Property="Referenceable" Bool="true" />
@@ -9154,6 +9154,18 @@
               <String>microsoft.graph.servicePrincipal</String>
               <String>microsoft.graph.administrativeUnit</String>
               <String>microsoft.graph.device</String>
+            </Collection>
+          </Annotation>
+          <Annotation Term="Org.OData.Core.V1.ExplicitOperationBindings" xmlns:edm="http://docs.oasis-open.org/odata/ns/edm">
+            <Collection>
+              <String>microsoft.graph.getByIds</String>
+              <String>microsoft.graph.getAvailableExtensionProperties</String>
+              <String>microsoft.graph.validateProperties</String>
+              <String>microsoft.graph.restore</String>
+              <String>microsoft.graph.getMemberObjects</String>
+              <String>microsoft.graph.getMemberGroups</String>
+              <String>microsoft.graph.checkMemberObjects</String>
+              <String>microsoft.graph.checkMemberGroups</String>
             </Collection>
           </Annotation>
         </NavigationProperty>
@@ -14764,11 +14776,13 @@
         <Parameter Name="bindingParameter" Type="graph.directoryObject" Nullable="false" />
         <Parameter Name="groupIds" Type="Collection(Edm.String)" Nullable="false" Unicode="false" />
         <ReturnType Type="Collection(Edm.String)" Nullable="false" Unicode="false" />
+        <Annotation Term="Org.OData.Core.V1.RequiresExplicitBinding" xmlns:edm="http://docs.oasis-open.org/odata/ns/edm" />
       </Action>
       <Action Name="checkMemberObjects" IsBound="true">
         <Parameter Name="bindingParameter" Type="graph.directoryObject" Nullable="false" />
         <Parameter Name="ids" Type="Collection(Edm.String)" Nullable="false" Unicode="false" />
         <ReturnType Type="Collection(Edm.String)" Nullable="false" Unicode="false" />
+        <Annotation Term="Org.OData.Core.V1.RequiresExplicitBinding" xmlns:edm="http://docs.oasis-open.org/odata/ns/edm" />
       </Action>
       <Action Name="checkout" IsBound="true">
         <Parameter Name="bindingParameter" Type="graph.driveItem" />
@@ -15666,12 +15680,14 @@
         <Parameter Name="bindingParameter" Type="Collection(graph.directoryObject)" Nullable="false" />
         <Parameter Name="isSyncedFromOnPremises" Type="Edm.Boolean" />
         <ReturnType Type="Collection(graph.extensionProperty)" Nullable="false" />
+        <Annotation Term="Org.OData.Core.V1.RequiresExplicitBinding" xmlns:edm="http://docs.oasis-open.org/odata/ns/edm" />
       </Action>
       <Action Name="getByIds" EntitySetPath="bindingParameter" IsBound="true">
         <Parameter Name="bindingParameter" Type="Collection(graph.directoryObject)" Nullable="false" />
         <Parameter Name="ids" Type="Collection(Edm.String)" Nullable="false" Unicode="false" />
         <Parameter Name="types" Type="Collection(Edm.String)" Unicode="false" />
         <ReturnType Type="Collection(graph.directoryObject)" Nullable="false" />
+        <Annotation Term="Org.OData.Core.V1.RequiresExplicitBinding" xmlns:edm="http://docs.oasis-open.org/odata/ns/edm" />
       </Action>
       <Action Name="getCachedReport" IsBound="true">
         <Parameter Name="bindingParameter" Type="graph.deviceManagementReports" />
@@ -15836,11 +15852,13 @@
         <Parameter Name="bindingParameter" Type="graph.directoryObject" Nullable="false" />
         <Parameter Name="securityEnabledOnly" Type="Edm.Boolean" />
         <ReturnType Type="Collection(Edm.String)" Nullable="false" Unicode="false" />
+        <Annotation Term="Org.OData.Core.V1.RequiresExplicitBinding" xmlns:edm="http://docs.oasis-open.org/odata/ns/edm" />
       </Action>
       <Action Name="getMemberObjects" IsBound="true">
         <Parameter Name="bindingParameter" Type="graph.directoryObject" Nullable="false" />
         <Parameter Name="securityEnabledOnly" Type="Edm.Boolean" />
         <ReturnType Type="Collection(Edm.String)" Nullable="false" Unicode="false" />
+        <Annotation Term="Org.OData.Core.V1.RequiresExplicitBinding" xmlns:edm="http://docs.oasis-open.org/odata/ns/edm" />
       </Action>
       <Action Name="getNoncompliantDevicesAndSettingsReport" IsBound="true">
         <Parameter Name="bindingParameter" Type="graph.deviceManagementReports" />
@@ -17078,6 +17096,7 @@
       <Action Name="restore" IsBound="true">
         <Parameter Name="bindingParameter" Type="graph.directoryObject" Nullable="false" />
         <ReturnType Type="graph.directoryObject" />
+        <Annotation Term="Org.OData.Core.V1.RequiresExplicitBinding" xmlns:edm="http://docs.oasis-open.org/odata/ns/edm" />
       </Action>
       <Action Name="restore" IsBound="true">
         <Parameter Name="bindingParameter" Type="graph.documentSetVersion" />
@@ -17708,6 +17727,7 @@
         <Parameter Name="displayName" Type="Edm.String" Unicode="false" />
         <Parameter Name="mailNickname" Type="Edm.String" Unicode="false" />
         <Parameter Name="onBehalfOfUserId" Type="Edm.Guid" />
+        <Annotation Term="Org.OData.Core.V1.RequiresExplicitBinding" xmlns:edm="http://docs.oasis-open.org/odata/ns/edm" />
       </Action>
       <Action Name="validateProperties" IsBound="true">
         <Parameter Name="bindingParameter" Type="graph.group" Nullable="false" />
@@ -18002,6 +18022,7 @@
       <Function Name="delta" IsBound="true">
         <Parameter Name="bindingParameter" Type="Collection(graph.directoryObject)" />
         <ReturnType Type="Collection(graph.directoryObject)" />
+        <Annotation Term="Org.OData.Core.V1.RequiresExplicitBinding" xmlns:edm="http://docs.oasis-open.org/odata/ns/edm" />
       </Function>
       <Function Name="delta" IsBound="true">
         <Parameter Name="bindingParameter" Type="Collection(graph.directoryRole)" />
@@ -22863,7 +22884,21 @@
         <Annotation Term="Org.OData.Capabilities.V1.SkipSupported" Bool="true" />
         <Annotation Term="Org.OData.Capabilities.V1.TopSupported" Bool="true" />
       </Annotations>
-      <Annotations Target="microsoft.graph.directoryObject" />
+      <Annotations Target="microsoft.graph.directoryObject">
+        <Annotation Term="Org.OData.Core.V1.ExplicitOperationBindings" xmlns:edm="http://docs.oasis-open.org/odata/ns/edm">
+          <Collection>
+            <String>microsoft.graph.getByIds</String>
+            <String>microsoft.graph.delta</String>
+            <String>microsoft.graph.getAvailableExtensionProperties</String>
+            <String>microsoft.graph.validateProperties</String>
+            <String>microsoft.graph.restore</String>
+            <String>microsoft.graph.getMemberObjects</String>
+            <String>microsoft.graph.getMemberGroups</String>
+            <String>microsoft.graph.checkMemberObjects</String>
+            <String>microsoft.graph.checkMemberGroups</String>
+          </Collection>
+        </Annotation>
+      </Annotations>
       <Annotations Target="microsoft.graph.directoryRole">
         <Annotation Term="Org.OData.Capabilities.V1.ChangeTracking">
           <Record>
@@ -32952,6 +32987,13 @@
           </Record>
         </Annotation>
       </Annotations>
+      <Annotations Target="microsoft.graph.externalConnectors.externalConnection/schema">
+        <Annotation Term="Org.OData.Capabilities.V1.DeleteRestrictions">
+          <Record>
+            <PropertyValue Property="Deletable" Bool="false" />
+          </Record>
+        </Annotation>
+      </Annotations>
       <Annotations Target="microsoft.graph.educationSchool/administrativeUnit">
         <Annotation Term="Org.OData.Capabilities.V1.UpdateRestrictions">
           <Record>
@@ -33450,7 +33492,8 @@
         <Member Name="lastModifiedDateTime" Value="6" />
         <Member Name="fileName" Value="7" />
         <Member Name="fileExtension" Value="8" />
-        <Member Name="unknownFutureValue" Value="9" />
+        <Member Name="unknownFutureValue" Value="12" />
+        <Member Name="iconUrl" Value="15" />
       </EnumType>
       <EnumType Name="propertyType">
         <Member Name="string" Value="0" />
@@ -34348,6 +34391,7 @@
         <Property Name="comments" Type="Collection(microsoft.graph.security.alertComment)" />
         <Property Name="createdDateTime" Type="Edm.DateTimeOffset" Nullable="false" />
         <Property Name="customTags" Type="Collection(Edm.String)" />
+        <Property Name="description" Type="Edm.String" />
         <Property Name="determination" Type="microsoft.graph.security.alertDetermination" />
         <Property Name="displayName" Type="Edm.String" />
         <Property Name="incidentWebUrl" Type="Edm.String" />
@@ -34356,6 +34400,7 @@
         <Property Name="redirectIncidentId" Type="Edm.String" />
         <Property Name="severity" Type="microsoft.graph.security.alertSeverity" Nullable="false" />
         <Property Name="status" Type="microsoft.graph.security.incidentStatus" Nullable="false" />
+        <Property Name="systemTags" Type="Collection(Edm.String)" />
         <Property Name="tenantId" Type="Edm.String" />
         <NavigationProperty Name="alerts" Type="Collection(microsoft.graph.security.alert)" />
       </EntityType>
