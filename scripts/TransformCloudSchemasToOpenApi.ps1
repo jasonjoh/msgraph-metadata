@@ -16,7 +16,9 @@ foreach($file in $metaDataFiles)
     $csdl = "$($file).csdl"
     $csdlPath = Join-Path $schemaDirectory $csdl
     $transform = Join-Path $repoDirectory "transformed_$($csdl)"
-    $openapi = Join-Path $repoDirectory "schemas/openapi/v1.0/$($file).yml"
+    $fileParts = $file -split "-"
+    $openapiFile = $fileParts[1]
+    $openapi = Join-Path $repoDirectory "schemas/openapi/v1.0/$($openapiFile).yml"
     $version = "v1.0"
 
     Write-Host "Tranforming $csdl metadata using xslt with parameters used in the OpenAPI flow..." -ForegroundColor Green
@@ -31,7 +33,9 @@ foreach($file in $metaDataBetaFiles)
     $csdl = "$($file).csdl"
     $csdlPath = Join-Path $schemaDirectory $csdl
     $transform = Join-Path $repoDirectory "transformed_$($csdl)"
-    $openapi = Join-Path $repoDirectory "schemas/openapi/beta/$($file).yml"
+    $fileParts = $file -split "-"
+    $openapiFile = $fileParts[1]
+    $openapi = Join-Path $repoDirectory "schemas/openapi/beta/$($openapiFile).yml"
     $version = "beta"
 
     Write-Host "Tranforming $csdl metadata using xslt with parameters used in the OpenAPI flow..." -ForegroundColor Green
