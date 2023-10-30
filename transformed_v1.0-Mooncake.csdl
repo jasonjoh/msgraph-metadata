@@ -32,6 +32,15 @@
         <Member Name="serviceManaged" Value="3" />
         <Member Name="unknownFutureValue" Value="4" />
       </EnumType>
+      <EnumType Name="accessPackageCustomExtensionStage">
+        <Member Name="assignmentRequestCreated" Value="1" />
+        <Member Name="assignmentRequestApproved" Value="2" />
+        <Member Name="assignmentRequestGranted" Value="3" />
+        <Member Name="assignmentRequestRemoved" Value="4" />
+        <Member Name="assignmentFourteenDaysBeforeExpiration" Value="5" />
+        <Member Name="assignmentOneDayBeforeExpiration" Value="6" />
+        <Member Name="unknownFutureValue" Value="7" />
+      </EnumType>
       <EnumType Name="accessPackageExternalUserLifecycleAction">
         <Member Name="none" Value="0" />
         <Member Name="blockSignIn" Value="1" />
@@ -493,6 +502,14 @@
         <Member Name="group" Value="2" />
         <Member Name="application" Value="3" />
         <Member Name="unknownFutureValue" Value="4" />
+      </EnumType>
+      <EnumType Name="customExtensionCalloutInstanceStatus">
+        <Member Name="calloutSent" Value="1" />
+        <Member Name="callbackReceived" Value="2" />
+        <Member Name="calloutFailed" Value="3" />
+        <Member Name="callbackTimedOut" Value="4" />
+        <Member Name="waitingForCallback" Value="5" />
+        <Member Name="unknownFutureValue" Value="6" />
       </EnumType>
       <EnumType Name="dayOfWeek">
         <Member Name="sunday" Value="0" />
@@ -2095,6 +2112,12 @@
         <Property Name="isApprovalRequiredForUpdate" Type="Edm.Boolean" />
         <Property Name="stages" Type="Collection(graph.accessPackageApprovalStage)" />
       </ComplexType>
+      <ComplexType Name="accessPackageAssignmentRequestCallbackData" BaseType="graph.customExtensionData">
+        <Property Name="customExtensionStageInstanceDetail" Type="Edm.String" />
+        <Property Name="customExtensionStageInstanceId" Type="Edm.String" />
+        <Property Name="stage" Type="graph.accessPackageCustomExtensionStage" />
+        <Property Name="state" Type="Edm.String" />
+      </ComplexType>
       <ComplexType Name="accessPackageAssignmentRequestorSettings">
         <Property Name="allowCustomAssignmentSchedule" Type="Edm.Boolean" />
         <Property Name="enableOnBehalfRequestorsToAddAccess" Type="Edm.Boolean" />
@@ -2388,6 +2411,7 @@
         <Property Name="displayName" Type="Edm.String" />
         <Property Name="tenantId" Type="Edm.String" />
       </ComplexType>
+      <ComplexType Name="azureAdPopTokenAuthentication" BaseType="graph.customExtensionAuthenticationConfiguration" />
       <ComplexType Name="bitLockerRemovableDrivePolicy">
         <Property Name="blockCrossOrganizationWriteAccess" Type="Edm.Boolean" Nullable="false" />
         <Property Name="encryptionMethod" Type="graph.bitLockerEncryptionMethod" />
@@ -2505,6 +2529,12 @@
       <ComplexType Name="channelSetAsFavoriteByDefaultEventMessageDetail" BaseType="graph.eventMessageDetail">
         <Property Name="channelId" Type="Edm.String" />
         <Property Name="initiator" Type="graph.identitySet" />
+      </ComplexType>
+      <ComplexType Name="channelSummary">
+        <Property Name="guestsCount" Type="Edm.Int32" />
+        <Property Name="hasMembersFromOtherTenants" Type="Edm.Boolean" />
+        <Property Name="membersCount" Type="Edm.Int32" />
+        <Property Name="ownersCount" Type="Edm.Int32" />
       </ComplexType>
       <ComplexType Name="channelUnsetAsFavoriteByDefaultEventMessageDetail" BaseType="graph.eventMessageDetail">
         <Property Name="channelId" Type="Edm.String" />
@@ -2719,6 +2749,22 @@
       <ComplexType Name="currencyColumn">
         <Property Name="locale" Type="Edm.String" />
       </ComplexType>
+      <ComplexType Name="customExtensionAuthenticationConfiguration" Abstract="true" />
+      <ComplexType Name="customExtensionCallbackConfiguration">
+        <Property Name="timeoutDuration" Type="Edm.Duration" />
+      </ComplexType>
+      <ComplexType Name="customExtensionCalloutInstance">
+        <Property Name="customExtensionId" Type="Edm.String" />
+        <Property Name="detail" Type="Edm.String" />
+        <Property Name="externalCorrelationId" Type="Edm.String" />
+        <Property Name="id" Type="Edm.String" />
+        <Property Name="status" Type="graph.customExtensionCalloutInstanceStatus" />
+      </ComplexType>
+      <ComplexType Name="customExtensionClientConfiguration">
+        <Property Name="timeoutInMilliseconds" Type="Edm.Int32" />
+      </ComplexType>
+      <ComplexType Name="customExtensionData" Abstract="true" />
+      <ComplexType Name="customExtensionEndpointConfiguration" Abstract="true" />
       <ComplexType Name="customSecurityAttributeValue" OpenType="true" />
       <ComplexType Name="dateTimeColumn">
         <Property Name="displayAs" Type="Edm.String" />
@@ -3245,6 +3291,12 @@
       <ComplexType Name="location">
         <Property Name="address" Type="graph.physicalAddress" />
         <Property Name="displayName" Type="Edm.String" />
+      </ComplexType>
+      <ComplexType Name="logicAppTriggerEndpointConfiguration" BaseType="graph.customExtensionEndpointConfiguration">
+        <Property Name="logicAppWorkflowName" Type="Edm.String" />
+        <Property Name="resourceGroupName" Type="Edm.String" />
+        <Property Name="subscriptionId" Type="Edm.String" />
+        <Property Name="url" Type="Edm.String" />
       </ComplexType>
       <ComplexType Name="loginPageLayoutConfiguration">
         <Property Name="isFooterShown" Type="Edm.Boolean" />
@@ -4486,6 +4538,7 @@
         </NavigationProperty>
       </EntityType>
       <EntityType Name="accessPackageAssignment" BaseType="graph.entity">
+        <Property Name="customExtensionCalloutInstances" Type="Collection(graph.customExtensionCalloutInstance)" />
         <Property Name="expiredDateTime" Type="Edm.DateTimeOffset" />
         <Property Name="schedule" Type="graph.entitlementManagementSchedule" />
         <Property Name="state" Type="graph.accessPackageAssignmentState" />
@@ -4508,12 +4561,14 @@
         <Property Name="specificAllowedTargets" Type="Collection(graph.subjectSet)" />
         <NavigationProperty Name="accessPackage" Type="graph.accessPackage" />
         <NavigationProperty Name="catalog" Type="graph.accessPackageCatalog" />
+        <NavigationProperty Name="customExtensionStageSettings" Type="Collection(graph.customExtensionStageSetting)" ContainsTarget="true" />
         <NavigationProperty Name="questions" Type="Collection(graph.accessPackageQuestion)" ContainsTarget="true" />
       </EntityType>
       <EntityType Name="accessPackageAssignmentRequest" BaseType="graph.entity">
         <Property Name="answers" Type="Collection(graph.accessPackageAnswer)" />
         <Property Name="completedDateTime" Type="Edm.DateTimeOffset" />
         <Property Name="createdDateTime" Type="Edm.DateTimeOffset" />
+        <Property Name="customExtensionCalloutInstances" Type="Collection(graph.customExtensionCalloutInstance)" />
         <Property Name="requestType" Type="graph.accessPackageRequestType" />
         <Property Name="schedule" Type="graph.entitlementManagementSchedule" />
         <Property Name="state" Type="graph.accessPackageRequestState" />
@@ -4521,6 +4576,20 @@
         <NavigationProperty Name="accessPackage" Type="graph.accessPackage" />
         <NavigationProperty Name="assignment" Type="graph.accessPackageAssignment" />
         <NavigationProperty Name="requestor" Type="graph.accessPackageSubject" />
+      </EntityType>
+      <EntityType Name="accessPackageAssignmentRequestWorkflowExtension" BaseType="graph.customCalloutExtension">
+        <Property Name="callbackConfiguration" Type="graph.customExtensionCallbackConfiguration" />
+        <Property Name="createdBy" Type="Edm.String" />
+        <Property Name="createdDateTime" Type="Edm.DateTimeOffset" />
+        <Property Name="lastModifiedBy" Type="Edm.String" />
+        <Property Name="lastModifiedDateTime" Type="Edm.DateTimeOffset" />
+      </EntityType>
+      <EntityType Name="accessPackageAssignmentWorkflowExtension" BaseType="graph.customCalloutExtension">
+        <Property Name="callbackConfiguration" Type="graph.customExtensionCallbackConfiguration" />
+        <Property Name="createdBy" Type="Edm.String" />
+        <Property Name="createdDateTime" Type="Edm.DateTimeOffset" />
+        <Property Name="lastModifiedBy" Type="Edm.String" />
+        <Property Name="lastModifiedDateTime" Type="Edm.DateTimeOffset" />
       </EntityType>
       <EntityType Name="accessPackageCatalog" BaseType="graph.entity">
         <Property Name="catalogType" Type="graph.accessPackageCatalogType" />
@@ -4531,6 +4600,7 @@
         <Property Name="modifiedDateTime" Type="Edm.DateTimeOffset" />
         <Property Name="state" Type="graph.accessPackageCatalogState" />
         <NavigationProperty Name="accessPackages" Type="Collection(graph.accessPackage)" />
+        <NavigationProperty Name="customWorkflowExtensions" Type="Collection(graph.customCalloutExtension)" ContainsTarget="true" />
       </EntityType>
       <EntityType Name="accessPackageMultipleChoiceQuestion" BaseType="graph.accessPackageQuestion">
         <Property Name="choices" Type="Collection(graph.accessPackageAnswerChoice)" />
@@ -5193,6 +5263,7 @@
         <Property Name="email" Type="Edm.String" />
         <Property Name="isFavoriteByDefault" Type="Edm.Boolean" />
         <Property Name="membershipType" Type="graph.channelMembershipType" />
+        <Property Name="summary" Type="graph.channelSummary" />
         <Property Name="tenantId" Type="Edm.String" />
         <Property Name="webUrl" Type="Edm.String" />
         <NavigationProperty Name="filesFolder" Type="graph.driveItem" />
@@ -5471,6 +5542,17 @@
         <Property Name="inboundTrust" Type="graph.crossTenantAccessPolicyInboundTrust" />
         <Property Name="isServiceProvider" Type="Edm.Boolean" />
         <Property Name="tenantId" Type="Edm.String" Nullable="false" />
+      </EntityType>
+      <EntityType Name="customCalloutExtension" BaseType="graph.entity" Abstract="true">
+        <Property Name="authenticationConfiguration" Type="graph.customExtensionAuthenticationConfiguration" />
+        <Property Name="clientConfiguration" Type="graph.customExtensionClientConfiguration" />
+        <Property Name="description" Type="Edm.String" />
+        <Property Name="displayName" Type="Edm.String" />
+        <Property Name="endpointConfiguration" Type="graph.customExtensionEndpointConfiguration" />
+      </EntityType>
+      <EntityType Name="customExtensionStageSetting" BaseType="graph.entity">
+        <Property Name="stage" Type="graph.accessPackageCustomExtensionStage" Nullable="false" />
+        <NavigationProperty Name="customExtension" Type="graph.customCalloutExtension" />
       </EntityType>
       <EntityType Name="customSecurityAttributeDefinition" BaseType="graph.entity">
         <Property Name="attributeSet" Type="Edm.String" Nullable="false" />
@@ -7657,15 +7739,51 @@
       <EntityType Name="organizationalBrandingLocalization" BaseType="graph.organizationalBrandingProperties" />
       <EntityType Name="organizationalBrandingProperties" BaseType="graph.entity" Abstract="true">
         <Property Name="backgroundColor" Type="Edm.String" />
-        <Property Name="backgroundImage" Type="Edm.Stream" />
+        <Property Name="backgroundImage" Type="Edm.Stream">
+          <Annotation Term="Org.OData.Core.V1.AcceptableMediaTypes" xmlns:edm="http://docs.oasis-open.org/odata/ns/edm">
+            <Collection>
+              <String>image/bmp</String>
+              <String>image/jpg</String>
+              <String>image/jpeg</String>
+              <String>image/gif</String>
+              <String>image/vnd.microsoft.icon</String>
+              <String>image/png</String>
+              <String>image/tiff</String>
+            </Collection>
+          </Annotation>
+        </Property>
         <Property Name="backgroundImageRelativeUrl" Type="Edm.String" />
-        <Property Name="bannerLogo" Type="Edm.Stream" />
+        <Property Name="bannerLogo" Type="Edm.Stream">
+          <Annotation Term="Org.OData.Core.V1.AcceptableMediaTypes" xmlns:edm="http://docs.oasis-open.org/odata/ns/edm">
+            <Collection>
+              <String>image/bmp</String>
+              <String>image/jpg</String>
+              <String>image/jpeg</String>
+              <String>image/gif</String>
+              <String>image/vnd.microsoft.icon</String>
+              <String>image/png</String>
+              <String>image/tiff</String>
+            </Collection>
+          </Annotation>
+        </Property>
         <Property Name="bannerLogoRelativeUrl" Type="Edm.String" />
         <Property Name="cdnList" Type="Collection(Edm.String)" />
         <Property Name="customAccountResetCredentialsUrl" Type="Edm.String" />
         <Property Name="customCannotAccessYourAccountText" Type="Edm.String" />
         <Property Name="customCannotAccessYourAccountUrl" Type="Edm.String" />
-        <Property Name="customCSS" Type="Edm.Stream" />
+        <Property Name="customCSS" Type="Edm.Stream">
+          <Annotation Term="Org.OData.Core.V1.AcceptableMediaTypes" xmlns:edm="http://docs.oasis-open.org/odata/ns/edm">
+            <Collection>
+              <String>image/bmp</String>
+              <String>image/jpg</String>
+              <String>image/jpeg</String>
+              <String>image/gif</String>
+              <String>image/vnd.microsoft.icon</String>
+              <String>image/png</String>
+              <String>image/tiff</String>
+            </Collection>
+          </Annotation>
+        </Property>
         <Property Name="customCSSRelativeUrl" Type="Edm.String" />
         <Property Name="customForgotMyPasswordText" Type="Edm.String" />
         <Property Name="customPrivacyAndCookiesText" Type="Edm.String" />
@@ -7673,16 +7791,64 @@
         <Property Name="customResetItNowText" Type="Edm.String" />
         <Property Name="customTermsOfUseText" Type="Edm.String" />
         <Property Name="customTermsOfUseUrl" Type="Edm.String" />
-        <Property Name="favicon" Type="Edm.Stream" />
+        <Property Name="favicon" Type="Edm.Stream">
+          <Annotation Term="Org.OData.Core.V1.AcceptableMediaTypes" xmlns:edm="http://docs.oasis-open.org/odata/ns/edm">
+            <Collection>
+              <String>image/bmp</String>
+              <String>image/jpg</String>
+              <String>image/jpeg</String>
+              <String>image/gif</String>
+              <String>image/vnd.microsoft.icon</String>
+              <String>image/png</String>
+              <String>image/tiff</String>
+            </Collection>
+          </Annotation>
+        </Property>
         <Property Name="faviconRelativeUrl" Type="Edm.String" />
         <Property Name="headerBackgroundColor" Type="Edm.String" />
-        <Property Name="headerLogo" Type="Edm.Stream" />
+        <Property Name="headerLogo" Type="Edm.Stream">
+          <Annotation Term="Org.OData.Core.V1.AcceptableMediaTypes" xmlns:edm="http://docs.oasis-open.org/odata/ns/edm">
+            <Collection>
+              <String>image/bmp</String>
+              <String>image/jpg</String>
+              <String>image/jpeg</String>
+              <String>image/gif</String>
+              <String>image/vnd.microsoft.icon</String>
+              <String>image/png</String>
+              <String>image/tiff</String>
+            </Collection>
+          </Annotation>
+        </Property>
         <Property Name="headerLogoRelativeUrl" Type="Edm.String" />
         <Property Name="loginPageLayoutConfiguration" Type="graph.loginPageLayoutConfiguration" />
         <Property Name="loginPageTextVisibilitySettings" Type="graph.loginPageTextVisibilitySettings" />
         <Property Name="signInPageText" Type="Edm.String" />
-        <Property Name="squareLogo" Type="Edm.Stream" />
-        <Property Name="squareLogoDark" Type="Edm.Stream" />
+        <Property Name="squareLogo" Type="Edm.Stream">
+          <Annotation Term="Org.OData.Core.V1.AcceptableMediaTypes" xmlns:edm="http://docs.oasis-open.org/odata/ns/edm">
+            <Collection>
+              <String>image/bmp</String>
+              <String>image/jpg</String>
+              <String>image/jpeg</String>
+              <String>image/gif</String>
+              <String>image/vnd.microsoft.icon</String>
+              <String>image/png</String>
+              <String>image/tiff</String>
+            </Collection>
+          </Annotation>
+        </Property>
+        <Property Name="squareLogoDark" Type="Edm.Stream">
+          <Annotation Term="Org.OData.Core.V1.AcceptableMediaTypes" xmlns:edm="http://docs.oasis-open.org/odata/ns/edm">
+            <Collection>
+              <String>image/bmp</String>
+              <String>image/jpg</String>
+              <String>image/jpeg</String>
+              <String>image/gif</String>
+              <String>image/vnd.microsoft.icon</String>
+              <String>image/png</String>
+              <String>image/tiff</String>
+            </Collection>
+          </Annotation>
+        </Property>
         <Property Name="squareLogoDarkRelativeUrl" Type="Edm.String" />
         <Property Name="squareLogoRelativeUrl" Type="Edm.String" />
         <Property Name="usernameHintText" Type="Edm.String" />
@@ -7884,6 +8050,10 @@
         <Property Name="lastConnectionDateTime" Type="Edm.DateTimeOffset" Nullable="false" />
         <Property Name="onboardingStatus" Type="graph.remoteAssistanceOnboardingStatus" Nullable="false" />
         <Property Name="onboardingUrl" Type="Edm.String" />
+      </EntityType>
+      <EntityType Name="remoteDesktopSecurityConfiguration" BaseType="graph.entity">
+        <Property Name="isRemoteDesktopProtocolEnabled" Type="Edm.Boolean" Nullable="false" />
+        <NavigationProperty Name="targetDeviceGroups" Type="Collection(graph.targetDeviceGroup)" ContainsTarget="true" />
       </EntityType>
       <EntityType Name="reportRoot">
         <NavigationProperty Name="authenticationMethods" Type="graph.authenticationMethodsRoot" ContainsTarget="true" />
@@ -8150,6 +8320,7 @@
             </Record>
           </Annotation>
         </NavigationProperty>
+        <NavigationProperty Name="remoteDesktopSecurityConfiguration" Type="graph.remoteDesktopSecurityConfiguration" ContainsTarget="true" />
         <NavigationProperty Name="tokenIssuancePolicies" Type="Collection(graph.tokenIssuancePolicy)" />
         <NavigationProperty Name="tokenLifetimePolicies" Type="Collection(graph.tokenLifetimePolicy)" />
         <NavigationProperty Name="transitiveMemberOf" Type="Collection(graph.directoryObject)">
@@ -8324,6 +8495,9 @@
         <Property Name="lifecycleNotificationUrl" Type="Edm.String" />
         <Property Name="notificationUrl" Type="Edm.String" Nullable="false" />
         <Property Name="resource" Type="Edm.String" Nullable="false" />
+      </EntityType>
+      <EntityType Name="targetDeviceGroup" BaseType="graph.entity">
+        <Property Name="displayName" Type="Edm.String" />
       </EntityType>
       <EntityType Name="targetedManagedAppConfiguration" BaseType="graph.managedAppConfiguration">
         <Property Name="deployedAppCount" Type="Edm.Int32" Nullable="false" />
@@ -16270,6 +16444,11 @@
             <PropertyValue Property="Supported" Bool="false" />
           </Record>
         </Annotation>
+        <Annotation Term="Org.OData.Capabilities.V1.CountRestrictions">
+          <Record>
+            <PropertyValue Property="Countable" Bool="false" />
+          </Record>
+        </Annotation>
         <Annotation Term="Org.OData.Capabilities.V1.DeleteRestrictions">
           <Record>
             <PropertyValue Property="Deletable" Bool="false" />
@@ -20956,6 +21135,11 @@
             <PropertyValue Property="Supported" Bool="false" />
           </Record>
         </Annotation>
+        <Annotation Term="Org.OData.Capabilities.V1.CountRestrictions">
+          <Record>
+            <PropertyValue Property="Countable" Bool="false" />
+          </Record>
+        </Annotation>
         <Annotation Term="Org.OData.Capabilities.V1.DeleteRestrictions">
           <Record>
             <PropertyValue Property="Deletable" Bool="false" />
@@ -25331,6 +25515,20 @@
               <EnumMember>Org.OData.Capabilities.V1.HttpMethod/PUT</EnumMember>
             </PropertyValue>
             <PropertyValue Property="Updatable" Bool="true" />
+          </Record>
+        </Annotation>
+      </Annotations>
+      <Annotations Target="microsoft.graph.externalUsersSelfServiceSignUpEventsFlow/onAttributeCollection">
+        <Annotation Term="Org.OData.Capabilities.V1.ReadRestrictions">
+          <Record>
+            <PropertyValue Property="Readable" Bool="true" />
+          </Record>
+        </Annotation>
+      </Annotations>
+      <Annotations Target="microsoft.graph.externalUsersSelfServiceSignUpEventsFlow/onAuthenticationMethodLoadStart">
+        <Annotation Term="Org.OData.Capabilities.V1.ReadRestrictions">
+          <Record>
+            <PropertyValue Property="Readable" Bool="true" />
           </Record>
         </Annotation>
       </Annotations>
