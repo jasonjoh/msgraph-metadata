@@ -102,6 +102,14 @@
                 <Property Name="onAttributeCollection" Type="graph.onAttributeCollectionHandler" />
                 <Property Name="onAuthenticationMethodLoadStart" Type="graph.onAuthenticationMethodLoadStartHandler" />
             </EntityType>
+            <EntityType Name="authenticationEventsFlow" BaseType="graph.entity" Abstract="true" OpenType="true">
+                <Property Name="conditions" Type="graph.authenticationConditions">
+                    <Annotation Term="Org.OData.Core.V1.Description" String="The conditions representing the context of the authentication request that will be used to decide whether the events policy will be invoked." />
+                </Property>                
+            </EntityType>
+            <ComplexType Name="onAttributeCollectionExternalUsersSelfServiceSignUp" BaseType="graph.onAttributeCollectionHandler">
+                <NavigationProperty Name="attributes" Type="Collection(graph.identityUserFlowAttribute)" />
+            </ComplexType>
             <ComplexType Name="onAuthenticationMethodLoadStartExternalUsersSelfServiceSignUp" BaseType="graph.onAuthenticationMethodLoadStartHandler">
                 <NavigationProperty Name="identityProviders" Type="Collection(graph.identityProviderBase)" />
             </ComplexType>
@@ -373,6 +381,10 @@
               <EntitySet Name="directoryObjects" EntityType="microsoft.graph.directoryObject" />
               <EntitySet Name="places" EntityType="microsoft.graph.place" />
             </EntityContainer>
+            <Function Name="delta" IsBound="true">
+                <Parameter Name="bindingparameter" Type="Collection(graph.message)" Nullable="false" />
+                <ReturnType Type="Collection(graph.message)" Nullable="false" />
+            </Function>
             <Function Name="delta" IsBound="true">
                 <Parameter Name="bindingparameter" Type="Collection(graph.event)" Nullable="false" />
                 <ReturnType Type="Collection(graph.event)" Nullable="false" />

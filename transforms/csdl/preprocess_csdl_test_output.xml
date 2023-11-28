@@ -513,6 +513,20 @@
           </Annotation>
         </Property>
       </EntityType>
+      <EntityType Name="authenticationEventsFlow" BaseType="graph.entity" Abstract="true" OpenType="true">
+        <Property Name="conditions" Type="graph.authenticationConditions">
+          <Annotation Term="Org.OData.Core.V1.Description" String="The conditions representing the context of the authentication request that will be used to decide whether the events policy will be invoked." />
+        </Property>
+      </EntityType>
+      <ComplexType Name="onAttributeCollectionExternalUsersSelfServiceSignUp" BaseType="graph.onAttributeCollectionHandler">
+        <NavigationProperty Name="attributes" Type="Collection(graph.identityUserFlowAttribute)">
+          <Annotation Term="Org.OData.Capabilities.V1.NavigationRestrictions">
+            <Record>
+              <PropertyValue Property="Referenceable" Bool="true" />
+            </Record>
+          </Annotation>
+        </NavigationProperty>
+      </ComplexType>
       <ComplexType Name="onAuthenticationMethodLoadStartExternalUsersSelfServiceSignUp" BaseType="graph.onAuthenticationMethodLoadStartHandler">
         <NavigationProperty Name="identityProviders" Type="Collection(graph.identityProviderBase)">
           <Annotation Term="Org.OData.Capabilities.V1.NavigationRestrictions">
@@ -1032,6 +1046,23 @@
         </EntitySet>
       </EntityContainer>
       <Function Name="delta" IsBound="true">
+        <Parameter Name="bindingparameter" Type="Collection(graph.message)" Nullable="false" />
+        <ReturnType Type="Collection(graph.message)" Nullable="false" />
+        <Annotation Term="Org.OData.Capabilities.V1.OperationRestrictions" xmlns:edm="http://docs.oasis-open.org/odata/ns/edm">
+          <Record>
+            <PropertyValue Property="CustomQueryOptions">
+              <Collection>
+                <Record>
+                  <PropertyValue Property="Name" String="changeType" />
+                  <PropertyValue Property="Description" String="A custom query option to filter the delta response based on the type of change. Supported values are created, updated or deleted." />
+                  <PropertyValue Property="Required" Bool="false" />
+                </Record>
+              </Collection>
+            </PropertyValue>
+          </Record>
+        </Annotation>
+      </Function>
+      <Function Name="delta" IsBound="true">
         <Parameter Name="bindingparameter" Type="Collection(graph.event)" Nullable="false" />
         <ReturnType Type="Collection(graph.event)" Nullable="false" />
         <Annotation Term="Org.OData.Capabilities.V1.OperationRestrictions" xmlns:edm="http://docs.oasis-open.org/odata/ns/edm">
@@ -1351,6 +1382,13 @@
         </Annotation>
       </Annotations>
       <Annotations Target="microsoft.graph.externalUsersSelfServiceSignUpEventsFlow/onAuthenticationMethodLoadStart">
+        <Annotation Term="Org.OData.Capabilities.V1.ReadRestrictions">
+          <Record>
+            <PropertyValue Property="Readable" Bool="true" />
+          </Record>
+        </Annotation>
+      </Annotations>
+      <Annotations Target="microsoft.graph.authenticationEventsFlow/conditions">
         <Annotation Term="Org.OData.Capabilities.V1.ReadRestrictions">
           <Record>
             <PropertyValue Property="Readable" Bool="true" />

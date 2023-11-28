@@ -354,6 +354,15 @@
             </xsl:call-template>
         </xsl:copy>
     </xsl:template>
+
+    <xsl:template match="edm:Schema[@Namespace='microsoft.graph']/edm:ComplexType[@Name='onAttributeCollectionExternalUsersSelfServiceSignUp']/edm:NavigationProperty[@Name='attributes']">
+        <xsl:copy>
+            <xsl:copy-of select="@* | node()" />
+            <xsl:call-template name="ReferenceableRestrictionsTemplate">
+                <xsl:with-param name="referenceable">true</xsl:with-param>
+            </xsl:call-template>
+        </xsl:copy>
+    </xsl:template>
     
     <xsl:template match="edm:Schema[@Namespace='microsoft.graph']/edm:EntityType[@Name='user']/edm:NavigationProperty[@Name='createdObjects']|
                          edm:Schema[@Namespace='microsoft.graph']/edm:EntityType[@Name='servicePrincipal']/edm:NavigationProperty[@Name='createdObjects']">
@@ -653,6 +662,26 @@
                             <PropertyValue Property="Description" String="The end date and time of the time range in the function, represented in ISO 8601 format. For example, 2019-11-08T20:00:00-08:00" />
                             <PropertyValue Property="Required" Bool="true" />
                         </Record>
+                    </Collection>
+                </PropertyValue>
+            </Record>
+            </Annotation>
+        </xsl:copy>
+    </xsl:template>
+    
+    <!--Delta function for messages needs the changeType parameter-->
+    <xsl:template match="edm:Schema[@Namespace='microsoft.graph']/edm:Function[@Name='delta'][edm:Parameter[@Name='bindingparameter']][edm:Parameter[@Type='Collection(graph.message)']]">
+        <xsl:copy>
+            <xsl:apply-templates select="@* | node()"/>
+            <Annotation Term="Org.OData.Capabilities.V1.OperationRestrictions">
+            <Record>
+                <PropertyValue Property="CustomQueryOptions">
+                    <Collection>
+                        <Record>
+                            <PropertyValue Property="Name" String="changeType" />
+                            <PropertyValue Property="Description" String="A custom query option to filter the delta response based on the type of change. Supported values are created, updated or deleted." />
+                            <PropertyValue Property="Required" Bool="false" />
+                        </Record>                        
                     </Collection>
                 </PropertyValue>
             </Record>
@@ -1703,6 +1732,18 @@
                     </xsl:element>
                 </xsl:when>
             </xsl:choose>
+
+            <!-- Add readability for complex property authenticationEventsFlow/conditions -->
+            <xsl:choose>
+                <xsl:when test="not(edm:Annotations[@Target='microsoft.graph.authenticationEventsFlow/conditions'])">
+                    <xsl:element name="Annotations">
+                        <xsl:attribute name="Target">microsoft.graph.authenticationEventsFlow/conditions</xsl:attribute>
+                        <xsl:call-template name="ReadRestrictionsTemplate">
+                            <xsl:with-param name="readable">true</xsl:with-param>
+                        </xsl:call-template>
+                    </xsl:element>
+                </xsl:when>
+            </xsl:choose>
         
         </xsl:copy>
     </xsl:template>
@@ -2097,6 +2138,19 @@
         </xsl:copy>
     </xsl:template>
 
+    <!-- Add readability for complex property authenticationEventsFlow/conditions -->
+    <xsl:template match="edm:Schema[@Namespace='microsoft.graph']/edm:Annotations[@Target='microsoft.graph.authenticationEventsFlow/conditions']/edm:Annotation[@Term='Org.OData.Capabilities.V1.ReadRestrictions']">
+        <xsl:copy>
+            <xsl:copy-of select="@*"/>
+            <xsl:element name="Record" namespace="{namespace-uri()}">
+                <xsl:copy-of select="edm:Record/edm:PropertyValue"/>
+                <xsl:call-template name="ReadableTemplate">
+                    <xsl:with-param name="readable">true</xsl:with-param>
+                </xsl:call-template>
+            </xsl:element>
+        </xsl:copy>
+    </xsl:template>
+
     <!-- If the grand-parent "Annotations" tag already exists, modify it -->
     
     <!-- Add readability for complex property externalUsersSelfServiceSignUpEventsFlow/onAttributeCollection -->
@@ -2121,6 +2175,26 @@
     
     <!-- Add readability for complex property externalUsersSelfServiceSignUpEventsFlow/onAuthenticationMethodLoadStart -->
     <xsl:template match="edm:Schema[@Namespace='microsoft.graph']/edm:Annotations[@Target='microsoft.graph.externalUsersSelfServiceSignUpEventsFlow/onAuthenticationMethodLoadStart']">
+        <xsl:choose>
+            <!--ReadRestrictions not present-->
+            <xsl:when test="not(edm:Annotation[@Term='Org.OData.Capabilities.V1.ReadRestrictions'])">
+                <xsl:copy>
+                    <xsl:copy-of select="@*|node()"/>
+                    <xsl:call-template name="ReadableTemplate">
+                        <xsl:with-param name="readable">true</xsl:with-param>
+                    </xsl:call-template>
+                </xsl:copy>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:copy>
+                    <xsl:apply-templates select="@* | node()"/>
+                </xsl:copy>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:template>
+
+    <!-- Add readability for complex property authenticationEventsFlow/conditions -->
+    <xsl:template match="edm:Schema[@Namespace='microsoft.graph']/edm:Annotations[@Target='microsoft.graph.authenticationEventsFlow/conditions']">
         <xsl:choose>
             <!--ReadRestrictions not present-->
             <xsl:when test="not(edm:Annotation[@Term='Org.OData.Capabilities.V1.ReadRestrictions'])">
