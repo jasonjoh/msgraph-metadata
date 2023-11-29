@@ -459,6 +459,12 @@
         <Member Name="text" Value="0" />
         <Member Name="html" Value="1" />
       </EnumType>
+      <EnumType Name="broadcastMeetingAudience">
+        <Member Name="roleIsAttendee" Value="0" />
+        <Member Name="organization" Value="1" />
+        <Member Name="everyone" Value="2" />
+        <Member Name="unknownFutureValue" Value="3" />
+      </EnumType>
       <EnumType Name="bucketAggregationSortProperty">
         <Member Name="count" Value="0" />
         <Member Name="keyAsString" Value="1" />
@@ -1392,6 +1398,17 @@
         <Member Name="inactive" Value="1" />
         <Member Name="unknownFutureValue" Value="2" />
       </EnumType>
+      <EnumType Name="meetingChatHistoryDefaultMode">
+        <Member Name="none" Value="0" />
+        <Member Name="all" Value="1" />
+        <Member Name="unknownFutureValue" Value="2" />
+      </EnumType>
+      <EnumType Name="meetingChatMode">
+        <Member Name="enabled" Value="0" />
+        <Member Name="disabled" Value="1" />
+        <Member Name="limited" Value="2" />
+        <Member Name="unknownFutureValue" Value="3" />
+      </EnumType>
       <EnumType Name="meetingMessageType">
         <Member Name="none" Value="0" />
         <Member Name="meetingRequest" Value="1" />
@@ -1533,6 +1550,10 @@
         <Member Name="always" Value="3" />
         <Member Name="unknownFutureValue" Value="999" />
       </EnumType>
+      <EnumType Name="onlineMeetingContentSharingDisabledReason" IsFlags="true">
+        <Member Name="watermarkProtection" Value="1" />
+        <Member Name="unknownFutureValue" Value="2" />
+      </EnumType>
       <EnumType Name="onlineMeetingPresenters">
         <Member Name="everyone" Value="0" />
         <Member Name="organization" Value="1" />
@@ -1549,6 +1570,12 @@
       <EnumType Name="onlineMeetingRole">
         <Member Name="attendee" Value="0" />
         <Member Name="presenter" Value="1" />
+        <Member Name="unknownFutureValue" Value="2" />
+        <Member Name="producer" Value="3" />
+        <Member Name="coorganizer" Value="4" />
+      </EnumType>
+      <EnumType Name="onlineMeetingVideoDisabledReason" IsFlags="true">
+        <Member Name="watermarkProtection" Value="1" />
         <Member Name="unknownFutureValue" Value="2" />
       </EnumType>
       <EnumType Name="operatingSystemUpgradeEligibility">
@@ -4177,6 +4204,11 @@
         <Property Name="name" Type="Edm.String" />
         <Property Name="size" Type="Edm.Int64" />
       </ComplexType>
+      <ComplexType Name="attendanceInterval">
+        <Property Name="durationInSeconds" Type="Edm.Int32" />
+        <Property Name="joinDateTime" Type="Edm.DateTimeOffset" />
+        <Property Name="leaveDateTime" Type="Edm.DateTimeOffset" />
+      </ComplexType>
       <ComplexType Name="attendee" BaseType="graph.attendeeBase">
         <Property Name="status" Type="graph.responseStatus" />
       </ComplexType>
@@ -4252,7 +4284,9 @@
         <Property Name="conferenceId" Type="Edm.String" />
         <Property Name="dialinUrl" Type="Edm.String" />
         <Property Name="tollFreeNumber" Type="Edm.String" />
+        <Property Name="tollFreeNumbers" Type="Collection(Edm.String)" />
         <Property Name="tollNumber" Type="Edm.String" />
+        <Property Name="tollNumbers" Type="Collection(Edm.String)" />
       </ComplexType>
       <ComplexType Name="auditActivityInitiator">
         <Property Name="app" Type="graph.appIdentity" />
@@ -4331,6 +4365,19 @@
         <Property Name="requireEncryptionForWriteAccess" Type="Edm.Boolean" Nullable="false" />
       </ComplexType>
       <ComplexType Name="booleanColumn" />
+      <ComplexType Name="broadcastMeetingCaptionSettings">
+        <Property Name="isCaptionEnabled" Type="Edm.Boolean" />
+        <Property Name="spokenLanguage" Type="Edm.String" />
+        <Property Name="translationLanguages" Type="Collection(Edm.String)" />
+      </ComplexType>
+      <ComplexType Name="broadcastMeetingSettings">
+        <Property Name="allowedAudience" Type="graph.broadcastMeetingAudience" />
+        <Property Name="captions" Type="graph.broadcastMeetingCaptionSettings" />
+        <Property Name="isAttendeeReportEnabled" Type="Edm.Boolean" />
+        <Property Name="isQuestionAndAnswerEnabled" Type="Edm.Boolean" />
+        <Property Name="isRecordingEnabled" Type="Edm.Boolean" />
+        <Property Name="isVideoOnDemandEnabled" Type="Edm.Boolean" />
+      </ComplexType>
       <ComplexType Name="bucketAggregationDefinition">
         <Property Name="isDescending" Type="Edm.Boolean" />
         <Property Name="minimumCount" Type="Edm.Int32" />
@@ -4874,6 +4921,12 @@
         <Property Name="virtualSecureMode" Type="Edm.String" />
         <Property Name="windowsPE" Type="Edm.String" />
       </ComplexType>
+      <ComplexType Name="deviceLocalCredential">
+        <Property Name="accountName" Type="Edm.String" Nullable="false" />
+        <Property Name="accountSid" Type="Edm.String" Nullable="false" />
+        <Property Name="backupDateTime" Type="Edm.DateTimeOffset" Nullable="false" />
+        <Property Name="passwordBase64" Type="Edm.String" Nullable="false" />
+      </ComplexType>
       <ComplexType Name="deviceManagementPartnerAssignment">
         <Property Name="target" Type="graph.deviceAndAppManagementAssignmentTarget" />
       </ComplexType>
@@ -5311,6 +5364,15 @@
         <Property Name="shareId" Type="Edm.String" />
         <Property Name="sharepointIds" Type="graph.sharepointIds" />
         <Property Name="siteId" Type="Edm.String" />
+      </ComplexType>
+      <ComplexType Name="joinMeetingIdMeetingInfo" BaseType="graph.meetingInfo" OpenType="true">
+        <Property Name="joinMeetingId" Type="Edm.String" Nullable="false" />
+        <Property Name="passcode" Type="Edm.String" />
+      </ComplexType>
+      <ComplexType Name="joinMeetingIdSettings">
+        <Property Name="isPasscodeRequired" Type="Edm.Boolean" />
+        <Property Name="joinMeetingId" Type="Edm.String" />
+        <Property Name="passcode" Type="Edm.String" />
       </ComplexType>
       <ComplexType Name="Json" />
       <ComplexType Name="keyCredential">
@@ -5750,6 +5812,10 @@
         <Property Name="tollFreeNumbers" Type="Collection(Edm.String)" />
         <Property Name="tollNumber" Type="Edm.String" />
       </ComplexType>
+      <ComplexType Name="onlineMeetingRestricted">
+        <Property Name="contentSharingDisabled" Type="graph.onlineMeetingContentSharingDisabledReason" />
+        <Property Name="videoDisabled" Type="graph.onlineMeetingVideoDisabledReason" />
+      </ComplexType>
       <ComplexType Name="onPremisesExtensionAttributes">
         <Property Name="extensionAttribute1" Type="Edm.String" />
         <Property Name="extensionAttribute10" Type="Edm.String" />
@@ -5972,6 +6038,11 @@
       <ComplexType Name="preAuthorizedApplication">
         <Property Name="appId" Type="Edm.String" />
         <Property Name="delegatedPermissionIds" Type="Collection(Edm.String)" Nullable="false" />
+      </ComplexType>
+      <ComplexType Name="presenceStatusMessage">
+        <Property Name="expiryDateTime" Type="graph.dateTimeTimeZone" />
+        <Property Name="message" Type="graph.itemBody" />
+        <Property Name="publishedDateTime" Type="Edm.DateTimeOffset" />
       </ComplexType>
       <ComplexType Name="principalResourceMembershipsScope" BaseType="graph.accessReviewScope">
         <Property Name="principalScopes" Type="Collection(graph.accessReviewScope)" />
@@ -6329,6 +6400,14 @@
       <ComplexType Name="resultTemplateDictionary" BaseType="graph.Dictionary" OpenType="true" />
       <ComplexType Name="resultTemplateOption">
         <Property Name="enableResultTemplate" Type="Edm.Boolean" />
+      </ComplexType>
+      <ComplexType Name="retentionLabelSettings">
+        <Property Name="behaviorDuringRetentionPeriod" Type="microsoft.graph.security.behaviorDuringRetentionPeriod" />
+        <Property Name="isContentUpdateAllowed" Type="Edm.Boolean" />
+        <Property Name="isDeleteAllowed" Type="Edm.Boolean" />
+        <Property Name="isLabelUpdateAllowed" Type="Edm.Boolean" />
+        <Property Name="isMetadataUpdateAllowed" Type="Edm.Boolean" />
+        <Property Name="isRecordLocked" Type="Edm.Boolean" />
       </ComplexType>
       <ComplexType Name="rgbColor">
         <Property Name="b" Type="Edm.Byte" Nullable="false" />
@@ -6894,6 +6973,12 @@
         <Property Name="averageOutboundBitRate" Type="Edm.Double" />
         <Property Name="averageOutboundFrameRate" Type="Edm.Double" />
       </ComplexType>
+      <ComplexType Name="tenantInformation">
+        <Property Name="defaultDomainName" Type="Edm.String" />
+        <Property Name="displayName" Type="Edm.String" />
+        <Property Name="federationBrandName" Type="Edm.String" />
+        <Property Name="tenantId" Type="Edm.String" Nullable="false" />
+      </ComplexType>
       <ComplexType Name="termColumn">
         <Property Name="allowMultipleValues" Type="Edm.Boolean" />
         <Property Name="showFullyQualifiedName" Type="Edm.Boolean" />
@@ -7102,6 +7187,10 @@
         <Property Name="cve" Type="Edm.String" />
         <Property Name="severity" Type="Edm.String" />
         <Property Name="wasRunning" Type="Edm.Boolean" />
+      </ComplexType>
+      <ComplexType Name="watermarkProtectionValues">
+        <Property Name="isEnabledForContentSharing" Type="Edm.Boolean" />
+        <Property Name="isEnabledForVideo" Type="Edm.Boolean" />
       </ComplexType>
       <ComplexType Name="webApplication">
         <Property Name="homePageUrl" Type="Edm.String" />
@@ -8076,6 +8165,13 @@
         <Property Name="expirationDateTime" Type="Edm.DateTimeOffset" />
         <Property Name="nextExpectedRanges" Type="Collection(Edm.String)" />
       </EntityType>
+      <EntityType Name="attendanceRecord" BaseType="graph.entity">
+        <Property Name="attendanceIntervals" Type="Collection(graph.attendanceInterval)" />
+        <Property Name="emailAddress" Type="Edm.String" />
+        <Property Name="identity" Type="graph.identity" />
+        <Property Name="role" Type="Edm.String" />
+        <Property Name="totalAttendanceInSeconds" Type="Edm.Int32" />
+      </EntityType>
       <EntityType Name="attributeMappingFunctionSchema" BaseType="graph.entity">
         <Property Name="parameters" Type="Collection(graph.attributeMappingParameterSchema)" />
       </EntityType>
@@ -8357,6 +8453,7 @@
         <NavigationProperty Name="callRecords" Type="Collection(microsoft.graph.callRecords.callRecord)" ContainsTarget="true" />
         <NavigationProperty Name="calls" Type="Collection(graph.call)" ContainsTarget="true" />
         <NavigationProperty Name="onlineMeetings" Type="Collection(graph.onlineMeeting)" ContainsTarget="true" />
+        <NavigationProperty Name="presences" Type="Collection(graph.presence)" ContainsTarget="true" />
       </EntityType>
       <EntityType Name="columnDefinition" BaseType="graph.entity">
         <Property Name="boolean" Type="graph.booleanColumn" />
@@ -8688,10 +8785,13 @@
         <Property Name="alternativeSecurityIds" Type="Collection(graph.alternativeSecurityId)" Nullable="false" />
         <Property Name="approximateLastSignInDateTime" Type="Edm.DateTimeOffset" />
         <Property Name="complianceExpirationDateTime" Type="Edm.DateTimeOffset" />
+        <Property Name="deviceCategory" Type="Edm.String" />
         <Property Name="deviceId" Type="Edm.String" />
         <Property Name="deviceMetadata" Type="Edm.String" />
+        <Property Name="deviceOwnership" Type="Edm.String" />
         <Property Name="deviceVersion" Type="Edm.Int32" />
         <Property Name="displayName" Type="Edm.String" />
+        <Property Name="enrollmentProfileName" Type="Edm.String" />
         <Property Name="isCompliant" Type="Edm.Boolean" />
         <Property Name="isManaged" Type="Edm.Boolean" />
         <Property Name="mdmAppId" Type="Edm.String" />
@@ -8701,6 +8801,7 @@
         <Property Name="operatingSystemVersion" Type="Edm.String" />
         <Property Name="physicalIds" Type="Collection(Edm.String)" Nullable="false" />
         <Property Name="profileType" Type="Edm.String" />
+        <Property Name="registrationDateTime" Type="Edm.DateTimeOffset" />
         <Property Name="systemLabels" Type="Collection(Edm.String)" Nullable="false" />
         <Property Name="trustType" Type="Edm.String" />
         <NavigationProperty Name="extensions" Type="Collection(graph.extension)" ContainsTarget="true" />
@@ -9123,6 +9224,12 @@
         <Property Name="osVersion" Type="Edm.String" />
         <Property Name="userName" Type="Edm.String" />
       </EntityType>
+      <EntityType Name="deviceLocalCredentialInfo" BaseType="graph.entity">
+        <Property Name="credentials" Type="Collection(graph.deviceLocalCredential)" Nullable="false" />
+        <Property Name="deviceName" Type="Edm.String" Nullable="false" />
+        <Property Name="lastBackupDateTime" Type="Edm.DateTimeOffset" Nullable="false" />
+        <Property Name="refreshDateTime" Type="Edm.DateTimeOffset" Nullable="false" />
+      </EntityType>
       <EntityType Name="deviceLogCollectionResponse" BaseType="graph.entity">
         <Property Name="enrolledByUser" Type="Edm.String" />
         <Property Name="expirationDateTimeUTC" Type="Edm.DateTimeOffset" />
@@ -9268,6 +9375,7 @@
             </Collection>
           </Annotation>
         </NavigationProperty>
+        <NavigationProperty Name="deviceLocalCredentials" Type="Collection(graph.deviceLocalCredentialInfo)" ContainsTarget="true" />
         <NavigationProperty Name="federationConfigurations" Type="Collection(graph.identityProviderBase)" ContainsTarget="true" />
       </EntityType>
       <EntityType Name="directoryAudit" BaseType="graph.entity">
@@ -9455,6 +9563,7 @@
         <NavigationProperty Name="children" Type="Collection(graph.driveItem)" />
         <NavigationProperty Name="listItem" Type="graph.listItem" />
         <NavigationProperty Name="permissions" Type="Collection(graph.permission)" ContainsTarget="true" />
+        <NavigationProperty Name="retentionLabel" Type="graph.itemRetentionLabel" ContainsTarget="true" />
         <NavigationProperty Name="subscriptions" Type="Collection(graph.subscription)" ContainsTarget="true" />
         <NavigationProperty Name="thumbnails" Type="Collection(graph.thumbnailSet)" ContainsTarget="true" />
         <NavigationProperty Name="versions" Type="Collection(graph.driveItemVersion)" ContainsTarget="true" />
@@ -10358,6 +10467,13 @@
       <EntityType Name="itemAttachment" BaseType="graph.attachment">
         <NavigationProperty Name="item" Type="graph.outlookItem" ContainsTarget="true" />
       </EntityType>
+      <EntityType Name="itemRetentionLabel" BaseType="graph.entity">
+        <Property Name="isLabelAppliedExplicitly" Type="Edm.Boolean" />
+        <Property Name="labelAppliedBy" Type="graph.identitySet" />
+        <Property Name="labelAppliedDateTime" Type="Edm.DateTimeOffset" />
+        <Property Name="name" Type="Edm.String" />
+        <Property Name="retentionSettings" Type="graph.retentionLabelSettings" />
+      </EntityType>
       <EntityType Name="licenseDetails" BaseType="graph.entity">
         <Property Name="servicePlans" Type="Collection(graph.servicePlanInfo)" Nullable="false" />
         <Property Name="skuId" Type="Edm.Guid" />
@@ -10787,6 +10903,12 @@
         <NavigationProperty Name="contentVersions" Type="Collection(graph.mobileAppContent)" ContainsTarget="true" />
       </EntityType>
       <EntityType Name="mdmWindowsInformationProtectionPolicy" BaseType="graph.windowsInformationProtection" />
+      <EntityType Name="meetingAttendanceReport" BaseType="graph.entity">
+        <Property Name="meetingEndDateTime" Type="Edm.DateTimeOffset" />
+        <Property Name="meetingStartDateTime" Type="Edm.DateTimeOffset" />
+        <Property Name="totalParticipantCount" Type="Edm.Int32" />
+        <NavigationProperty Name="attendanceRecords" Type="Collection(graph.attendanceRecord)" ContainsTarget="true" />
+      </EntityType>
       <EntityType Name="membershipOutlierInsight" BaseType="graph.governanceInsight">
         <Property Name="containerId" Type="Edm.String" Nullable="false" />
         <Property Name="memberId" Type="Edm.String" Nullable="false" />
@@ -10970,20 +11092,33 @@
         <Property Name="scope" Type="Edm.String" />
       </EntityType>
       <EntityType Name="onlineMeeting" BaseType="graph.entity" OpenType="true">
+        <Property Name="allowAttendeeToEnableCamera" Type="Edm.Boolean" />
+        <Property Name="allowAttendeeToEnableMic" Type="Edm.Boolean" />
         <Property Name="allowedPresenters" Type="graph.onlineMeetingPresenters" />
+        <Property Name="allowMeetingChat" Type="graph.meetingChatMode" />
+        <Property Name="allowParticipantsToChangeName" Type="Edm.Boolean" />
+        <Property Name="allowTeamworkReactions" Type="Edm.Boolean" />
+        <Property Name="attendeeReport" Type="Edm.Stream" />
         <Property Name="audioConferencing" Type="graph.audioConferencing" />
+        <Property Name="broadcastSettings" Type="graph.broadcastMeetingSettings" />
         <Property Name="chatInfo" Type="graph.chatInfo" />
         <Property Name="creationDateTime" Type="Edm.DateTimeOffset" />
         <Property Name="endDateTime" Type="Edm.DateTimeOffset" />
         <Property Name="externalId" Type="Edm.String" />
+        <Property Name="isBroadcast" Type="Edm.Boolean" />
         <Property Name="isEntryExitAnnounced" Type="Edm.Boolean" />
         <Property Name="joinInformation" Type="graph.itemBody" />
+        <Property Name="joinMeetingIdSettings" Type="graph.joinMeetingIdSettings" />
         <Property Name="joinWebUrl" Type="Edm.String" />
         <Property Name="lobbyBypassSettings" Type="graph.lobbyBypassSettings" />
         <Property Name="participants" Type="graph.meetingParticipants" />
+        <Property Name="recordAutomatically" Type="Edm.Boolean" />
+        <Property Name="shareMeetingChatHistoryDefault" Type="graph.meetingChatHistoryDefaultMode" />
         <Property Name="startDateTime" Type="Edm.DateTimeOffset" />
         <Property Name="subject" Type="Edm.String" />
         <Property Name="videoTeleconferenceId" Type="Edm.String" />
+        <Property Name="watermarkProtection" Type="graph.watermarkProtectionValues" />
+        <NavigationProperty Name="attendanceReports" Type="Collection(graph.meetingAttendanceReport)" ContainsTarget="true" />
       </EntityType>
       <EntityType Name="onPremisesConditionalAccessSettings" BaseType="graph.entity">
         <Property Name="enabled" Type="Edm.Boolean" Nullable="false" />
@@ -11556,6 +11691,11 @@
             </Record>
           </Annotation>
         </NavigationProperty>
+      </EntityType>
+      <EntityType Name="presence" BaseType="graph.entity">
+        <Property Name="activity" Type="Edm.String" />
+        <Property Name="availability" Type="Edm.String" />
+        <Property Name="statusMessage" Type="graph.presenceStatusMessage" />
       </EntityType>
       <EntityType Name="print">
         <Property Name="settings" Type="graph.printSettings" />
@@ -12509,6 +12649,7 @@
         <Property Name="isEnabled" Type="Edm.Boolean" Nullable="false" />
         <Property Name="servicePrincipalRestrictions" Type="graph.appManagementConfiguration" />
       </EntityType>
+      <EntityType Name="tenantRelationship" />
       <EntityType Name="termsAndConditions" BaseType="graph.entity">
         <Property Name="acceptanceStatement" Type="Edm.String" />
         <Property Name="bodyText" Type="Edm.String" />
@@ -13078,6 +13219,7 @@
             </Record>
           </Annotation>
         </NavigationProperty>
+        <NavigationProperty Name="presence" Type="graph.presence" ContainsTarget="true" />
         <NavigationProperty Name="registeredDevices" Type="Collection(graph.directoryObject)">
           <Annotation Term="Org.OData.Validation.V1.DerivedTypeConstraint" xmlns:edm="http://docs.oasis-open.org/odata/ns/edm">
             <Collection>
@@ -15041,6 +15183,13 @@
       <Action Name="clearFilters" IsBound="true">
         <Parameter Name="bindparameter" Type="graph.workbookTable" />
       </Action>
+      <Action Name="clearPresence" IsBound="true">
+        <Parameter Name="bindingParameter" Type="graph.presence" />
+        <Parameter Name="sessionId" Type="Edm.String" Unicode="false" />
+      </Action>
+      <Action Name="clearUserPreferredPresence" IsBound="true">
+        <Parameter Name="bindingParameter" Type="graph.presence" />
+      </Action>
       <Action Name="clone" IsBound="true">
         <Parameter Name="bindingParameter" Type="graph.team" />
         <Parameter Name="displayName" Type="Edm.String" Unicode="false" />
@@ -16103,6 +16252,11 @@
         <Parameter Name="sessionId" Type="Edm.String" Unicode="false" />
         <Parameter Name="filter" Type="Edm.String" Unicode="false" />
         <ReturnType Type="Edm.Stream" />
+      </Action>
+      <Action Name="getPresencesByUserId" IsBound="true">
+        <Parameter Name="bindingParameter" Type="graph.cloudCommunications" />
+        <Parameter Name="ids" Type="Collection(Edm.String)" Nullable="false" Unicode="false" />
+        <ReturnType Type="Collection(graph.presence)" />
       </Action>
       <Action Name="getReportFilters" IsBound="true">
         <Parameter Name="bindingParameter" Type="graph.deviceManagementReports" />
@@ -17454,6 +17608,13 @@
         <Parameter Name="startCell" Type="graph.Json" />
         <Parameter Name="endCell" Type="graph.Json" />
       </Action>
+      <Action Name="setPresence" IsBound="true">
+        <Parameter Name="bindingParameter" Type="graph.presence" />
+        <Parameter Name="sessionId" Type="Edm.String" Unicode="false" />
+        <Parameter Name="availability" Type="Edm.String" Nullable="false" Unicode="false" />
+        <Parameter Name="activity" Type="Edm.String" Nullable="false" Unicode="false" />
+        <Parameter Name="expirationDuration" Type="Edm.Duration" />
+      </Action>
       <Action Name="setPriority" IsBound="true">
         <Parameter Name="bindingParameter" Type="graph.deviceEnrollmentConfiguration" />
         <Parameter Name="priority" Type="Edm.Int32" Nullable="false" />
@@ -17465,6 +17626,16 @@
       <Action Name="setSolidColor" IsBound="true">
         <Parameter Name="bindparameter" Type="graph.workbookChartFill" />
         <Parameter Name="color" Type="Edm.String" Unicode="false" />
+      </Action>
+      <Action Name="setStatusMessage" IsBound="true">
+        <Parameter Name="bindingParameter" Type="graph.presence" />
+        <Parameter Name="statusMessage" Type="graph.presenceStatusMessage" />
+      </Action>
+      <Action Name="setUserPreferredPresence" IsBound="true">
+        <Parameter Name="bindingParameter" Type="graph.presence" />
+        <Parameter Name="availability" Type="Edm.String" Nullable="false" Unicode="false" />
+        <Parameter Name="activity" Type="Edm.String" Nullable="false" Unicode="false" />
+        <Parameter Name="expirationDuration" Type="Edm.Duration" />
       </Action>
       <Action Name="sheet" IsBound="true">
         <Parameter Name="bindparameter" Type="graph.workbookFunctions" />
@@ -18253,6 +18424,19 @@
       <Function Name="delta" IsBound="true">
         <Parameter Name="bindingparameter" Type="Collection(graph.message)" />
         <ReturnType Type="Collection(graph.message)" Nullable="false" />
+        <Annotation Term="Org.OData.Capabilities.V1.OperationRestrictions" xmlns:edm="http://docs.oasis-open.org/odata/ns/edm">
+          <Record>
+            <PropertyValue Property="CustomQueryOptions">
+              <Collection>
+                <Record>
+                  <PropertyValue Property="Name" String="changeType" />
+                  <PropertyValue Property="Description" String="A custom query option to filter the delta response based on the type of change. Supported values are created, updated or deleted." />
+                  <PropertyValue Property="Required" Bool="false" />
+                </Record>
+              </Collection>
+            </PropertyValue>
+          </Record>
+        </Annotation>
       </Function>
       <Function Name="delta" IsBound="true">
         <Parameter Name="bindingParameter" Type="Collection(graph.oAuth2PermissionGrant)" />
@@ -18413,6 +18597,16 @@
       <Function Name="filterOperators" IsBound="true">
         <Parameter Name="bindingParameter" Type="graph.synchronizationSchema" />
         <ReturnType Type="Collection(graph.filterOperatorSchema)" />
+      </Function>
+      <Function Name="findTenantInformationByDomainName" IsBound="true">
+        <Parameter Name="bindingParameter" Type="graph.tenantRelationship" Nullable="false" />
+        <Parameter Name="domainName" Type="Edm.String" Unicode="false" />
+        <ReturnType Type="graph.tenantInformation" />
+      </Function>
+      <Function Name="findTenantInformationByTenantId" IsBound="true">
+        <Parameter Name="bindingParameter" Type="graph.tenantRelationship" Nullable="false" />
+        <Parameter Name="tenantId" Type="Edm.String" Unicode="false" />
+        <ReturnType Type="graph.tenantInformation" />
       </Function>
       <Function Name="functions" IsBound="true">
         <Parameter Name="bindingParameter" Type="graph.synchronizationSchema" />
@@ -19399,6 +19593,7 @@
         <Singleton Name="search" Type="microsoft.graph.searchEntity" />
         <Singleton Name="security" Type="microsoft.graph.security" />
         <Singleton Name="teamwork" Type="microsoft.graph.teamwork" />
+        <Singleton Name="tenantRelationships" Type="microsoft.graph.tenantRelationship" />
       </EntityContainer>
       <ComplexType Name="InnerError">
         <Property Name="request-id" Type="Edm.String">
@@ -19717,6 +19912,13 @@
         </Annotation>
       </Annotations>
       <Annotations Target="microsoft.graph.externalUsersSelfServiceSignUpEventsFlow/onAuthenticationMethodLoadStart">
+        <Annotation Term="Org.OData.Capabilities.V1.ReadRestrictions">
+          <Record>
+            <PropertyValue Property="Readable" Bool="true" />
+          </Record>
+        </Annotation>
+      </Annotations>
+      <Annotations Target="microsoft.graph.authenticationEventsFlow/conditions">
         <Annotation Term="Org.OData.Capabilities.V1.ReadRestrictions">
           <Record>
             <PropertyValue Property="Readable" Bool="true" />
@@ -24221,6 +24423,19 @@
       </Annotations>
       <Annotations Target="microsoft.graph.diagnosticDataSubmissionMode/userDefined">
         <Annotation Term="Org.OData.Core.V1.Description" String="Allow the user to set." />
+      </Annotations>
+      <Annotations Target="microsoft.graph.directory/deviceLocalCredentials">
+        <Annotation Term="Org.OData.Capabilities.V1.ExpandRestrictions">
+          <Record>
+            <PropertyValue Property="Expandable" Bool="false" />
+          </Record>
+        </Annotation>
+        <Annotation Term="Org.OData.Capabilities.V1.NavigationRestrictions">
+          <Record>
+            <PropertyValue Property="Referenceable" Bool="false" />
+          </Record>
+        </Annotation>
+        <Annotation Term="Org.OData.Capabilities.V1.SkipSupported" Bool="false" />
       </Annotations>
       <Annotations Target="microsoft.graph.directoryAudit">
         <Annotation Term="Org.OData.Capabilities.V1.CountRestrictions">
@@ -34801,6 +35016,13 @@
         <Member Name="inProgress" Value="4" />
         <Member Name="resolved" Value="8" />
         <Member Name="unknownFutureValue" Value="31" />
+      </EnumType>
+      <EnumType Name="behaviorDuringRetentionPeriod">
+        <Member Name="doNotRetain" Value="0" />
+        <Member Name="retain" Value="1" />
+        <Member Name="retainAsRecord" Value="2" />
+        <Member Name="retainAsRegulatoryRecord" Value="3" />
+        <Member Name="unknownFutureValue" Value="4" />
       </EnumType>
       <EnumType Name="caseAction">
         <Member Name="contentExport" Value="0" />
