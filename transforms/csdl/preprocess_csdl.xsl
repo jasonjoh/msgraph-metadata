@@ -501,6 +501,16 @@
             </Annotation>
         </xsl:copy>
     </xsl:template>
+    <xsl:template match="edm:Schema[@Namespace='microsoft.graph']/edm:EntityType[@Name='site']/edm:NavigationProperty[@Name='pages']">
+        <xsl:copy>
+            <xsl:copy-of select="@* | node()" />
+            <Annotation Term="Org.OData.Validation.V1.DerivedTypeConstraint">
+                <Collection>
+                    <String>microsoft.graph.sitePage</String>
+                </Collection>
+            </Annotation>
+        </xsl:copy>
+    </xsl:template>
 
     <!-- Remove attribute -->
     <xsl:template match="edm:Schema[@Namespace='microsoft.graph']/edm:EntityType[@Name='onenotePage']/@HasStream|
@@ -1276,7 +1286,7 @@
                             </xsl:element>
                         </xsl:element>
                         <xsl:element name="Property">
-                            <xsl:attribute name="Name">Date</xsl:attribute>
+                            <xsl:attribute name="Name">date</xsl:attribute>
                             <xsl:attribute name="Type">Edm.DateTimeOffset</xsl:attribute>
                             <xsl:element name="Annotation">
                                 <xsl:attribute name="Term">Org.OData.Core.V1.Description</xsl:attribute>
