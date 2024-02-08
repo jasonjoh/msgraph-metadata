@@ -1679,6 +1679,17 @@
         <Property Name="languageCode" Type="Edm.String" Nullable="false" />
         <Property Name="text" Type="Edm.String" />
       </ComplexType>
+      <ComplexType Name="accessPackageResourceAttribute">
+        <Property Name="destination" Type="graph.accessPackageResourceAttributeDestination" />
+        <Property Name="name" Type="Edm.String" />
+        <Property Name="source" Type="graph.accessPackageResourceAttributeSource" />
+      </ComplexType>
+      <ComplexType Name="accessPackageResourceAttributeDestination" Abstract="true" />
+      <ComplexType Name="accessPackageResourceAttributeQuestion" BaseType="graph.accessPackageResourceAttributeSource">
+        <NavigationProperty Name="question" Type="graph.accessPackageQuestion" />
+      </ComplexType>
+      <ComplexType Name="accessPackageResourceAttributeSource" Abstract="true" />
+      <ComplexType Name="accessPackageUserDirectoryAttributeStore" BaseType="graph.accessPackageResourceAttributeDestination" />
       <ComplexType Name="accessReviewApplyAction" Abstract="true" />
       <ComplexType Name="accessReviewHistoryScheduleSettings">
         <Property Name="recurrence" Type="graph.patternedRecurrence" Nullable="false" />
@@ -3253,6 +3264,10 @@
         <Property Name="path" Type="Edm.String" />
         <Property Name="processId" Type="Edm.Int32" />
       </ComplexType>
+      <ComplexType Name="profileCardAnnotation">
+        <Property Name="displayName" Type="Edm.String" />
+        <Property Name="localizations" Type="Collection(graph.displayNameLocalization)" />
+      </ComplexType>
       <ComplexType Name="propertyToEvaluate">
         <Property Name="propertyName" Type="Edm.String" />
         <Property Name="propertyValue" Type="Edm.String" />
@@ -4125,6 +4140,9 @@
         <Property Name="state" Type="graph.accessPackageCatalogState" />
         <NavigationProperty Name="accessPackages" Type="Collection(graph.accessPackage)" ContainsTarget="true" />
         <NavigationProperty Name="customWorkflowExtensions" Type="Collection(graph.customCalloutExtension)" ContainsTarget="true" />
+        <NavigationProperty Name="resourceRoles" Type="Collection(graph.accessPackageResourceRole)" />
+        <NavigationProperty Name="resources" Type="Collection(graph.accessPackageResource)" ContainsTarget="true" />
+        <NavigationProperty Name="resourceScopes" Type="Collection(graph.accessPackageResourceScope)" />
       </EntityType>
       <EntityType Name="accessPackageMultipleChoiceQuestion" BaseType="graph.accessPackageQuestion">
         <Property Name="choices" Type="Collection(graph.accessPackageAnswerChoice)" />
@@ -4136,6 +4154,55 @@
         <Property Name="localizations" Type="Collection(graph.accessPackageLocalizedText)" />
         <Property Name="sequence" Type="Edm.Int32" />
         <Property Name="text" Type="Edm.String" />
+      </EntityType>
+      <EntityType Name="accessPackageResource" BaseType="graph.entity">
+        <Property Name="attributes" Type="Collection(graph.accessPackageResourceAttribute)" />
+        <Property Name="createdDateTime" Type="Edm.DateTimeOffset" />
+        <Property Name="description" Type="Edm.String" />
+        <Property Name="displayName" Type="Edm.String" />
+        <Property Name="modifiedDateTime" Type="Edm.DateTimeOffset" />
+        <Property Name="originId" Type="Edm.String" />
+        <Property Name="originSystem" Type="Edm.String" />
+        <NavigationProperty Name="environment" Type="graph.accessPackageResourceEnvironment" />
+        <NavigationProperty Name="roles" Type="Collection(graph.accessPackageResourceRole)" ContainsTarget="true" />
+        <NavigationProperty Name="scopes" Type="Collection(graph.accessPackageResourceScope)" ContainsTarget="true" />
+      </EntityType>
+      <EntityType Name="accessPackageResourceEnvironment" BaseType="graph.entity">
+        <Property Name="createdDateTime" Type="Edm.DateTimeOffset" />
+        <Property Name="description" Type="Edm.String" />
+        <Property Name="displayName" Type="Edm.String" />
+        <Property Name="isDefaultEnvironment" Type="Edm.Boolean" />
+        <Property Name="modifiedDateTime" Type="Edm.DateTimeOffset" />
+        <Property Name="originId" Type="Edm.String" />
+        <Property Name="originSystem" Type="Edm.String" />
+        <NavigationProperty Name="resources" Type="Collection(graph.accessPackageResource)" ContainsTarget="true" />
+      </EntityType>
+      <EntityType Name="accessPackageResourceRequest" BaseType="graph.entity">
+        <Property Name="createdDateTime" Type="Edm.DateTimeOffset" />
+        <Property Name="requestType" Type="graph.accessPackageRequestType" />
+        <Property Name="state" Type="graph.accessPackageRequestState" />
+        <NavigationProperty Name="catalog" Type="graph.accessPackageCatalog" ContainsTarget="true" />
+        <NavigationProperty Name="resource" Type="graph.accessPackageResource" ContainsTarget="true" />
+      </EntityType>
+      <EntityType Name="accessPackageResourceRole" BaseType="graph.entity">
+        <Property Name="description" Type="Edm.String" />
+        <Property Name="displayName" Type="Edm.String" />
+        <Property Name="originId" Type="Edm.String" />
+        <Property Name="originSystem" Type="Edm.String" />
+        <NavigationProperty Name="resource" Type="graph.accessPackageResource" ContainsTarget="true" />
+      </EntityType>
+      <EntityType Name="accessPackageResourceRoleScope" BaseType="graph.entity">
+        <Property Name="createdDateTime" Type="Edm.DateTimeOffset" />
+        <NavigationProperty Name="role" Type="graph.accessPackageResourceRole" ContainsTarget="true" />
+        <NavigationProperty Name="scope" Type="graph.accessPackageResourceScope" ContainsTarget="true" />
+      </EntityType>
+      <EntityType Name="accessPackageResourceScope" BaseType="graph.entity">
+        <Property Name="description" Type="Edm.String" />
+        <Property Name="displayName" Type="Edm.String" />
+        <Property Name="isRootScope" Type="Edm.Boolean" />
+        <Property Name="originId" Type="Edm.String" />
+        <Property Name="originSystem" Type="Edm.String" />
+        <NavigationProperty Name="resource" Type="graph.accessPackageResource" ContainsTarget="true" />
       </EntityType>
       <EntityType Name="accessPackageSubject" BaseType="graph.entity">
         <Property Name="displayName" Type="Edm.String" />
@@ -4233,6 +4300,9 @@
         <NavigationProperty Name="decisions" Type="Collection(graph.accessReviewInstanceDecisionItem)" ContainsTarget="true" />
       </EntityType>
       <EntityType Name="activityBasedTimeoutPolicy" BaseType="graph.stsPolicy" />
+      <EntityType Name="admin">
+        <NavigationProperty Name="people" Type="graph.peopleAdminSettings" ContainsTarget="true" />
+      </EntityType>
       <EntityType Name="adminConsentRequestPolicy" BaseType="graph.entity">
         <Property Name="isEnabled" Type="Edm.Boolean" Nullable="false" />
         <Property Name="notifyReviewers" Type="Edm.Boolean" Nullable="false" />
@@ -4351,6 +4421,7 @@
         <Property Name="appRoles" Type="Collection(graph.appRole)" Nullable="false" />
         <Property Name="createdDateTime" Type="Edm.DateTimeOffset" />
         <Property Name="description" Type="Edm.String" />
+        <Property Name="disabledByMicrosoftStatus" Type="Edm.String" />
         <Property Name="displayName" Type="Edm.String" />
         <Property Name="groupMembershipClaims" Type="Edm.String" />
         <Property Name="identifierUris" Type="Collection(Edm.String)" Nullable="false" />
@@ -4956,6 +5027,7 @@
         <Property Name="isManaged" Type="Edm.Boolean" />
         <Property Name="mdmAppId" Type="Edm.String" />
         <Property Name="onPremisesLastSyncDateTime" Type="Edm.DateTimeOffset" />
+        <Property Name="onPremisesSecurityIdentifier" Type="Edm.String" />
         <Property Name="onPremisesSyncEnabled" Type="Edm.Boolean" />
         <Property Name="operatingSystem" Type="Edm.String" />
         <Property Name="operatingSystemVersion" Type="Edm.String" />
@@ -5180,6 +5252,10 @@
         <NavigationProperty Name="assignments" Type="Collection(graph.accessPackageAssignment)" ContainsTarget="true" />
         <NavigationProperty Name="catalogs" Type="Collection(graph.accessPackageCatalog)" ContainsTarget="true" />
         <NavigationProperty Name="connectedOrganizations" Type="Collection(graph.connectedOrganization)" ContainsTarget="true" />
+        <NavigationProperty Name="resourceEnvironments" Type="Collection(graph.accessPackageResourceEnvironment)" ContainsTarget="true" />
+        <NavigationProperty Name="resourceRequests" Type="Collection(graph.accessPackageResourceRequest)" ContainsTarget="true" />
+        <NavigationProperty Name="resourceRoleScopes" Type="Collection(graph.accessPackageResourceRoleScope)" ContainsTarget="true" />
+        <NavigationProperty Name="resources" Type="Collection(graph.accessPackageResource)" ContainsTarget="true" />
         <NavigationProperty Name="settings" Type="graph.entitlementManagementSettings" ContainsTarget="true" />
       </EntityType>
       <EntityType Name="entitlementManagementSettings" BaseType="graph.entity">
@@ -5786,6 +5862,10 @@
         <Property Name="createdDateTime" Type="Edm.DateTimeOffset" />
         <Property Name="password" Type="Edm.String" />
       </EntityType>
+      <EntityType Name="peopleAdminSettings" BaseType="graph.entity">
+        <NavigationProperty Name="profileCardProperties" Type="Collection(graph.profileCardProperty)" ContainsTarget="true" />
+        <NavigationProperty Name="pronouns" Type="graph.pronounsSettings" ContainsTarget="true" />
+      </EntityType>
       <EntityType Name="permission" BaseType="graph.entity">
         <Property Name="expirationDateTime" Type="Edm.DateTimeOffset" />
         <Property Name="grantedTo" Type="graph.identitySet" />
@@ -5966,9 +6046,16 @@
         <Property Name="scheduleInfo" Type="graph.requestSchedule" />
         <Property Name="ticketInfo" Type="graph.ticketInfo" />
       </EntityType>
+      <EntityType Name="profileCardProperty" BaseType="graph.entity">
+        <Property Name="annotations" Type="Collection(graph.profileCardAnnotation)" />
+        <Property Name="directoryPropertyName" Type="Edm.String" />
+      </EntityType>
       <EntityType Name="profilePhoto" BaseType="graph.entity" HasStream="true">
         <Property Name="height" Type="Edm.Int32" />
         <Property Name="width" Type="Edm.Int32" />
+      </EntityType>
+      <EntityType Name="pronounsSettings" BaseType="graph.entity">
+        <Property Name="isEnabledInOrganization" Type="Edm.Boolean" Nullable="false" />
       </EntityType>
       <EntityType Name="provisioningObjectSummary" BaseType="graph.entity">
         <Property Name="activityDateTime" Type="Edm.DateTimeOffset" Nullable="false" />
@@ -6183,6 +6270,7 @@
         <Property Name="appRoles" Type="Collection(graph.appRole)" Nullable="false" />
         <Property Name="customSecurityAttributes" Type="graph.customSecurityAttributeValue" />
         <Property Name="description" Type="Edm.String" />
+        <Property Name="disabledByMicrosoftStatus" Type="Edm.String" />
         <Property Name="displayName" Type="Edm.String" />
         <Property Name="homepage" Type="Edm.String" />
         <Property Name="info" Type="graph.informationalUrl" />
@@ -7479,6 +7567,7 @@
         <Parameter Name="activityType" Type="Edm.String" Unicode="false" />
         <Parameter Name="chainId" Type="Edm.Int64" />
         <Parameter Name="previewText" Type="graph.itemBody" />
+        <Parameter Name="teamsAppId" Type="Edm.String" Unicode="false" />
         <Parameter Name="templateParameters" Type="Collection(graph.keyValuePair)" />
         <Parameter Name="recipient" Type="graph.teamworkNotificationRecipient" />
       </Action>
@@ -7488,6 +7577,7 @@
         <Parameter Name="activityType" Type="Edm.String" Unicode="false" />
         <Parameter Name="chainId" Type="Edm.Int64" />
         <Parameter Name="previewText" Type="graph.itemBody" />
+        <Parameter Name="teamsAppId" Type="Edm.String" Unicode="false" />
         <Parameter Name="templateParameters" Type="Collection(graph.keyValuePair)" />
         <Parameter Name="recipient" Type="graph.teamworkNotificationRecipient" />
       </Action>
@@ -7497,6 +7587,7 @@
         <Parameter Name="activityType" Type="Edm.String" Unicode="false" />
         <Parameter Name="chainId" Type="Edm.Int64" />
         <Parameter Name="previewText" Type="graph.itemBody" />
+        <Parameter Name="teamsAppId" Type="Edm.String" Unicode="false" />
         <Parameter Name="templateParameters" Type="Collection(graph.keyValuePair)" />
       </Action>
       <Action Name="sendMail" IsBound="true">
@@ -8054,6 +8145,7 @@
           <NavigationPropertyBinding Path="registeredDevices" Target="directoryObjects" />
           <NavigationPropertyBinding Path="transitiveMemberOf" Target="directoryObjects" />
         </EntitySet>
+        <Singleton Name="admin" Type="microsoft.graph.admin" />
         <Singleton Name="appCatalogs" Type="microsoft.graph.appCatalogs" />
         <Singleton Name="auditLogs" Type="microsoft.graph.auditLogRoot" />
         <Singleton Name="authenticationMethodsPolicy" Type="microsoft.graph.authenticationMethodsPolicy" />

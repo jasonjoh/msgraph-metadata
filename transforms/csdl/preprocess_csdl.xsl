@@ -638,6 +638,12 @@
        <xsl:attribute name="Type">Edm.Stream</xsl:attribute>
     </xsl:template>
 
+    <!-- Set IsComposable to false for all functions with a ReturnType of graph.workbookRange. -->
+    <!-- This is to prevent overgeneration of composable functions in the OpenAPI. -->
+    <xsl:template match="edm:Schema[@Namespace='microsoft.graph']/edm:Function[edm:ReturnType[@Type='graph.workbookRange']]/@IsComposable">
+        <xsl:attribute name="IsComposable">false</xsl:attribute>
+    </xsl:template>
+
     <!-- Actions/Functions bound to  directoryObject should have the 'RequiresExplicitBinding' annotation-->
     <xsl:template match="edm:Schema[@Namespace='microsoft.graph']/edm:Action[@IsBound='true'][edm:Parameter[@Type='graph.directoryObject']] |
                          edm:Schema[@Namespace='microsoft.graph']/edm:Action[@IsBound='true'][edm:Parameter[@Type='Collection(graph.directoryObject)']] |
@@ -883,6 +889,11 @@
                                 <xsl:with-param name="startDateTimeName">startDateTime</xsl:with-param>
                                 <xsl:with-param name="endDateTimeName">endDateTime</xsl:with-param>
                             </xsl:call-template>
+                            <xsl:call-template name="CalendarViewRestrictedPopertyTemplate">
+                                <xsl:with-param name="propertyPath">calendarGroups/calendars/calendarView</xsl:with-param>
+                                <xsl:with-param name="startDateTimeName">startDateTime</xsl:with-param>
+                                <xsl:with-param name="endDateTimeName">endDateTime</xsl:with-param>
+                            </xsl:call-template>
                         </xsl:element>
                     </xsl:element>
                 </xsl:element>
@@ -927,6 +938,18 @@
             </xsl:call-template>
         </xsl:copy>
     </xsl:template>
+    <!-- Add paths for user signInPreferences by adding annotations to read and update the complex property-->
+    <xsl:template match="edm:Schema[@Namespace='microsoft.graph']/edm:EntityType[@Name='authentication']/edm:Property[@Name='signInPreferences']">
+        <xsl:copy>
+            <xsl:apply-templates select="@* | node()"/>
+            <xsl:call-template name="ReadRestrictionsTemplate">
+                <xsl:with-param name="readable">true</xsl:with-param>
+            </xsl:call-template>
+            <xsl:call-template name="UpdateRestrictionsTemplate">
+                <xsl:with-param name="updatable">true</xsl:with-param>
+            </xsl:call-template>
+        </xsl:copy>
+    </xsl:template>
     <!-- Add paths for user serviceProvisioningErrors by adding annotations to read complex property-->
     <xsl:template match="edm:Schema[@Namespace='microsoft.graph']/edm:EntityType[@Name='user']/edm:Property[@Name='serviceProvisioningErrors']|
                          edm:Schema[@Namespace='microsoft.graph']/edm:EntityType[@Name='group']/edm:Property[@Name='serviceProvisioningErrors']|
@@ -956,6 +979,27 @@
                             </xsl:call-template>
                         </xsl:element>
                     </xsl:element>
+                </xsl:element>
+            </xsl:element>
+        </xsl:copy>
+    </xsl:template>
+
+    <!-- Add custom query options - $format to driveItem/content -->
+    <xsl:template match="edm:Schema[@Namespace='microsoft.graph']/edm:EntityType[@Name='driveItem']/edm:Property[@Name='content']">
+        <xsl:copy>
+            <xsl:apply-templates select="@* | node()"/>
+            <xsl:element name="Annotation">
+                <xsl:attribute name="Term">Org.OData.Capabilities.V1.ReadRestrictions</xsl:attribute>
+                <xsl:element name="Record" namespace="{namespace-uri()}">
+                    <PropertyValue Property="CustomQueryOptions">
+                      <Collection>
+                        <Record>
+                          <PropertyValue Property="Name" String="$format" />
+                          <PropertyValue Property="Description" String="Format of the content" />
+                          <PropertyValue Property="Required" Bool="false" />
+                        </Record>
+                      </Collection>
+                    </PropertyValue>
                 </xsl:element>
             </xsl:element>
         </xsl:copy>
@@ -1920,6 +1964,7 @@
 
     <!-- Add ExpandRestrictions to events,mailfolders and messages entity type -->
     <xsl:template match="edm:Schema[@Namespace='microsoft.graph']/edm:Annotations[@Target='microsoft.graph.user/events']/edm:Annotation[@Term='Org.OData.Capabilities.V1.ExpandRestrictions']|
+                        edm:Schema[@Namespace='microsoft.graph']/edm:Annotations[@Target='microsoft.graph.group/events']/edm:Annotation[@Term='Org.OData.Capabilities.V1.ExpandRestrictions']|
                         edm:Schema[@Namespace='microsoft.graph.identityGovernance']/edm:Annotations[@Target='microsoft.graph.user/events']/edm:Annotation[@Term='Org.OData.Capabilities.V1.ExpandRestrictions']|
                         edm:Schema[@Namespace='microsoft.graph']/edm:Annotations[@Target='microsoft.graph.user/mailFolders']/edm:Annotation[@Term='Org.OData.Capabilities.V1.ExpandRestrictions']|
                         edm:Schema[@Namespace='microsoft.graph.identityGovernance']/edm:Annotations[@Target='microsoft.graph.user/mailFolders']/edm:Annotation[@Term='Org.OData.Capabilities.V1.ExpandRestrictions']|

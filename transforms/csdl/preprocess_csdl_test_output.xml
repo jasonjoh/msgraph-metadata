@@ -332,6 +332,21 @@
         <Property Name="title" Type="Edm.String" />
       </EntityType>
       <EntityType Name="driveItem" BaseType="graph.baseItem">
+        <Property Name="content" Type="Edm.Stream">
+          <Annotation Term="Org.OData.Capabilities.V1.ReadRestrictions">
+            <Record>
+              <PropertyValue Property="CustomQueryOptions" xmlns:edm="http://docs.oasis-open.org/odata/ns/edm">
+                <Collection>
+                  <Record>
+                    <PropertyValue Property="Name" String="$format" />
+                    <PropertyValue Property="Description" String="Format of the content" />
+                    <PropertyValue Property="Required" Bool="false" />
+                  </Record>
+                </Collection>
+              </PropertyValue>
+            </Record>
+          </Annotation>
+        </Property>
         <NavigationProperty Name="analytics" Type="graph.itemAnalytics" ContainsTarget="true">
           <Annotation Term="Org.OData.Core.V1.Description" String="Analytics about the view activities that took place on this item." />
         </NavigationProperty>
@@ -415,6 +430,20 @@
             </Record>
           </Annotation>
         </NavigationProperty>
+      </EntityType>
+      <EntityType Name="authentication" BaseType="graph.entity">
+        <Property Name="signInPreferences" Type="graph.signInPreferences">
+          <Annotation Term="Org.OData.Capabilities.V1.ReadRestrictions">
+            <Record>
+              <PropertyValue Property="Readable" Bool="true" />
+            </Record>
+          </Annotation>
+          <Annotation Term="Org.OData.Capabilities.V1.UpdateRestrictions">
+            <Record>
+              <PropertyValue Property="Updatable" Bool="true" />
+            </Record>
+          </Annotation>
+        </Property>
       </EntityType>
       <EntityType Name="organizationalBrandingProperties" BaseType="graph.entity" Abstract="true">
         <Property Name="backgroundImage" Type="Edm.Stream">
@@ -563,6 +592,13 @@
             <PropertyValue Property="Description" String="List onAttributeCollection" />
             <PropertyValue Property="LongDescription" String="Get the The configuration for what to invoke when attributes are ready to be collected from the user." />
             <PropertyValue Property="Readable" Bool="true" />
+          </Record>
+        </Annotation>
+      </Annotations>
+      <Annotations Target="microsoft.graph.group/events">
+        <Annotation Term="Org.OData.Capabilities.V1.ExpandRestrictions">
+          <Record>
+            <PropertyValue Property="Expandable" Bool="true" />
           </Record>
         </Annotation>
       </Annotations>
@@ -973,6 +1009,29 @@
                       </Record>
                     </PropertyValue>
                   </Record>
+                  <Record>
+                    <PropertyValue Property="NavigationProperty">
+                      <PropertyPath>calendarGroups/calendars/calendarView</PropertyPath>
+                    </PropertyValue>
+                    <PropertyValue Property="ReadRestrictions">
+                      <Record>
+                        <PropertyValue Property="CustomQueryOptions">
+                          <Collection>
+                            <Record>
+                              <PropertyValue Property="Name" String="startDateTime" />
+                              <PropertyValue Property="Description" String="The start date and time of the time range, represented in ISO 8601 format. For example, 2019-11-08T19:00:00-08:00" />
+                              <PropertyValue Property="Required" Bool="true" />
+                            </Record>
+                            <Record>
+                              <PropertyValue Property="Name" String="endDateTime" />
+                              <PropertyValue Property="Description" String="The end date and time of the time range, represented in ISO 8601 format. For example, 2019-11-08T20:00:00-08:00" />
+                              <PropertyValue Property="Required" Bool="true" />
+                            </Record>
+                          </Collection>
+                        </PropertyValue>
+                      </Record>
+                    </PropertyValue>
+                  </Record>
                 </Collection>
               </PropertyValue>
             </Record>
@@ -1100,6 +1159,23 @@
         <Parameter Name="bindingparameter" Type="Collection(graph.directoryObject)" Nullable="false" />
         <ReturnType Type="Collection(graph.directoryObject)" Nullable="false" />
         <Annotation Term="Org.OData.Core.V1.RequiresExplicitBinding" xmlns:edm="http://docs.oasis-open.org/odata/ns/edm" />
+      </Function>
+      <Function Name="boundingRect" IsBound="true" IsComposable="false">
+        <Parameter Name="bindparameter" Type="graph.workbookRange" />
+        <Parameter Name="anotherRange" Type="Edm.String" Unicode="false" />
+        <ReturnType Type="graph.workbookRange" />
+      </Function>
+      <Function Name="cell" IsBound="true" IsComposable="false">
+        <Parameter Name="bindparameter" Type="graph.workbookRange" />
+        <Parameter Name="row" Type="Edm.Int32" Nullable="false" />
+        <Parameter Name="column" Type="Edm.Int32" Nullable="false" />
+        <ReturnType Type="graph.workbookRange" />
+      </Function>
+      <Function Name="cell" IsBound="true" IsComposable="false">
+        <Parameter Name="bindparameter" Type="graph.workbookWorksheet" />
+        <Parameter Name="row" Type="Edm.Int32" Nullable="false" />
+        <Parameter Name="column" Type="Edm.Int32" Nullable="false" />
+        <ReturnType Type="graph.workbookRange" />
       </Function>
       <Action Name="accept" IsBound="true">
         <Parameter Name="bindingParameter" Type="graph.event" />
