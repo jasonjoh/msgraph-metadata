@@ -2255,6 +2255,17 @@
         <Property Name="languageCode" Type="Edm.String" Nullable="false" />
         <Property Name="text" Type="Edm.String" />
       </ComplexType>
+      <ComplexType Name="accessPackageResourceAttribute">
+        <Property Name="destination" Type="graph.accessPackageResourceAttributeDestination" />
+        <Property Name="name" Type="Edm.String" />
+        <Property Name="source" Type="graph.accessPackageResourceAttributeSource" />
+      </ComplexType>
+      <ComplexType Name="accessPackageResourceAttributeDestination" Abstract="true" />
+      <ComplexType Name="accessPackageResourceAttributeQuestion" BaseType="graph.accessPackageResourceAttributeSource">
+        <NavigationProperty Name="question" Type="graph.accessPackageQuestion" />
+      </ComplexType>
+      <ComplexType Name="accessPackageResourceAttributeSource" Abstract="true" />
+      <ComplexType Name="accessPackageUserDirectoryAttributeStore" BaseType="graph.accessPackageResourceAttributeDestination" />
       <ComplexType Name="accessReviewApplyAction" Abstract="true" />
       <ComplexType Name="accessReviewHistoryScheduleSettings">
         <Property Name="recurrence" Type="graph.patternedRecurrence" Nullable="false" />
@@ -4717,6 +4728,7 @@
             </Record>
           </Annotation>
         </NavigationProperty>
+        <NavigationProperty Name="resourceRoleScopes" Type="Collection(graph.accessPackageResourceRoleScope)" ContainsTarget="true" />
       </EntityType>
       <EntityType Name="accessPackageAssignment" BaseType="graph.entity">
         <Property Name="customExtensionCalloutInstances" Type="Collection(graph.customExtensionCalloutInstance)" />
@@ -4782,6 +4794,9 @@
         <Property Name="state" Type="graph.accessPackageCatalogState" />
         <NavigationProperty Name="accessPackages" Type="Collection(graph.accessPackage)" />
         <NavigationProperty Name="customWorkflowExtensions" Type="Collection(graph.customCalloutExtension)" ContainsTarget="true" />
+        <NavigationProperty Name="resourceRoles" Type="Collection(graph.accessPackageResourceRole)" />
+        <NavigationProperty Name="resources" Type="Collection(graph.accessPackageResource)" ContainsTarget="true" />
+        <NavigationProperty Name="resourceScopes" Type="Collection(graph.accessPackageResourceScope)" />
       </EntityType>
       <EntityType Name="accessPackageMultipleChoiceQuestion" BaseType="graph.accessPackageQuestion">
         <Property Name="choices" Type="Collection(graph.accessPackageAnswerChoice)" />
@@ -4793,6 +4808,55 @@
         <Property Name="localizations" Type="Collection(graph.accessPackageLocalizedText)" />
         <Property Name="sequence" Type="Edm.Int32" />
         <Property Name="text" Type="Edm.String" />
+      </EntityType>
+      <EntityType Name="accessPackageResource" BaseType="graph.entity">
+        <Property Name="attributes" Type="Collection(graph.accessPackageResourceAttribute)" />
+        <Property Name="createdDateTime" Type="Edm.DateTimeOffset" />
+        <Property Name="description" Type="Edm.String" />
+        <Property Name="displayName" Type="Edm.String" />
+        <Property Name="modifiedDateTime" Type="Edm.DateTimeOffset" />
+        <Property Name="originId" Type="Edm.String" />
+        <Property Name="originSystem" Type="Edm.String" />
+        <NavigationProperty Name="environment" Type="graph.accessPackageResourceEnvironment" />
+        <NavigationProperty Name="roles" Type="Collection(graph.accessPackageResourceRole)" ContainsTarget="true" />
+        <NavigationProperty Name="scopes" Type="Collection(graph.accessPackageResourceScope)" ContainsTarget="true" />
+      </EntityType>
+      <EntityType Name="accessPackageResourceEnvironment" BaseType="graph.entity">
+        <Property Name="createdDateTime" Type="Edm.DateTimeOffset" />
+        <Property Name="description" Type="Edm.String" />
+        <Property Name="displayName" Type="Edm.String" />
+        <Property Name="isDefaultEnvironment" Type="Edm.Boolean" />
+        <Property Name="modifiedDateTime" Type="Edm.DateTimeOffset" />
+        <Property Name="originId" Type="Edm.String" />
+        <Property Name="originSystem" Type="Edm.String" />
+        <NavigationProperty Name="resources" Type="Collection(graph.accessPackageResource)" ContainsTarget="true" />
+      </EntityType>
+      <EntityType Name="accessPackageResourceRequest" BaseType="graph.entity">
+        <Property Name="createdDateTime" Type="Edm.DateTimeOffset" />
+        <Property Name="requestType" Type="graph.accessPackageRequestType" />
+        <Property Name="state" Type="graph.accessPackageRequestState" />
+        <NavigationProperty Name="catalog" Type="graph.accessPackageCatalog" ContainsTarget="true" />
+        <NavigationProperty Name="resource" Type="graph.accessPackageResource" ContainsTarget="true" />
+      </EntityType>
+      <EntityType Name="accessPackageResourceRole" BaseType="graph.entity">
+        <Property Name="description" Type="Edm.String" />
+        <Property Name="displayName" Type="Edm.String" />
+        <Property Name="originId" Type="Edm.String" />
+        <Property Name="originSystem" Type="Edm.String" />
+        <NavigationProperty Name="resource" Type="graph.accessPackageResource" ContainsTarget="true" />
+      </EntityType>
+      <EntityType Name="accessPackageResourceRoleScope" BaseType="graph.entity">
+        <Property Name="createdDateTime" Type="Edm.DateTimeOffset" />
+        <NavigationProperty Name="role" Type="graph.accessPackageResourceRole" ContainsTarget="true" />
+        <NavigationProperty Name="scope" Type="graph.accessPackageResourceScope" ContainsTarget="true" />
+      </EntityType>
+      <EntityType Name="accessPackageResourceScope" BaseType="graph.entity">
+        <Property Name="description" Type="Edm.String" />
+        <Property Name="displayName" Type="Edm.String" />
+        <Property Name="isRootScope" Type="Edm.Boolean" />
+        <Property Name="originId" Type="Edm.String" />
+        <Property Name="originSystem" Type="Edm.String" />
+        <NavigationProperty Name="resource" Type="graph.accessPackageResource" ContainsTarget="true" />
       </EntityType>
       <EntityType Name="accessPackageSubject" BaseType="graph.entity">
         <Property Name="displayName" Type="Edm.String" />
@@ -5194,6 +5258,7 @@
         <Property Name="createdDateTime" Type="Edm.DateTimeOffset" />
         <Property Name="defaultRedirectUri" Type="Edm.String" />
         <Property Name="description" Type="Edm.String" />
+        <Property Name="disabledByMicrosoftStatus" Type="Edm.String" />
         <Property Name="displayName" Type="Edm.String" />
         <Property Name="groupMembershipClaims" Type="Edm.String" />
         <Property Name="identifierUris" Type="Collection(Edm.String)" Nullable="false" />
@@ -5827,6 +5892,7 @@
         <Property Name="isManaged" Type="Edm.Boolean" />
         <Property Name="mdmAppId" Type="Edm.String" />
         <Property Name="onPremisesLastSyncDateTime" Type="Edm.DateTimeOffset" />
+        <Property Name="onPremisesSecurityIdentifier" Type="Edm.String" />
         <Property Name="onPremisesSyncEnabled" Type="Edm.Boolean" />
         <Property Name="operatingSystem" Type="Edm.String" />
         <Property Name="operatingSystemVersion" Type="Edm.String" />
@@ -6547,7 +6613,21 @@
       <EntityType Name="driveItem" BaseType="graph.baseItem" OpenType="true">
         <Property Name="audio" Type="graph.audio" />
         <Property Name="bundle" Type="graph.bundle" />
-        <Property Name="content" Type="Edm.Stream" />
+        <Property Name="content" Type="Edm.Stream">
+          <Annotation Term="Org.OData.Capabilities.V1.ReadRestrictions">
+            <Record>
+              <PropertyValue Property="CustomQueryOptions" xmlns:edm="http://docs.oasis-open.org/odata/ns/edm">
+                <Collection>
+                  <Record>
+                    <PropertyValue Property="Name" String="$format" />
+                    <PropertyValue Property="Description" String="Format of the content" />
+                    <PropertyValue Property="Required" Bool="false" />
+                  </Record>
+                </Collection>
+              </PropertyValue>
+            </Record>
+          </Annotation>
+        </Property>
         <Property Name="cTag" Type="Edm.String" />
         <Property Name="deleted" Type="graph.deleted" />
         <Property Name="file" Type="graph.file" />
@@ -6633,6 +6713,10 @@
         <NavigationProperty Name="assignments" Type="Collection(graph.accessPackageAssignment)" ContainsTarget="true" />
         <NavigationProperty Name="catalogs" Type="Collection(graph.accessPackageCatalog)" ContainsTarget="true" />
         <NavigationProperty Name="connectedOrganizations" Type="Collection(graph.connectedOrganization)" ContainsTarget="true" />
+        <NavigationProperty Name="resourceEnvironments" Type="Collection(graph.accessPackageResourceEnvironment)" ContainsTarget="true" />
+        <NavigationProperty Name="resourceRequests" Type="Collection(graph.accessPackageResourceRequest)" ContainsTarget="true" />
+        <NavigationProperty Name="resourceRoleScopes" Type="Collection(graph.accessPackageResourceRoleScope)" ContainsTarget="true" />
+        <NavigationProperty Name="resources" Type="Collection(graph.accessPackageResource)" ContainsTarget="true" />
         <NavigationProperty Name="settings" Type="graph.entitlementManagementSettings" ContainsTarget="true" />
       </EntityType>
       <EntityType Name="entitlementManagementSettings" BaseType="graph.entity">
@@ -6851,6 +6935,7 @@
         <NavigationProperty Name="drives" Type="Collection(graph.drive)" />
         <NavigationProperty Name="events" Type="Collection(graph.event)" ContainsTarget="true" />
         <NavigationProperty Name="extensions" Type="Collection(graph.extension)" ContainsTarget="true" />
+        <NavigationProperty Name="groupLifecyclePolicies" Type="Collection(graph.groupLifecyclePolicy)" ContainsTarget="true" />
         <NavigationProperty Name="memberOf" Type="Collection(graph.directoryObject)">
           <Annotation Term="Org.OData.Validation.V1.DerivedTypeConstraint" xmlns:edm="http://docs.oasis-open.org/odata/ns/edm">
             <Collection>
@@ -7066,6 +7151,11 @@
             </Record>
           </Annotation>
         </NavigationProperty>
+      </EntityType>
+      <EntityType Name="groupLifecyclePolicy" BaseType="graph.entity">
+        <Property Name="alternateNotificationEmails" Type="Edm.String" />
+        <Property Name="groupLifetimeInDays" Type="Edm.Int32" />
+        <Property Name="managedGroupTypes" Type="Edm.String" />
       </EntityType>
       <EntityType Name="groupSetting" BaseType="graph.entity" OpenType="true">
         <Property Name="displayName" Type="Edm.String" />
@@ -8534,6 +8624,7 @@
         <Property Name="appRoles" Type="Collection(graph.appRole)" Nullable="false" />
         <Property Name="customSecurityAttributes" Type="graph.customSecurityAttributeValue" />
         <Property Name="description" Type="Edm.String" />
+        <Property Name="disabledByMicrosoftStatus" Type="Edm.String" />
         <Property Name="displayName" Type="Edm.String" />
         <Property Name="homepage" Type="Edm.String" />
         <Property Name="info" Type="graph.informationalUrl" />
@@ -10538,6 +10629,11 @@
       <Action Name="addFavorite" IsBound="true">
         <Parameter Name="bindingParameter" Type="graph.group" />
       </Action>
+      <Action Name="addGroup" IsBound="true">
+        <Parameter Name="bindingParameter" Type="graph.groupLifecyclePolicy" />
+        <Parameter Name="groupId" Type="Edm.String" Nullable="false" Unicode="false" />
+        <ReturnType Type="Edm.Boolean" Nullable="false" />
+      </Action>
       <Action Name="addKey" IsBound="true">
         <Parameter Name="bindingParameter" Type="graph.application" Nullable="false" />
         <Parameter Name="keyCredential" Type="graph.keyCredential" Nullable="false" />
@@ -11232,6 +11328,11 @@
       <Action Name="removeFavorite" IsBound="true">
         <Parameter Name="bindingParameter" Type="graph.group" />
       </Action>
+      <Action Name="removeGroup" IsBound="true">
+        <Parameter Name="bindingParameter" Type="graph.groupLifecyclePolicy" />
+        <Parameter Name="groupId" Type="Edm.String" Nullable="false" Unicode="false" />
+        <ReturnType Type="Edm.Boolean" Nullable="false" />
+      </Action>
       <Action Name="removeKey" IsBound="true">
         <Parameter Name="bindingParameter" Type="graph.application" Nullable="false" />
         <Parameter Name="keyId" Type="Edm.Guid" Nullable="false" />
@@ -11249,6 +11350,9 @@
       <Action Name="removePassword" IsBound="true">
         <Parameter Name="bindingParameter" Type="graph.servicePrincipal" Nullable="false" />
         <Parameter Name="keyId" Type="Edm.Guid" Nullable="false" />
+      </Action>
+      <Action Name="renew" IsBound="true">
+        <Parameter Name="bindingParameter" Type="graph.group" />
       </Action>
       <Action Name="renewUpload" IsBound="true">
         <Parameter Name="bindingParameter" Type="graph.mobileAppContentFile" />
@@ -11334,6 +11438,7 @@
         <Parameter Name="activityType" Type="Edm.String" Unicode="false" />
         <Parameter Name="chainId" Type="Edm.Int64" />
         <Parameter Name="previewText" Type="graph.itemBody" />
+        <Parameter Name="teamsAppId" Type="Edm.String" Unicode="false" />
         <Parameter Name="templateParameters" Type="Collection(graph.keyValuePair)" />
         <Parameter Name="recipient" Type="graph.teamworkNotificationRecipient" />
       </Action>
@@ -11343,6 +11448,7 @@
         <Parameter Name="activityType" Type="Edm.String" Unicode="false" />
         <Parameter Name="chainId" Type="Edm.Int64" />
         <Parameter Name="previewText" Type="graph.itemBody" />
+        <Parameter Name="teamsAppId" Type="Edm.String" Unicode="false" />
         <Parameter Name="templateParameters" Type="Collection(graph.keyValuePair)" />
         <Parameter Name="recipient" Type="graph.teamworkNotificationRecipient" />
       </Action>
@@ -11352,6 +11458,7 @@
         <Parameter Name="activityType" Type="Edm.String" Unicode="false" />
         <Parameter Name="chainId" Type="Edm.Int64" />
         <Parameter Name="previewText" Type="graph.itemBody" />
+        <Parameter Name="teamsAppId" Type="Edm.String" Unicode="false" />
         <Parameter Name="templateParameters" Type="Collection(graph.keyValuePair)" />
       </Action>
       <Action Name="sendActivityNotificationToRecipients" IsBound="true">
@@ -12155,6 +12262,7 @@
           <NavigationPropertyBinding Path="domainNameReferences" Target="directoryObjects" />
         </EntitySet>
         <EntitySet Name="drives" EntityType="microsoft.graph.drive" />
+        <EntitySet Name="groupLifecyclePolicies" EntityType="microsoft.graph.groupLifecyclePolicy" />
         <EntitySet Name="groups" EntityType="microsoft.graph.group">
           <NavigationPropertyBinding Path="createdOnBehalfOf" Target="directoryObjects" />
           <NavigationPropertyBinding Path="memberOf" Target="directoryObjects" />
@@ -12215,6 +12323,29 @@
                   <Record>
                     <PropertyValue Property="NavigationProperty">
                       <PropertyPath>calendars/calendarView</PropertyPath>
+                    </PropertyValue>
+                    <PropertyValue Property="ReadRestrictions">
+                      <Record>
+                        <PropertyValue Property="CustomQueryOptions">
+                          <Collection>
+                            <Record>
+                              <PropertyValue Property="Name" String="startDateTime" />
+                              <PropertyValue Property="Description" String="The start date and time of the time range, represented in ISO 8601 format. For example, 2019-11-08T19:00:00-08:00" />
+                              <PropertyValue Property="Required" Bool="true" />
+                            </Record>
+                            <Record>
+                              <PropertyValue Property="Name" String="endDateTime" />
+                              <PropertyValue Property="Description" String="The end date and time of the time range, represented in ISO 8601 format. For example, 2019-11-08T20:00:00-08:00" />
+                              <PropertyValue Property="Required" Bool="true" />
+                            </Record>
+                          </Collection>
+                        </PropertyValue>
+                      </Record>
+                    </PropertyValue>
+                  </Record>
+                  <Record>
+                    <PropertyValue Property="NavigationProperty">
+                      <PropertyPath>calendarGroups/calendars/calendarView</PropertyPath>
                     </PropertyValue>
                     <PropertyValue Property="ReadRestrictions">
                       <Record>
@@ -12396,6 +12527,29 @@
                       </Record>
                     </PropertyValue>
                   </Record>
+                  <Record>
+                    <PropertyValue Property="NavigationProperty">
+                      <PropertyPath>calendarGroups/calendars/calendarView</PropertyPath>
+                    </PropertyValue>
+                    <PropertyValue Property="ReadRestrictions">
+                      <Record>
+                        <PropertyValue Property="CustomQueryOptions">
+                          <Collection>
+                            <Record>
+                              <PropertyValue Property="Name" String="startDateTime" />
+                              <PropertyValue Property="Description" String="The start date and time of the time range, represented in ISO 8601 format. For example, 2019-11-08T19:00:00-08:00" />
+                              <PropertyValue Property="Required" Bool="true" />
+                            </Record>
+                            <Record>
+                              <PropertyValue Property="Name" String="endDateTime" />
+                              <PropertyValue Property="Description" String="The end date and time of the time range, represented in ISO 8601 format. For example, 2019-11-08T20:00:00-08:00" />
+                              <PropertyValue Property="Required" Bool="true" />
+                            </Record>
+                          </Collection>
+                        </PropertyValue>
+                      </Record>
+                    </PropertyValue>
+                  </Record>
                 </Collection>
               </PropertyValue>
             </Record>
@@ -12495,6 +12649,29 @@
                   <Record>
                     <PropertyValue Property="NavigationProperty">
                       <PropertyPath>calendars/calendarView</PropertyPath>
+                    </PropertyValue>
+                    <PropertyValue Property="ReadRestrictions">
+                      <Record>
+                        <PropertyValue Property="CustomQueryOptions">
+                          <Collection>
+                            <Record>
+                              <PropertyValue Property="Name" String="startDateTime" />
+                              <PropertyValue Property="Description" String="The start date and time of the time range, represented in ISO 8601 format. For example, 2019-11-08T19:00:00-08:00" />
+                              <PropertyValue Property="Required" Bool="true" />
+                            </Record>
+                            <Record>
+                              <PropertyValue Property="Name" String="endDateTime" />
+                              <PropertyValue Property="Description" String="The end date and time of the time range, represented in ISO 8601 format. For example, 2019-11-08T20:00:00-08:00" />
+                              <PropertyValue Property="Required" Bool="true" />
+                            </Record>
+                          </Collection>
+                        </PropertyValue>
+                      </Record>
+                    </PropertyValue>
+                  </Record>
+                  <Record>
+                    <PropertyValue Property="NavigationProperty">
+                      <PropertyPath>calendarGroups/calendars/calendarView</PropertyPath>
                     </PropertyValue>
                     <PropertyValue Property="ReadRestrictions">
                       <Record>
@@ -16922,7 +17099,7 @@
         </Annotation>
         <Annotation Term="Org.OData.Capabilities.V1.ExpandRestrictions">
           <Record>
-            <PropertyValue Property="Expandable" Bool="false" />
+            <PropertyValue Property="Expandable" Bool="true" />
           </Record>
         </Annotation>
         <Annotation Term="Org.OData.Capabilities.V1.SearchRestrictions">

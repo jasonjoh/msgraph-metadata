@@ -1274,6 +1274,11 @@
         <Member Name="other" Value="2" />
         <Member Name="unknownFutureValue" Value="3" />
       </EnumType>
+      <EnumType Name="educationModuleStatus">
+        <Member Name="draft" Value="0" />
+        <Member Name="published" Value="1" />
+        <Member Name="unknownFutureValue" Value="2" />
+      </EnumType>
       <EnumType Name="educationSubmissionStatus">
         <Member Name="working" Value="0" />
         <Member Name="submitted" Value="1" />
@@ -3476,6 +3481,10 @@
         <Member Name="forbidden" Value="2" />
         <Member Name="unknownFutureValue" Value="3" />
       </EnumType>
+      <EnumType Name="remindBeforeTimeInMinutesType">
+        <Member Name="mins15" Value="0" />
+        <Member Name="unknownFutureValue" Value="100" />
+      </EnumType>
       <EnumType Name="remoteAssistanceOnboardingStatus">
         <Member Name="notOnboarded" Value="0" />
         <Member Name="onboarding" Value="1" />
@@ -3868,6 +3877,10 @@
         <Member Name="medium" Value="3" />
         <Member Name="mediumHigh" Value="4" />
         <Member Name="high" Value="5" />
+      </EnumType>
+      <EnumType Name="socialIdentitySourceType">
+        <Member Name="facebook" Value="1" />
+        <Member Name="unknownFutureValue" Value="2" />
       </EnumType>
       <EnumType Name="stagedFeatureName">
         <Member Name="passthroughAuthentication" Value="0" />
@@ -4353,6 +4366,12 @@
         <Member Name="tenant" Value="0" />
         <Member Name="application" Value="1" />
         <Member Name="unknownFutureValue" Value="2" />
+      </EnumType>
+      <EnumType Name="virtualAppointmentMessageType">
+        <Member Name="confirmation" Value="0" />
+        <Member Name="reschedule" Value="1" />
+        <Member Name="cancellation" Value="2" />
+        <Member Name="unknownFutureValue" Value="10" />
       </EnumType>
       <EnumType Name="virtualEventAttendeeRegistrationStatus">
         <Member Name="registered" Value="0" />
@@ -4849,6 +4868,17 @@
         <Property Name="languageCode" Type="Edm.String" Nullable="false" />
         <Property Name="text" Type="Edm.String" />
       </ComplexType>
+      <ComplexType Name="accessPackageResourceAttribute">
+        <Property Name="destination" Type="graph.accessPackageResourceAttributeDestination" />
+        <Property Name="name" Type="Edm.String" />
+        <Property Name="source" Type="graph.accessPackageResourceAttributeSource" />
+      </ComplexType>
+      <ComplexType Name="accessPackageResourceAttributeDestination" Abstract="true" />
+      <ComplexType Name="accessPackageResourceAttributeQuestion" BaseType="graph.accessPackageResourceAttributeSource">
+        <NavigationProperty Name="question" Type="graph.accessPackageQuestion" />
+      </ComplexType>
+      <ComplexType Name="accessPackageResourceAttributeSource" Abstract="true" />
+      <ComplexType Name="accessPackageUserDirectoryAttributeStore" BaseType="graph.accessPackageResourceAttributeDestination" />
       <ComplexType Name="accessReviewApplyAction" Abstract="true" />
       <ComplexType Name="accessReviewHistoryScheduleSettings">
         <Property Name="recurrence" Type="graph.patternedRecurrence" Nullable="false" />
@@ -5152,6 +5182,10 @@
       </ComplexType>
       <ComplexType Name="attendeeBase" BaseType="graph.recipient">
         <Property Name="type" Type="graph.attendeeType" />
+      </ComplexType>
+      <ComplexType Name="attendeeNotificationInfo">
+        <Property Name="phoneNumber" Type="Edm.String" />
+        <Property Name="timeZone" Type="Edm.String" />
       </ComplexType>
       <ComplexType Name="attributeDefinition">
         <Property Name="anchor" Type="Edm.Boolean" Nullable="false" />
@@ -6167,6 +6201,9 @@
         <Property Name="maxPoints" Type="Edm.Single" />
       </ComplexType>
       <ComplexType Name="educationAssignmentRecipient" Abstract="true" />
+      <ComplexType Name="educationChannelResource" BaseType="graph.educationResource">
+        <Property Name="url" Type="Edm.String" />
+      </ComplexType>
       <ComplexType Name="educationCourse">
         <Property Name="courseNumber" Type="Edm.String" />
         <Property Name="description" Type="Edm.String" />
@@ -6191,6 +6228,9 @@
       <ComplexType Name="educationItemBody">
         <Property Name="content" Type="Edm.String" />
         <Property Name="contentType" Type="graph.bodyType" />
+      </ComplexType>
+      <ComplexType Name="educationLinkedAssignmentResource" BaseType="graph.educationResource">
+        <Property Name="url" Type="Edm.String" />
       </ComplexType>
       <ComplexType Name="educationLinkResource" BaseType="graph.educationResource">
         <Property Name="link" Type="Edm.String" />
@@ -8237,6 +8277,10 @@
         <Property Name="maximumSize" Type="Edm.Int32" />
         <Property Name="minimumSize" Type="Edm.Int32" />
       </ComplexType>
+      <ComplexType Name="socialIdentitySource" BaseType="graph.identitySource">
+        <Property Name="displayName" Type="Edm.String" />
+        <Property Name="socialIdentitySourceType" Type="graph.socialIdentitySourceType" Nullable="false" />
+      </ComplexType>
       <ComplexType Name="sortProperty">
         <Property Name="isDescending" Type="Edm.Boolean" />
         <Property Name="name" Type="Edm.String" Nullable="false" />
@@ -9300,6 +9344,7 @@
         <Property Name="text" Type="Edm.String" />
       </EntityType>
       <EntityType Name="accessPackageResource" BaseType="graph.entity">
+        <Property Name="attributes" Type="Collection(graph.accessPackageResourceAttribute)" />
         <Property Name="createdDateTime" Type="Edm.DateTimeOffset" />
         <Property Name="description" Type="Edm.String" />
         <Property Name="displayName" Type="Edm.String" />
@@ -9829,6 +9874,7 @@
         <Property Name="spa" Type="graph.spaApplication" />
         <Property Name="tags" Type="Collection(Edm.String)" Nullable="false" />
         <Property Name="tokenEncryptionKeyId" Type="Edm.Guid" />
+        <Property Name="uniqueName" Type="Edm.String" />
         <Property Name="verifiedPublisher" Type="graph.verifiedPublisher" />
         <Property Name="web" Type="graph.webApplication" />
         <NavigationProperty Name="appManagementPolicies" Type="Collection(graph.appManagementPolicy)">
@@ -9902,6 +9948,16 @@
                   <Record Type="Org.OData.Core.V1.PropertyRef">
                     <PropertyValue Property="Alias" String="appId" />
                     <PropertyValue Property="Name" PropertyPath="appId" />
+                  </Record>
+                </Collection>
+              </PropertyValue>
+            </Record>
+            <Record Type="Org.OData.Core.V1.AlternateKey">
+              <PropertyValue Property="Key">
+                <Collection>
+                  <Record Type="Org.OData.Core.V1.PropertyRef">
+                    <PropertyValue Property="Alias" String="uniqueName" />
+                    <PropertyValue Property="Name" PropertyPath="uniqueName" />
                   </Record>
                 </Collection>
               </PropertyValue>
@@ -10906,6 +10962,7 @@
         <Property Name="isManaged" Type="Edm.Boolean" />
         <Property Name="mdmAppId" Type="Edm.String" />
         <Property Name="onPremisesLastSyncDateTime" Type="Edm.DateTimeOffset" />
+        <Property Name="onPremisesSecurityIdentifier" Type="Edm.String" />
         <Property Name="onPremisesSyncEnabled" Type="Edm.Boolean" />
         <Property Name="operatingSystem" Type="Edm.String" />
         <Property Name="operatingSystemVersion" Type="Edm.String" />
@@ -11653,7 +11710,21 @@
       <EntityType Name="driveItem" BaseType="graph.baseItem" OpenType="true">
         <Property Name="audio" Type="graph.audio" />
         <Property Name="bundle" Type="graph.bundle" />
-        <Property Name="content" Type="Edm.Stream" />
+        <Property Name="content" Type="Edm.Stream">
+          <Annotation Term="Org.OData.Capabilities.V1.ReadRestrictions">
+            <Record>
+              <PropertyValue Property="CustomQueryOptions" xmlns:edm="http://docs.oasis-open.org/odata/ns/edm">
+                <Collection>
+                  <Record>
+                    <PropertyValue Property="Name" String="$format" />
+                    <PropertyValue Property="Description" String="Format of the content" />
+                    <PropertyValue Property="Required" Bool="false" />
+                  </Record>
+                </Collection>
+              </PropertyValue>
+            </Record>
+          </Annotation>
+        </Property>
         <Property Name="cTag" Type="Edm.String" />
         <Property Name="deleted" Type="graph.deleted" />
         <Property Name="file" Type="graph.file" />
@@ -11725,6 +11796,7 @@
         <Property Name="instructions" Type="graph.educationItemBody" />
         <Property Name="lastModifiedBy" Type="graph.identitySet" />
         <Property Name="lastModifiedDateTime" Type="Edm.DateTimeOffset" />
+        <Property Name="moduleUrl" Type="Edm.String" />
         <Property Name="notificationChannelUrl" Type="Edm.String" />
         <Property Name="resourcesFolderUrl" Type="Edm.String" />
         <Property Name="status" Type="graph.educationAssignmentStatus" />
@@ -11789,6 +11861,7 @@
             </Record>
           </Annotation>
         </NavigationProperty>
+        <NavigationProperty Name="modules" Type="Collection(graph.educationModule)" ContainsTarget="true" />
         <NavigationProperty Name="schools" Type="Collection(graph.educationSchool)" />
         <NavigationProperty Name="teachers" Type="Collection(graph.educationUser)">
           <Annotation Term="Org.OData.Capabilities.V1.NavigationRestrictions">
@@ -11809,6 +11882,21 @@
       <EntityType Name="educationGradingCategory" BaseType="graph.entity">
         <Property Name="displayName" Type="Edm.String" Nullable="false" />
         <Property Name="percentageWeight" Type="Edm.Int32" Nullable="false" />
+      </EntityType>
+      <EntityType Name="educationModule" BaseType="graph.entity">
+        <Property Name="createdBy" Type="graph.identitySet" />
+        <Property Name="createdDateTime" Type="Edm.DateTimeOffset" />
+        <Property Name="description" Type="Edm.String" />
+        <Property Name="displayName" Type="Edm.String" />
+        <Property Name="isPinned" Type="Edm.Boolean" />
+        <Property Name="lastModifiedBy" Type="graph.identitySet" />
+        <Property Name="lastModifiedDateTime" Type="Edm.DateTimeOffset" />
+        <Property Name="resourcesFolderUrl" Type="Edm.String" />
+        <Property Name="status" Type="graph.educationModuleStatus" />
+        <NavigationProperty Name="resources" Type="Collection(graph.educationModuleResource)" ContainsTarget="true" />
+      </EntityType>
+      <EntityType Name="educationModuleResource" BaseType="graph.entity">
+        <Property Name="resource" Type="graph.educationResource" />
       </EntityType>
       <EntityType Name="educationOrganization" BaseType="graph.entity" Abstract="true">
         <Property Name="description" Type="Edm.String" />
@@ -11887,6 +11975,7 @@
         <Property Name="submittedDateTime" Type="Edm.DateTimeOffset" />
         <Property Name="unsubmittedBy" Type="graph.identitySet" />
         <Property Name="unsubmittedDateTime" Type="Edm.DateTimeOffset" />
+        <Property Name="webUrl" Type="Edm.String" />
         <NavigationProperty Name="outcomes" Type="Collection(graph.educationOutcome)" ContainsTarget="true" />
         <NavigationProperty Name="resources" Type="Collection(graph.educationSubmissionResource)" ContainsTarget="true" />
         <NavigationProperty Name="submittedResources" Type="Collection(graph.educationSubmissionResource)" ContainsTarget="true" />
@@ -12255,6 +12344,7 @@
           </Annotation>
         </Property>
         <Property Name="theme" Type="Edm.String" />
+        <Property Name="uniqueName" Type="Edm.String" />
         <Property Name="unseenCount" Type="Edm.Int32" />
         <Property Name="visibility" Type="Edm.String" />
         <NavigationProperty Name="acceptedSenders" Type="Collection(graph.directoryObject)">
@@ -12528,6 +12618,20 @@
             </Record>
           </Annotation>
         </NavigationProperty>
+        <Annotation Term="Org.OData.Core.V1.AlternateKeys">
+          <Collection>
+            <Record Type="Org.OData.Core.V1.AlternateKey">
+              <PropertyValue Property="Key">
+                <Collection>
+                  <Record Type="Org.OData.Core.V1.PropertyRef">
+                    <PropertyValue Property="Alias" String="uniqueName" />
+                    <PropertyValue Property="Name" PropertyPath="uniqueName" />
+                  </Record>
+                </Collection>
+              </PropertyValue>
+            </Record>
+          </Collection>
+        </Annotation>
       </EntityType>
       <EntityType Name="groupLifecyclePolicy" BaseType="graph.entity">
         <Property Name="alternateNotificationEmails" Type="Edm.String" />
@@ -14090,6 +14194,9 @@
         <Property Name="participantId" Type="Edm.String" Nullable="false" />
         <NavigationProperty Name="call" Type="graph.call" ContainsTarget="true" />
       </EntityType>
+      <EntityType Name="partners" BaseType="graph.entity">
+        <NavigationProperty Name="billing" Type="microsoft.graph.partners.billing.billing" ContainsTarget="true" />
+      </EntityType>
       <EntityType Name="passwordAuthenticationMethod" BaseType="graph.authenticationMethod">
         <Property Name="createdDateTime" Type="Edm.DateTimeOffset" />
         <Property Name="password" Type="Edm.String" />
@@ -14693,6 +14800,7 @@
         <NavigationProperty Name="dailyPrintUsageByUser" Type="Collection(graph.printUsageByUser)" ContainsTarget="true" />
         <NavigationProperty Name="monthlyPrintUsageByPrinter" Type="Collection(graph.printUsageByPrinter)" ContainsTarget="true" />
         <NavigationProperty Name="monthlyPrintUsageByUser" Type="Collection(graph.printUsageByUser)" ContainsTarget="true" />
+        <NavigationProperty Name="partners" Type="graph.partners" ContainsTarget="true" />
         <NavigationProperty Name="security" Type="graph.securityReportsRoot" ContainsTarget="true" />
       </EntityType>
       <EntityType Name="request" BaseType="graph.entity">
@@ -20424,6 +20532,10 @@
         <Parameter Name="bindparameter" Type="graph.workbookFunctions" />
         <ReturnType Type="graph.workbookFunctionResult" />
       </Action>
+      <Action Name="pin" IsBound="true">
+        <Parameter Name="bindingParameter" Type="graph.educationModule" />
+        <ReturnType Type="graph.educationModule" />
+      </Action>
       <Action Name="playPrompt" IsBound="true">
         <Parameter Name="bindingParameter" Type="graph.call" />
         <Parameter Name="prompts" Type="Collection(graph.prompt)" Nullable="false" />
@@ -20538,6 +20650,10 @@
       <Action Name="publish" IsBound="true">
         <Parameter Name="bindingParameter" Type="graph.educationAssignment" />
         <ReturnType Type="graph.educationAssignment" />
+      </Action>
+      <Action Name="publish" IsBound="true">
+        <Parameter Name="bindingParameter" Type="graph.educationModule" />
+        <ReturnType Type="graph.educationModule" />
       </Action>
       <Action Name="publish" IsBound="true">
         <Parameter Name="bookingBusiness" Type="graph.bookingBusiness" Nullable="false" />
@@ -20924,6 +21040,7 @@
         <Parameter Name="activityType" Type="Edm.String" Unicode="false" />
         <Parameter Name="chainId" Type="Edm.Int64" />
         <Parameter Name="previewText" Type="graph.itemBody" />
+        <Parameter Name="teamsAppId" Type="Edm.String" Unicode="false" />
         <Parameter Name="templateParameters" Type="Collection(graph.keyValuePair)" />
         <Parameter Name="recipient" Type="graph.teamworkNotificationRecipient" />
       </Action>
@@ -20933,6 +21050,7 @@
         <Parameter Name="activityType" Type="Edm.String" Unicode="false" />
         <Parameter Name="chainId" Type="Edm.Int64" />
         <Parameter Name="previewText" Type="graph.itemBody" />
+        <Parameter Name="teamsAppId" Type="Edm.String" Unicode="false" />
         <Parameter Name="templateParameters" Type="Collection(graph.keyValuePair)" />
         <Parameter Name="recipient" Type="graph.teamworkNotificationRecipient" />
       </Action>
@@ -20942,6 +21060,7 @@
         <Parameter Name="activityType" Type="Edm.String" Unicode="false" />
         <Parameter Name="chainId" Type="Edm.Int64" />
         <Parameter Name="previewText" Type="graph.itemBody" />
+        <Parameter Name="teamsAppId" Type="Edm.String" Unicode="false" />
         <Parameter Name="templateParameters" Type="Collection(graph.keyValuePair)" />
       </Action>
       <Action Name="sendActivityNotificationToRecipients" IsBound="true">
@@ -20971,6 +21090,16 @@
       </Action>
       <Action Name="sendTestMessage" IsBound="true">
         <Parameter Name="bindingParameter" Type="graph.notificationMessageTemplate" />
+      </Action>
+      <Action Name="sendVirtualAppointmentReminderSms" IsBound="true">
+        <Parameter Name="bindingParameter" Type="graph.onlineMeeting" />
+        <Parameter Name="remindBeforeTimeInMinutesType" Type="graph.remindBeforeTimeInMinutesType" />
+        <Parameter Name="attendees" Type="Collection(graph.attendeeNotificationInfo)" />
+      </Action>
+      <Action Name="sendVirtualAppointmentSms" IsBound="true">
+        <Parameter Name="bindingParameter" Type="graph.onlineMeeting" />
+        <Parameter Name="messageType" Type="graph.virtualAppointmentMessageType" />
+        <Parameter Name="attendees" Type="Collection(graph.attendeeNotificationInfo)" />
       </Action>
       <Action Name="seriesSum" IsBound="true">
         <Parameter Name="bindparameter" Type="graph.workbookFunctions" />
@@ -21028,6 +21157,10 @@
       <Action Name="setUpResourcesFolder" IsBound="true">
         <Parameter Name="bindingParameter" Type="graph.educationAssignment" />
         <ReturnType Type="graph.educationAssignment" />
+      </Action>
+      <Action Name="setUpResourcesFolder" IsBound="true">
+        <Parameter Name="bindingParameter" Type="graph.educationModule" />
+        <ReturnType Type="graph.educationModule" />
       </Action>
       <Action Name="setUpResourcesFolder" IsBound="true">
         <Parameter Name="bindingParameter" Type="graph.educationSubmission" />
@@ -21442,6 +21575,10 @@
         <Parameter Name="clientContext" Type="Edm.String" Unicode="false" />
         <ReturnType Type="graph.unmuteParticipantOperation" />
       </Action>
+      <Action Name="unpin" IsBound="true">
+        <Parameter Name="bindingParameter" Type="graph.educationModule" />
+        <ReturnType Type="graph.educationModule" />
+      </Action>
       <Action Name="unprotect" IsBound="true">
         <Parameter Name="bindparameter" Type="graph.workbookWorksheetProtection" />
       </Action>
@@ -21733,42 +21870,42 @@
         <Parameter Name="bindingParameter" Type="Collection(graph.identityProviderBase)" />
         <ReturnType Type="Collection(Edm.String)" Unicode="false" />
       </Function>
-      <Function Name="boundingRect" IsBound="true" IsComposable="true">
+      <Function Name="boundingRect" IsBound="true" IsComposable="false">
         <Parameter Name="bindparameter" Type="graph.workbookRange" />
         <Parameter Name="anotherRange" Type="Edm.String" Unicode="false" />
         <ReturnType Type="graph.workbookRange" />
       </Function>
-      <Function Name="cell" IsBound="true" IsComposable="true">
+      <Function Name="cell" IsBound="true" IsComposable="false">
         <Parameter Name="bindparameter" Type="graph.workbookRange" />
         <Parameter Name="row" Type="Edm.Int32" Nullable="false" />
         <Parameter Name="column" Type="Edm.Int32" Nullable="false" />
         <ReturnType Type="graph.workbookRange" />
       </Function>
-      <Function Name="cell" IsBound="true" IsComposable="true">
+      <Function Name="cell" IsBound="true" IsComposable="false">
         <Parameter Name="bindparameter" Type="graph.workbookWorksheet" />
         <Parameter Name="row" Type="Edm.Int32" Nullable="false" />
         <Parameter Name="column" Type="Edm.Int32" Nullable="false" />
         <ReturnType Type="graph.workbookRange" />
       </Function>
-      <Function Name="column" IsBound="true" IsComposable="true">
+      <Function Name="column" IsBound="true" IsComposable="false">
         <Parameter Name="bindparameter" Type="graph.workbookRange" />
         <Parameter Name="column" Type="Edm.Int32" Nullable="false" />
         <ReturnType Type="graph.workbookRange" />
       </Function>
-      <Function Name="columnsAfter" IsBound="true" IsComposable="true">
+      <Function Name="columnsAfter" IsBound="true" IsComposable="false">
         <Parameter Name="bindparameter" Type="graph.workbookRange" />
         <ReturnType Type="graph.workbookRange" />
       </Function>
-      <Function Name="columnsAfter" IsBound="true" IsComposable="true">
+      <Function Name="columnsAfter" IsBound="true" IsComposable="false">
         <Parameter Name="bindparameter" Type="graph.workbookRange" />
         <Parameter Name="count" Type="Edm.Int32" />
         <ReturnType Type="graph.workbookRange" />
       </Function>
-      <Function Name="columnsBefore" IsBound="true" IsComposable="true">
+      <Function Name="columnsBefore" IsBound="true" IsComposable="false">
         <Parameter Name="bindparameter" Type="graph.workbookRange" />
         <ReturnType Type="graph.workbookRange" />
       </Function>
-      <Function Name="columnsBefore" IsBound="true" IsComposable="true">
+      <Function Name="columnsBefore" IsBound="true" IsComposable="false">
         <Parameter Name="bindparameter" Type="graph.workbookRange" />
         <Parameter Name="count" Type="Edm.Int32" />
         <ReturnType Type="graph.workbookRange" />
@@ -21801,11 +21938,11 @@
         <Parameter Name="bindparameter" Type="Collection(graph.workbookTableRow)" />
         <ReturnType Type="Edm.Int32" Nullable="false" />
       </Function>
-      <Function Name="dataBodyRange" IsBound="true" IsComposable="true">
+      <Function Name="dataBodyRange" IsBound="true" IsComposable="false">
         <Parameter Name="bindparameter" Type="graph.workbookTable" />
         <ReturnType Type="graph.workbookRange" />
       </Function>
-      <Function Name="dataBodyRange" IsBound="true" IsComposable="true">
+      <Function Name="dataBodyRange" IsBound="true" IsComposable="false">
         <Parameter Name="bindparameter" Type="graph.workbookTableColumn" />
         <ReturnType Type="graph.workbookRange" />
       </Function>
@@ -21971,11 +22108,11 @@
         <Parameter Name="bindingParameter" Type="graph.applePushNotificationCertificate" />
         <ReturnType Type="Edm.String" Unicode="false" />
       </Function>
-      <Function Name="entireColumn" IsBound="true" IsComposable="true">
+      <Function Name="entireColumn" IsBound="true" IsComposable="false">
         <Parameter Name="bindparameter" Type="graph.workbookRange" />
         <ReturnType Type="graph.workbookRange" />
       </Function>
-      <Function Name="entireRow" IsBound="true" IsComposable="true">
+      <Function Name="entireRow" IsBound="true" IsComposable="false">
         <Parameter Name="bindparameter" Type="graph.workbookRange" />
         <ReturnType Type="graph.workbookRange" />
       </Function>
@@ -22167,7 +22304,7 @@
           </Record>
         </Annotation>
       </Function>
-      <Function Name="getAllMessages" EntitySetPath="bindingParameter/messages" IsBound="true">
+      <Function Name="getAllMessages" EntitySetPath="bindingParameter/messages" IsBound="true" IsComposable="true">
         <Parameter Name="bindingParameter" Type="Collection(graph.chat)" />
         <ReturnType Type="Collection(graph.chatMessage)" />
         <Annotation Term="Org.OData.Capabilities.V1.OperationRestrictions" xmlns:edm="http://docs.oasis-open.org/odata/ns/edm">
@@ -22793,11 +22930,11 @@
         <Parameter Name="period" Type="Edm.String" Nullable="false" Unicode="false" />
         <ReturnType Type="Edm.Stream" Nullable="false" />
       </Function>
-      <Function Name="headerRowRange" IsBound="true" IsComposable="true">
+      <Function Name="headerRowRange" IsBound="true" IsComposable="false">
         <Parameter Name="bindparameter" Type="graph.workbookTable" />
         <ReturnType Type="graph.workbookRange" />
       </Function>
-      <Function Name="headerRowRange" IsBound="true" IsComposable="true">
+      <Function Name="headerRowRange" IsBound="true" IsComposable="false">
         <Parameter Name="bindparameter" Type="graph.workbookTableColumn" />
         <ReturnType Type="graph.workbookRange" />
       </Function>
@@ -22827,7 +22964,7 @@
         <Parameter Name="bindingParameter" Type="graph.serviceHealthIssue" />
         <ReturnType Type="Edm.Stream" />
       </Function>
-      <Function Name="intersection" IsBound="true" IsComposable="true">
+      <Function Name="intersection" IsBound="true" IsComposable="false">
         <Parameter Name="bindparameter" Type="graph.workbookRange" />
         <Parameter Name="anotherRange" Type="Edm.String" Unicode="false" />
         <ReturnType Type="graph.workbookRange" />
@@ -22881,15 +23018,15 @@
         <Parameter Name="index" Type="Edm.Int32" Nullable="false" />
         <ReturnType Type="graph.workbookTableRow" />
       </Function>
-      <Function Name="lastCell" IsBound="true" IsComposable="true">
+      <Function Name="lastCell" IsBound="true" IsComposable="false">
         <Parameter Name="bindparameter" Type="graph.workbookRange" />
         <ReturnType Type="graph.workbookRange" />
       </Function>
-      <Function Name="lastColumn" IsBound="true" IsComposable="true">
+      <Function Name="lastColumn" IsBound="true" IsComposable="false">
         <Parameter Name="bindparameter" Type="graph.workbookRange" />
         <ReturnType Type="graph.workbookRange" />
       </Function>
-      <Function Name="lastRow" IsBound="true" IsComposable="true">
+      <Function Name="lastRow" IsBound="true" IsComposable="false">
         <Parameter Name="bindparameter" Type="graph.workbookRange" />
         <ReturnType Type="graph.workbookRange" />
       </Function>
@@ -22914,7 +23051,7 @@
         <Parameter Name="period" Type="Edm.String" Unicode="false" />
         <ReturnType Type="graph.report" />
       </Function>
-      <Function Name="offsetRange" IsBound="true" IsComposable="true">
+      <Function Name="offsetRange" IsBound="true" IsComposable="false">
         <Parameter Name="bindparameter" Type="graph.workbookRange" />
         <Parameter Name="rowOffset" Type="Edm.Int32" Nullable="false" />
         <Parameter Name="columnOffset" Type="Edm.Int32" Nullable="false" />
@@ -22924,31 +23061,31 @@
         <Parameter Name="bindingParameter" Type="graph.onenotePage" />
         <ReturnType Type="graph.onenotePagePreview" />
       </Function>
-      <Function Name="range" IsBound="true" IsComposable="true">
+      <Function Name="range" IsBound="true" IsComposable="false">
         <Parameter Name="bindparameter" Type="graph.workbookNamedItem" />
         <ReturnType Type="graph.workbookRange" />
       </Function>
-      <Function Name="range" IsBound="true" IsComposable="true">
+      <Function Name="range" IsBound="true" IsComposable="false">
         <Parameter Name="bindparameter" Type="graph.workbookRangeView" />
         <ReturnType Type="graph.workbookRange" />
       </Function>
-      <Function Name="range" IsBound="true" IsComposable="true">
+      <Function Name="range" IsBound="true" IsComposable="false">
         <Parameter Name="bindparameter" Type="graph.workbookTable" />
         <ReturnType Type="graph.workbookRange" />
       </Function>
-      <Function Name="range" IsBound="true" IsComposable="true">
+      <Function Name="range" IsBound="true" IsComposable="false">
         <Parameter Name="bindparameter" Type="graph.workbookTableColumn" />
         <ReturnType Type="graph.workbookRange" />
       </Function>
-      <Function Name="range" IsBound="true" IsComposable="true">
+      <Function Name="range" IsBound="true" IsComposable="false">
         <Parameter Name="bindparameter" Type="graph.workbookTableRow" />
         <ReturnType Type="graph.workbookRange" />
       </Function>
-      <Function Name="range" IsBound="true" IsComposable="true">
+      <Function Name="range" IsBound="true" IsComposable="false">
         <Parameter Name="bindparameter" Type="graph.workbookWorksheet" />
         <ReturnType Type="graph.workbookRange" />
       </Function>
-      <Function Name="range" IsBound="true" IsComposable="true">
+      <Function Name="range" IsBound="true" IsComposable="false">
         <Parameter Name="bindparameter" Type="graph.workbookWorksheet" />
         <Parameter Name="address" Type="Edm.String" Unicode="false" />
         <ReturnType Type="graph.workbookRange" />
@@ -22967,31 +23104,31 @@
         <Parameter Name="EndDateTime" Type="Edm.String" Unicode="false" />
         <ReturnType Type="Collection(graph.reminder)" Nullable="false" />
       </Function>
-      <Function Name="resizedRange" IsBound="true" IsComposable="true">
+      <Function Name="resizedRange" IsBound="true" IsComposable="false">
         <Parameter Name="bindparameter" Type="graph.workbookRange" />
         <Parameter Name="deltaRows" Type="Edm.Int32" Nullable="false" />
         <Parameter Name="deltaColumns" Type="Edm.Int32" Nullable="false" />
         <ReturnType Type="graph.workbookRange" />
       </Function>
-      <Function Name="row" IsBound="true" IsComposable="true">
+      <Function Name="row" IsBound="true" IsComposable="false">
         <Parameter Name="bindparameter" Type="graph.workbookRange" />
         <Parameter Name="row" Type="Edm.Int32" Nullable="false" />
         <ReturnType Type="graph.workbookRange" />
       </Function>
-      <Function Name="rowsAbove" IsBound="true" IsComposable="true">
+      <Function Name="rowsAbove" IsBound="true" IsComposable="false">
         <Parameter Name="bindparameter" Type="graph.workbookRange" />
         <ReturnType Type="graph.workbookRange" />
       </Function>
-      <Function Name="rowsAbove" IsBound="true" IsComposable="true">
+      <Function Name="rowsAbove" IsBound="true" IsComposable="false">
         <Parameter Name="bindparameter" Type="graph.workbookRange" />
         <Parameter Name="count" Type="Edm.Int32" />
         <ReturnType Type="graph.workbookRange" />
       </Function>
-      <Function Name="rowsBelow" IsBound="true" IsComposable="true">
+      <Function Name="rowsBelow" IsBound="true" IsComposable="false">
         <Parameter Name="bindparameter" Type="graph.workbookRange" />
         <ReturnType Type="graph.workbookRange" />
       </Function>
-      <Function Name="rowsBelow" IsBound="true" IsComposable="true">
+      <Function Name="rowsBelow" IsBound="true" IsComposable="false">
         <Parameter Name="bindparameter" Type="graph.workbookRange" />
         <Parameter Name="count" Type="Edm.Int32" />
         <ReturnType Type="graph.workbookRange" />
@@ -23038,11 +23175,11 @@
         <Parameter Name="key" Type="Edm.String" Nullable="false" Unicode="false" />
         <ReturnType Type="graph.workbookTableRow" />
       </Function>
-      <Function Name="totalRowRange" IsBound="true" IsComposable="true">
+      <Function Name="totalRowRange" IsBound="true" IsComposable="false">
         <Parameter Name="bindparameter" Type="graph.workbookTable" />
         <ReturnType Type="graph.workbookRange" />
       </Function>
-      <Function Name="totalRowRange" IsBound="true" IsComposable="true">
+      <Function Name="totalRowRange" IsBound="true" IsComposable="false">
         <Parameter Name="bindparameter" Type="graph.workbookTableColumn" />
         <ReturnType Type="graph.workbookRange" />
       </Function>
@@ -23050,20 +23187,20 @@
         <Parameter Name="bindingParameter" Type="graph.authenticationStrengthPolicy" />
         <ReturnType Type="graph.authenticationStrengthUsage" />
       </Function>
-      <Function Name="usedRange" IsBound="true" IsComposable="true">
+      <Function Name="usedRange" IsBound="true" IsComposable="false">
         <Parameter Name="bindparameter" Type="graph.workbookRange" />
         <ReturnType Type="graph.workbookRange" />
       </Function>
-      <Function Name="usedRange" IsBound="true" IsComposable="true">
+      <Function Name="usedRange" IsBound="true" IsComposable="false">
         <Parameter Name="bindparameter" Type="graph.workbookRange" />
         <Parameter Name="valuesOnly" Type="Edm.Boolean" Nullable="false" />
         <ReturnType Type="graph.workbookRange" />
       </Function>
-      <Function Name="usedRange" IsBound="true" IsComposable="true">
+      <Function Name="usedRange" IsBound="true" IsComposable="false">
         <Parameter Name="bindparameter" Type="graph.workbookWorksheet" />
         <ReturnType Type="graph.workbookRange" />
       </Function>
-      <Function Name="usedRange" IsBound="true" IsComposable="true">
+      <Function Name="usedRange" IsBound="true" IsComposable="false">
         <Parameter Name="bindparameter" Type="graph.workbookWorksheet" />
         <Parameter Name="valuesOnly" Type="Edm.Boolean" Nullable="false" />
         <ReturnType Type="graph.workbookRange" />
@@ -23318,6 +23455,29 @@
                       </Record>
                     </PropertyValue>
                   </Record>
+                  <Record>
+                    <PropertyValue Property="NavigationProperty">
+                      <PropertyPath>calendarGroups/calendars/calendarView</PropertyPath>
+                    </PropertyValue>
+                    <PropertyValue Property="ReadRestrictions">
+                      <Record>
+                        <PropertyValue Property="CustomQueryOptions">
+                          <Collection>
+                            <Record>
+                              <PropertyValue Property="Name" String="startDateTime" />
+                              <PropertyValue Property="Description" String="The start date and time of the time range, represented in ISO 8601 format. For example, 2019-11-08T19:00:00-08:00" />
+                              <PropertyValue Property="Required" Bool="true" />
+                            </Record>
+                            <Record>
+                              <PropertyValue Property="Name" String="endDateTime" />
+                              <PropertyValue Property="Description" String="The end date and time of the time range, represented in ISO 8601 format. For example, 2019-11-08T20:00:00-08:00" />
+                              <PropertyValue Property="Required" Bool="true" />
+                            </Record>
+                          </Collection>
+                        </PropertyValue>
+                      </Record>
+                    </PropertyValue>
+                  </Record>
                 </Collection>
               </PropertyValue>
             </Record>
@@ -23489,6 +23649,29 @@
                       </Record>
                     </PropertyValue>
                   </Record>
+                  <Record>
+                    <PropertyValue Property="NavigationProperty">
+                      <PropertyPath>calendarGroups/calendars/calendarView</PropertyPath>
+                    </PropertyValue>
+                    <PropertyValue Property="ReadRestrictions">
+                      <Record>
+                        <PropertyValue Property="CustomQueryOptions">
+                          <Collection>
+                            <Record>
+                              <PropertyValue Property="Name" String="startDateTime" />
+                              <PropertyValue Property="Description" String="The start date and time of the time range, represented in ISO 8601 format. For example, 2019-11-08T19:00:00-08:00" />
+                              <PropertyValue Property="Required" Bool="true" />
+                            </Record>
+                            <Record>
+                              <PropertyValue Property="Name" String="endDateTime" />
+                              <PropertyValue Property="Description" String="The end date and time of the time range, represented in ISO 8601 format. For example, 2019-11-08T20:00:00-08:00" />
+                              <PropertyValue Property="Required" Bool="true" />
+                            </Record>
+                          </Collection>
+                        </PropertyValue>
+                      </Record>
+                    </PropertyValue>
+                  </Record>
                 </Collection>
               </PropertyValue>
             </Record>
@@ -23612,6 +23795,29 @@
                   <Record>
                     <PropertyValue Property="NavigationProperty">
                       <PropertyPath>calendars/calendarView</PropertyPath>
+                    </PropertyValue>
+                    <PropertyValue Property="ReadRestrictions">
+                      <Record>
+                        <PropertyValue Property="CustomQueryOptions">
+                          <Collection>
+                            <Record>
+                              <PropertyValue Property="Name" String="startDateTime" />
+                              <PropertyValue Property="Description" String="The start date and time of the time range, represented in ISO 8601 format. For example, 2019-11-08T19:00:00-08:00" />
+                              <PropertyValue Property="Required" Bool="true" />
+                            </Record>
+                            <Record>
+                              <PropertyValue Property="Name" String="endDateTime" />
+                              <PropertyValue Property="Description" String="The end date and time of the time range, represented in ISO 8601 format. For example, 2019-11-08T20:00:00-08:00" />
+                              <PropertyValue Property="Required" Bool="true" />
+                            </Record>
+                          </Collection>
+                        </PropertyValue>
+                      </Record>
+                    </PropertyValue>
+                  </Record>
+                  <Record>
+                    <PropertyValue Property="NavigationProperty">
+                      <PropertyPath>calendarGroups/calendars/calendarView</PropertyPath>
                     </PropertyValue>
                     <PropertyValue Property="ReadRestrictions">
                       <Record>
@@ -24892,9 +25098,9 @@
             <PropertyValue Property="Countable" Bool="false" />
           </Record>
         </Annotation>
-        <Annotation Term="Org.OData.Capabilities.V1.SelectRestrictions">
+        <Annotation Term="Org.OData.Capabilities.V1.SelectSupport">
           <Record>
-            <PropertyValue Property="Selectable" Bool="false" />
+            <PropertyValue Property="Supported" Bool="false" />
           </Record>
         </Annotation>
         <Annotation Term="Org.OData.Capabilities.V1.SkipSupported" Bool="false" />
@@ -24939,9 +25145,9 @@
             <PropertyValue Property="Filterable" Bool="false" />
           </Record>
         </Annotation>
-        <Annotation Term="Org.OData.Capabilities.V1.SelectRestrictions">
+        <Annotation Term="Org.OData.Capabilities.V1.SelectSupport">
           <Record>
-            <PropertyValue Property="Selectable" Bool="false" />
+            <PropertyValue Property="Supported" Bool="false" />
           </Record>
         </Annotation>
         <Annotation Term="Org.OData.Capabilities.V1.SkipSupported" Bool="false" />
@@ -24968,9 +25174,9 @@
             <PropertyValue Property="Filterable" Bool="false" />
           </Record>
         </Annotation>
-        <Annotation Term="Org.OData.Capabilities.V1.SelectRestrictions">
+        <Annotation Term="Org.OData.Capabilities.V1.SelectSupport">
           <Record>
-            <PropertyValue Property="Selectable" Bool="false" />
+            <PropertyValue Property="Supported" Bool="false" />
           </Record>
         </Annotation>
         <Annotation Term="Org.OData.Capabilities.V1.SkipSupported" Bool="false" />
@@ -24997,9 +25203,9 @@
             <PropertyValue Property="Filterable" Bool="false" />
           </Record>
         </Annotation>
-        <Annotation Term="Org.OData.Capabilities.V1.SelectRestrictions">
+        <Annotation Term="Org.OData.Capabilities.V1.SelectSupport">
           <Record>
-            <PropertyValue Property="Selectable" Bool="false" />
+            <PropertyValue Property="Supported" Bool="false" />
           </Record>
         </Annotation>
         <Annotation Term="Org.OData.Capabilities.V1.SkipSupported" Bool="false" />
@@ -25026,9 +25232,9 @@
             <PropertyValue Property="Filterable" Bool="false" />
           </Record>
         </Annotation>
-        <Annotation Term="Org.OData.Capabilities.V1.SelectRestrictions">
+        <Annotation Term="Org.OData.Capabilities.V1.SelectSupport">
           <Record>
-            <PropertyValue Property="Selectable" Bool="false" />
+            <PropertyValue Property="Supported" Bool="false" />
           </Record>
         </Annotation>
         <Annotation Term="Org.OData.Capabilities.V1.SkipSupported" Bool="false" />
@@ -25055,9 +25261,9 @@
             <PropertyValue Property="Filterable" Bool="false" />
           </Record>
         </Annotation>
-        <Annotation Term="Org.OData.Capabilities.V1.SelectRestrictions">
+        <Annotation Term="Org.OData.Capabilities.V1.SelectSupport">
           <Record>
-            <PropertyValue Property="Selectable" Bool="false" />
+            <PropertyValue Property="Supported" Bool="false" />
           </Record>
         </Annotation>
         <Annotation Term="Org.OData.Capabilities.V1.SkipSupported" Bool="false" />
@@ -25079,9 +25285,9 @@
             <PropertyValue Property="Filterable" Bool="true" />
           </Record>
         </Annotation>
-        <Annotation Term="Org.OData.Capabilities.V1.SelectRestrictions">
+        <Annotation Term="Org.OData.Capabilities.V1.SelectSupport">
           <Record>
-            <PropertyValue Property="Selectable" Bool="true" />
+            <PropertyValue Property="Supported" Bool="true" />
           </Record>
         </Annotation>
         <Annotation Term="Org.OData.Capabilities.V1.SkipSupported" Bool="true" />
@@ -26055,9 +26261,9 @@
             <PropertyValue Property="Filterable" Bool="true" />
           </Record>
         </Annotation>
-        <Annotation Term="Org.OData.Capabilities.V1.SelectRestrictions">
+        <Annotation Term="Org.OData.Capabilities.V1.SelectSupport">
           <Record>
-            <PropertyValue Property="Selectable" Bool="false" />
+            <PropertyValue Property="Supported" Bool="false" />
           </Record>
         </Annotation>
         <Annotation Term="Org.OData.Capabilities.V1.SkipSupported" Bool="false" />
@@ -26153,9 +26359,9 @@
             <PropertyValue Property="Insertable" Bool="false" />
           </Record>
         </Annotation>
-        <Annotation Term="Org.OData.Capabilities.V1.SelectRestrictions">
+        <Annotation Term="Org.OData.Capabilities.V1.SelectSupport">
           <Record>
-            <PropertyValue Property="Selectable" Bool="false" />
+            <PropertyValue Property="Supported" Bool="false" />
           </Record>
         </Annotation>
         <Annotation Term="Org.OData.Capabilities.V1.SkipSupported" Bool="false" />
@@ -26904,9 +27110,9 @@
             <PropertyValue Property="Filterable" Bool="true" />
           </Record>
         </Annotation>
-        <Annotation Term="Org.OData.Capabilities.V1.SelectRestrictions">
+        <Annotation Term="Org.OData.Capabilities.V1.SelectSupport">
           <Record>
-            <PropertyValue Property="Selectable" Bool="true" />
+            <PropertyValue Property="Supported" Bool="true" />
           </Record>
         </Annotation>
         <Annotation Term="Org.OData.Capabilities.V1.SkipSupported" Bool="true" />
@@ -26933,9 +27139,9 @@
             <PropertyValue Property="Insertable" Bool="false" />
           </Record>
         </Annotation>
-        <Annotation Term="Org.OData.Capabilities.V1.SelectRestrictions">
+        <Annotation Term="Org.OData.Capabilities.V1.SelectSupport">
           <Record>
-            <PropertyValue Property="Selectable" Bool="true" />
+            <PropertyValue Property="Supported" Bool="true" />
           </Record>
         </Annotation>
         <Annotation Term="Org.OData.Capabilities.V1.SkipSupported" Bool="false" />
@@ -27127,9 +27333,9 @@
             <PropertyValue Property="Referenceable" Bool="false" />
           </Record>
         </Annotation>
-        <Annotation Term="Org.OData.Capabilities.V1.SelectRestrictions">
+        <Annotation Term="Org.OData.Capabilities.V1.SelectSupport">
           <Record>
-            <PropertyValue Property="Selectable" Bool="true" />
+            <PropertyValue Property="Supported" Bool="true" />
           </Record>
         </Annotation>
         <Annotation Term="Org.OData.Capabilities.V1.SkipSupported" Bool="false" />
@@ -27156,9 +27362,9 @@
             <PropertyValue Property="Referenceable" Bool="false" />
           </Record>
         </Annotation>
-        <Annotation Term="Org.OData.Capabilities.V1.SelectRestrictions">
+        <Annotation Term="Org.OData.Capabilities.V1.SelectSupport">
           <Record>
-            <PropertyValue Property="Selectable" Bool="true" />
+            <PropertyValue Property="Supported" Bool="true" />
           </Record>
         </Annotation>
         <Annotation Term="Org.OData.Capabilities.V1.SkipSupported" Bool="true" />
@@ -29322,6 +29528,24 @@
           </Record>
         </Annotation>
       </Annotations>
+      <Annotations Target="microsoft.graph.educationModule/createdBy">
+        <Annotation Term="Org.OData.Core.V1.Computed" Bool="true" />
+      </Annotations>
+      <Annotations Target="microsoft.graph.educationModule/createdDateTime">
+        <Annotation Term="Org.OData.Core.V1.Computed" Bool="true" />
+      </Annotations>
+      <Annotations Target="microsoft.graph.educationModule/lastModifiedBy">
+        <Annotation Term="Org.OData.Core.V1.Computed" Bool="true" />
+      </Annotations>
+      <Annotations Target="microsoft.graph.educationModule/lastModifiedDateTime">
+        <Annotation Term="Org.OData.Core.V1.Computed" Bool="true" />
+      </Annotations>
+      <Annotations Target="microsoft.graph.educationModule/resourcesFolderUrl">
+        <Annotation Term="Org.OData.Core.V1.Computed" Bool="true" />
+      </Annotations>
+      <Annotations Target="microsoft.graph.educationModule/status">
+        <Annotation Term="Org.OData.Core.V1.Computed" Bool="true" />
+      </Annotations>
       <Annotations Target="microsoft.graph.educationResource/createdBy">
         <Annotation Term="Org.OData.Core.V1.Computed" Bool="true" />
       </Annotations>
@@ -29395,6 +29619,9 @@
         <Annotation Term="Org.OData.Core.V1.Computed" Bool="true" />
       </Annotations>
       <Annotations Target="microsoft.graph.educationSubmission/unsubmittedDateTime">
+        <Annotation Term="Org.OData.Core.V1.Computed" Bool="true" />
+      </Annotations>
+      <Annotations Target="microsoft.graph.educationSubmission/webUrl">
         <Annotation Term="Org.OData.Core.V1.Computed" Bool="true" />
       </Annotations>
       <Annotations Target="microsoft.graph.enablement">
@@ -29690,6 +29917,13 @@
       <Annotations Target="microsoft.graph.firewallPreSharedKeyEncodingMethodType/utF8">
         <Annotation Term="Org.OData.Core.V1.Description" String="Encode the preshared key using UTF-8" />
       </Annotations>
+      <Annotations Target="microsoft.graph.getAllMessages(Collection(microsoft.graph.chat))">
+        <Annotation Term="Org.OData.Capabilities.V1.ChangeTracking">
+          <Record>
+            <PropertyValue Property="Supported" Bool="true" />
+          </Record>
+        </Annotation>
+      </Annotations>
       <Annotations Target="microsoft.graph.getEffectivePermissions(microsoft.graph.deviceManagement, Edm.String)">
         <Annotation Term="Org.OData.Core.V1.Description" String="Retrieves the effective permissions of the currently authenticated user" />
       </Annotations>
@@ -29723,6 +29957,11 @@
                 </Record>
               </Collection>
             </PropertyValue>
+          </Record>
+        </Annotation>
+        <Annotation Term="Org.OData.Capabilities.V1.UpdateRestrictions">
+          <Record>
+            <PropertyValue Property="Upsertable" Bool="true" />
           </Record>
         </Annotation>
       </Annotations>
@@ -29839,6 +30078,11 @@
             </PropertyValue>
           </Record>
         </Annotation>
+        <Annotation Term="Org.OData.Capabilities.V1.UpdateRestrictions">
+          <Record>
+            <PropertyValue Property="Upsertable" Bool="true" />
+          </Record>
+        </Annotation>
       </Annotations>
       <Annotations Target="microsoft.graph.GraphService/servicePrincipals">
         <Annotation Term="Org.OData.Capabilities.V1.ReadRestrictions">
@@ -29861,6 +30105,11 @@
                 </Record>
               </Collection>
             </PropertyValue>
+          </Record>
+        </Annotation>
+        <Annotation Term="Org.OData.Capabilities.V1.UpdateRestrictions">
+          <Record>
+            <PropertyValue Property="Upsertable" Bool="true" />
           </Record>
         </Annotation>
       </Annotations>
@@ -30174,9 +30423,9 @@
             <PropertyValue Property="Searchable" Bool="true" />
           </Record>
         </Annotation>
-        <Annotation Term="Org.OData.Capabilities.V1.SelectRestrictions">
+        <Annotation Term="Org.OData.Capabilities.V1.SelectSupport">
           <Record>
-            <PropertyValue Property="Selectable" Bool="false" />
+            <PropertyValue Property="Supported" Bool="false" />
           </Record>
         </Annotation>
         <Annotation Term="Org.OData.Capabilities.V1.SkipSupported" Bool="false" />
@@ -30256,9 +30505,9 @@
             <PropertyValue Property="Searchable" Bool="false" />
           </Record>
         </Annotation>
-        <Annotation Term="Org.OData.Capabilities.V1.SelectRestrictions">
+        <Annotation Term="Org.OData.Capabilities.V1.SelectSupport">
           <Record>
-            <PropertyValue Property="Selectable" Bool="false" />
+            <PropertyValue Property="Supported" Bool="false" />
           </Record>
         </Annotation>
         <Annotation Term="Org.OData.Capabilities.V1.SkipSupported" Bool="false" />
@@ -30324,9 +30573,9 @@
             <PropertyValue Property="Searchable" Bool="true" />
           </Record>
         </Annotation>
-        <Annotation Term="Org.OData.Capabilities.V1.SelectRestrictions">
+        <Annotation Term="Org.OData.Capabilities.V1.SelectSupport">
           <Record>
-            <PropertyValue Property="Selectable" Bool="false" />
+            <PropertyValue Property="Supported" Bool="false" />
           </Record>
         </Annotation>
         <Annotation Term="Org.OData.Capabilities.V1.SkipSupported" Bool="false" />
@@ -30375,9 +30624,9 @@
             <PropertyValue Property="Searchable" Bool="true" />
           </Record>
         </Annotation>
-        <Annotation Term="Org.OData.Capabilities.V1.SelectRestrictions">
+        <Annotation Term="Org.OData.Capabilities.V1.SelectSupport">
           <Record>
-            <PropertyValue Property="Selectable" Bool="false" />
+            <PropertyValue Property="Supported" Bool="false" />
           </Record>
         </Annotation>
         <Annotation Term="Org.OData.Capabilities.V1.SkipSupported" Bool="false" />
@@ -30409,9 +30658,9 @@
             <PropertyValue Property="Searchable" Bool="false" />
           </Record>
         </Annotation>
-        <Annotation Term="Org.OData.Capabilities.V1.SelectRestrictions">
+        <Annotation Term="Org.OData.Capabilities.V1.SelectSupport">
           <Record>
-            <PropertyValue Property="Selectable" Bool="false" />
+            <PropertyValue Property="Supported" Bool="false" />
           </Record>
         </Annotation>
         <Annotation Term="Org.OData.Capabilities.V1.SkipSupported" Bool="false" />
@@ -30443,9 +30692,9 @@
             <PropertyValue Property="Searchable" Bool="false" />
           </Record>
         </Annotation>
-        <Annotation Term="Org.OData.Capabilities.V1.SelectRestrictions">
+        <Annotation Term="Org.OData.Capabilities.V1.SelectSupport">
           <Record>
-            <PropertyValue Property="Selectable" Bool="false" />
+            <PropertyValue Property="Supported" Bool="false" />
           </Record>
         </Annotation>
         <Annotation Term="Org.OData.Capabilities.V1.SkipSupported" Bool="false" />
@@ -30506,9 +30755,9 @@
             <PropertyValue Property="Searchable" Bool="false" />
           </Record>
         </Annotation>
-        <Annotation Term="Org.OData.Capabilities.V1.SelectRestrictions">
+        <Annotation Term="Org.OData.Capabilities.V1.SelectSupport">
           <Record>
-            <PropertyValue Property="Selectable" Bool="false" />
+            <PropertyValue Property="Supported" Bool="false" />
           </Record>
         </Annotation>
         <Annotation Term="Org.OData.Capabilities.V1.SkipSupported" Bool="false" />
@@ -30557,9 +30806,9 @@
             <PropertyValue Property="Searchable" Bool="true" />
           </Record>
         </Annotation>
-        <Annotation Term="Org.OData.Capabilities.V1.SelectRestrictions">
+        <Annotation Term="Org.OData.Capabilities.V1.SelectSupport">
           <Record>
-            <PropertyValue Property="Selectable" Bool="false" />
+            <PropertyValue Property="Supported" Bool="false" />
           </Record>
         </Annotation>
         <Annotation Term="Org.OData.Capabilities.V1.SkipSupported" Bool="false" />
@@ -30666,9 +30915,9 @@
             <PropertyValue Property="Searchable" Bool="true" />
           </Record>
         </Annotation>
-        <Annotation Term="Org.OData.Capabilities.V1.SelectRestrictions">
+        <Annotation Term="Org.OData.Capabilities.V1.SelectSupport">
           <Record>
-            <PropertyValue Property="Selectable" Bool="false" />
+            <PropertyValue Property="Supported" Bool="false" />
           </Record>
         </Annotation>
         <Annotation Term="Org.OData.Capabilities.V1.SkipSupported" Bool="false" />
@@ -33665,9 +33914,9 @@
             <PropertyValue Property="Filterable" Bool="true" />
           </Record>
         </Annotation>
-        <Annotation Term="Org.OData.Capabilities.V1.SelectRestrictions">
+        <Annotation Term="Org.OData.Capabilities.V1.SelectSupport">
           <Record>
-            <PropertyValue Property="Selectable" Bool="true" />
+            <PropertyValue Property="Supported" Bool="true" />
           </Record>
         </Annotation>
         <Annotation Term="Org.OData.Capabilities.V1.SkipSupported" Bool="true" />
@@ -34639,9 +34888,9 @@
             <PropertyValue Property="Filterable" Bool="true" />
           </Record>
         </Annotation>
-        <Annotation Term="Org.OData.Capabilities.V1.SelectRestrictions">
+        <Annotation Term="Org.OData.Capabilities.V1.SelectSupport">
           <Record>
-            <PropertyValue Property="Selectable" Bool="true" />
+            <PropertyValue Property="Supported" Bool="true" />
           </Record>
         </Annotation>
         <Annotation Term="Org.OData.Capabilities.V1.SkipSupported" Bool="false" />
@@ -34673,9 +34922,9 @@
             <PropertyValue Property="Filterable" Bool="true" />
           </Record>
         </Annotation>
-        <Annotation Term="Org.OData.Capabilities.V1.SelectRestrictions">
+        <Annotation Term="Org.OData.Capabilities.V1.SelectSupport">
           <Record>
-            <PropertyValue Property="Selectable" Bool="true" />
+            <PropertyValue Property="Supported" Bool="true" />
           </Record>
         </Annotation>
         <Annotation Term="Org.OData.Capabilities.V1.SkipSupported" Bool="false" />
@@ -34692,9 +34941,9 @@
             <PropertyValue Property="Filterable" Bool="true" />
           </Record>
         </Annotation>
-        <Annotation Term="Org.OData.Capabilities.V1.SelectRestrictions">
+        <Annotation Term="Org.OData.Capabilities.V1.SelectSupport">
           <Record>
-            <PropertyValue Property="Selectable" Bool="true" />
+            <PropertyValue Property="Supported" Bool="true" />
           </Record>
         </Annotation>
       </Annotations>
@@ -34704,9 +34953,9 @@
             <PropertyValue Property="Filterable" Bool="true" />
           </Record>
         </Annotation>
-        <Annotation Term="Org.OData.Capabilities.V1.SelectRestrictions">
+        <Annotation Term="Org.OData.Capabilities.V1.SelectSupport">
           <Record>
-            <PropertyValue Property="Selectable" Bool="true" />
+            <PropertyValue Property="Supported" Bool="true" />
           </Record>
         </Annotation>
       </Annotations>
@@ -34721,9 +34970,9 @@
             <PropertyValue Property="Filterable" Bool="true" />
           </Record>
         </Annotation>
-        <Annotation Term="Org.OData.Capabilities.V1.SelectRestrictions">
+        <Annotation Term="Org.OData.Capabilities.V1.SelectSupport">
           <Record>
-            <PropertyValue Property="Selectable" Bool="true" />
+            <PropertyValue Property="Supported" Bool="true" />
           </Record>
         </Annotation>
       </Annotations>
@@ -34733,9 +34982,9 @@
             <PropertyValue Property="Filterable" Bool="true" />
           </Record>
         </Annotation>
-        <Annotation Term="Org.OData.Capabilities.V1.SelectRestrictions">
+        <Annotation Term="Org.OData.Capabilities.V1.SelectSupport">
           <Record>
-            <PropertyValue Property="Selectable" Bool="true" />
+            <PropertyValue Property="Supported" Bool="true" />
           </Record>
         </Annotation>
       </Annotations>
@@ -34875,9 +35124,9 @@
             <PropertyValue Property="Filterable" Bool="true" />
           </Record>
         </Annotation>
-        <Annotation Term="Org.OData.Capabilities.V1.SelectRestrictions">
+        <Annotation Term="Org.OData.Capabilities.V1.SelectSupport">
           <Record>
-            <PropertyValue Property="Selectable" Bool="true" />
+            <PropertyValue Property="Supported" Bool="true" />
           </Record>
         </Annotation>
         <Annotation Term="Org.OData.Capabilities.V1.SkipSupported" Bool="true" />
@@ -34899,9 +35148,9 @@
             <PropertyValue Property="Filterable" Bool="true" />
           </Record>
         </Annotation>
-        <Annotation Term="Org.OData.Capabilities.V1.SelectRestrictions">
+        <Annotation Term="Org.OData.Capabilities.V1.SelectSupport">
           <Record>
-            <PropertyValue Property="Selectable" Bool="true" />
+            <PropertyValue Property="Supported" Bool="true" />
           </Record>
         </Annotation>
         <Annotation Term="Org.OData.Capabilities.V1.SkipSupported" Bool="true" />
@@ -34933,9 +35182,9 @@
             <PropertyValue Property="Searchable" Bool="false" />
           </Record>
         </Annotation>
-        <Annotation Term="Org.OData.Capabilities.V1.SelectRestrictions">
+        <Annotation Term="Org.OData.Capabilities.V1.SelectSupport">
           <Record>
-            <PropertyValue Property="Selectable" Bool="false" />
+            <PropertyValue Property="Supported" Bool="false" />
           </Record>
         </Annotation>
         <Annotation Term="Org.OData.Capabilities.V1.SkipSupported" Bool="true" />
@@ -34957,9 +35206,9 @@
             <PropertyValue Property="Filterable" Bool="true" />
           </Record>
         </Annotation>
-        <Annotation Term="Org.OData.Capabilities.V1.SelectRestrictions">
+        <Annotation Term="Org.OData.Capabilities.V1.SelectSupport">
           <Record>
-            <PropertyValue Property="Selectable" Bool="true" />
+            <PropertyValue Property="Supported" Bool="true" />
           </Record>
         </Annotation>
         <Annotation Term="Org.OData.Capabilities.V1.SkipSupported" Bool="true" />
@@ -34991,9 +35240,9 @@
             <PropertyValue Property="Searchable" Bool="true" />
           </Record>
         </Annotation>
-        <Annotation Term="Org.OData.Capabilities.V1.SelectRestrictions">
+        <Annotation Term="Org.OData.Capabilities.V1.SelectSupport">
           <Record>
-            <PropertyValue Property="Selectable" Bool="true" />
+            <PropertyValue Property="Supported" Bool="true" />
           </Record>
         </Annotation>
         <Annotation Term="Org.OData.Capabilities.V1.SkipSupported" Bool="true" />
@@ -35025,9 +35274,9 @@
             <PropertyValue Property="Searchable" Bool="false" />
           </Record>
         </Annotation>
-        <Annotation Term="Org.OData.Capabilities.V1.SelectRestrictions">
+        <Annotation Term="Org.OData.Capabilities.V1.SelectSupport">
           <Record>
-            <PropertyValue Property="Selectable" Bool="true" />
+            <PropertyValue Property="Supported" Bool="true" />
           </Record>
         </Annotation>
         <Annotation Term="Org.OData.Capabilities.V1.SkipSupported" Bool="true" />
@@ -35054,9 +35303,9 @@
             <PropertyValue Property="Searchable" Bool="false" />
           </Record>
         </Annotation>
-        <Annotation Term="Org.OData.Capabilities.V1.SelectRestrictions">
+        <Annotation Term="Org.OData.Capabilities.V1.SelectSupport">
           <Record>
-            <PropertyValue Property="Selectable" Bool="true" />
+            <PropertyValue Property="Supported" Bool="true" />
           </Record>
         </Annotation>
         <Annotation Term="Org.OData.Capabilities.V1.SkipSupported" Bool="false" />
@@ -35088,9 +35337,9 @@
             <PropertyValue Property="Searchable" Bool="false" />
           </Record>
         </Annotation>
-        <Annotation Term="Org.OData.Capabilities.V1.SelectRestrictions">
+        <Annotation Term="Org.OData.Capabilities.V1.SelectSupport">
           <Record>
-            <PropertyValue Property="Selectable" Bool="true" />
+            <PropertyValue Property="Supported" Bool="true" />
           </Record>
         </Annotation>
         <Annotation Term="Org.OData.Capabilities.V1.SkipSupported" Bool="true" />
@@ -35117,9 +35366,9 @@
             <PropertyValue Property="Searchable" Bool="false" />
           </Record>
         </Annotation>
-        <Annotation Term="Org.OData.Capabilities.V1.SelectRestrictions">
+        <Annotation Term="Org.OData.Capabilities.V1.SelectSupport">
           <Record>
-            <PropertyValue Property="Selectable" Bool="true" />
+            <PropertyValue Property="Supported" Bool="true" />
           </Record>
         </Annotation>
         <Annotation Term="Org.OData.Capabilities.V1.SkipSupported" Bool="true" />
@@ -35146,9 +35395,9 @@
             <PropertyValue Property="Searchable" Bool="false" />
           </Record>
         </Annotation>
-        <Annotation Term="Org.OData.Capabilities.V1.SelectRestrictions">
+        <Annotation Term="Org.OData.Capabilities.V1.SelectSupport">
           <Record>
-            <PropertyValue Property="Selectable" Bool="true" />
+            <PropertyValue Property="Supported" Bool="true" />
           </Record>
         </Annotation>
         <Annotation Term="Org.OData.Capabilities.V1.SkipSupported" Bool="false" />
@@ -35180,9 +35429,9 @@
             <PropertyValue Property="Searchable" Bool="false" />
           </Record>
         </Annotation>
-        <Annotation Term="Org.OData.Capabilities.V1.SelectRestrictions">
+        <Annotation Term="Org.OData.Capabilities.V1.SelectSupport">
           <Record>
-            <PropertyValue Property="Selectable" Bool="true" />
+            <PropertyValue Property="Supported" Bool="true" />
           </Record>
         </Annotation>
         <Annotation Term="Org.OData.Capabilities.V1.SkipSupported" Bool="true" />
@@ -35199,9 +35448,9 @@
             <PropertyValue Property="Filterable" Bool="true" />
           </Record>
         </Annotation>
-        <Annotation Term="Org.OData.Capabilities.V1.SelectRestrictions">
+        <Annotation Term="Org.OData.Capabilities.V1.SelectSupport">
           <Record>
-            <PropertyValue Property="Selectable" Bool="true" />
+            <PropertyValue Property="Supported" Bool="true" />
           </Record>
         </Annotation>
         <Annotation Term="Org.OData.Capabilities.V1.SkipSupported" Bool="true" />
@@ -35247,9 +35496,9 @@
             <PropertyValue Property="Searchable" Bool="true" />
           </Record>
         </Annotation>
-        <Annotation Term="Org.OData.Capabilities.V1.SelectRestrictions">
+        <Annotation Term="Org.OData.Capabilities.V1.SelectSupport">
           <Record>
-            <PropertyValue Property="Selectable" Bool="true" />
+            <PropertyValue Property="Supported" Bool="true" />
           </Record>
         </Annotation>
         <Annotation Term="Org.OData.Capabilities.V1.SkipSupported" Bool="true" />
@@ -35295,9 +35544,9 @@
             <PropertyValue Property="Searchable" Bool="false" />
           </Record>
         </Annotation>
-        <Annotation Term="Org.OData.Capabilities.V1.SelectRestrictions">
+        <Annotation Term="Org.OData.Capabilities.V1.SelectSupport">
           <Record>
-            <PropertyValue Property="Selectable" Bool="true" />
+            <PropertyValue Property="Supported" Bool="true" />
           </Record>
         </Annotation>
         <Annotation Term="Org.OData.Capabilities.V1.SkipSupported" Bool="true" />
@@ -35324,9 +35573,9 @@
             <PropertyValue Property="Searchable" Bool="false" />
           </Record>
         </Annotation>
-        <Annotation Term="Org.OData.Capabilities.V1.SelectRestrictions">
+        <Annotation Term="Org.OData.Capabilities.V1.SelectSupport">
           <Record>
-            <PropertyValue Property="Selectable" Bool="true" />
+            <PropertyValue Property="Supported" Bool="true" />
           </Record>
         </Annotation>
         <Annotation Term="Org.OData.Capabilities.V1.SkipSupported" Bool="false" />
@@ -35367,9 +35616,9 @@
             <PropertyValue Property="Searchable" Bool="true" />
           </Record>
         </Annotation>
-        <Annotation Term="Org.OData.Capabilities.V1.SelectRestrictions">
+        <Annotation Term="Org.OData.Capabilities.V1.SelectSupport">
           <Record>
-            <PropertyValue Property="Selectable" Bool="true" />
+            <PropertyValue Property="Supported" Bool="true" />
           </Record>
         </Annotation>
         <Annotation Term="Org.OData.Capabilities.V1.SkipSupported" Bool="true" />
@@ -35409,9 +35658,9 @@
             <PropertyValue Property="Searchable" Bool="false" />
           </Record>
         </Annotation>
-        <Annotation Term="Org.OData.Capabilities.V1.SelectRestrictions">
+        <Annotation Term="Org.OData.Capabilities.V1.SelectSupport">
           <Record>
-            <PropertyValue Property="Selectable" Bool="true" />
+            <PropertyValue Property="Supported" Bool="true" />
           </Record>
         </Annotation>
         <Annotation Term="Org.OData.Capabilities.V1.SkipSupported" Bool="false" />
@@ -35438,9 +35687,9 @@
             <PropertyValue Property="Searchable" Bool="false" />
           </Record>
         </Annotation>
-        <Annotation Term="Org.OData.Capabilities.V1.SelectRestrictions">
+        <Annotation Term="Org.OData.Capabilities.V1.SelectSupport">
           <Record>
-            <PropertyValue Property="Selectable" Bool="true" />
+            <PropertyValue Property="Supported" Bool="true" />
           </Record>
         </Annotation>
         <Annotation Term="Org.OData.Capabilities.V1.SkipSupported" Bool="false" />
@@ -35472,9 +35721,9 @@
             <PropertyValue Property="Searchable" Bool="false" />
           </Record>
         </Annotation>
-        <Annotation Term="Org.OData.Capabilities.V1.SelectRestrictions">
+        <Annotation Term="Org.OData.Capabilities.V1.SelectSupport">
           <Record>
-            <PropertyValue Property="Selectable" Bool="true" />
+            <PropertyValue Property="Supported" Bool="true" />
           </Record>
         </Annotation>
         <Annotation Term="Org.OData.Capabilities.V1.SkipSupported" Bool="true" />
@@ -35501,9 +35750,9 @@
             <PropertyValue Property="Filterable" Bool="true" />
           </Record>
         </Annotation>
-        <Annotation Term="Org.OData.Capabilities.V1.SelectRestrictions">
+        <Annotation Term="Org.OData.Capabilities.V1.SelectSupport">
           <Record>
-            <PropertyValue Property="Selectable" Bool="true" />
+            <PropertyValue Property="Supported" Bool="true" />
           </Record>
         </Annotation>
         <Annotation Term="Org.OData.Capabilities.V1.SkipSupported" Bool="false" />
@@ -35746,9 +35995,9 @@
             <PropertyValue Property="Referenceable" Bool="false" />
           </Record>
         </Annotation>
-        <Annotation Term="Org.OData.Capabilities.V1.SelectRestrictions">
+        <Annotation Term="Org.OData.Capabilities.V1.SelectSupport">
           <Record>
-            <PropertyValue Property="Selectable" Bool="false" />
+            <PropertyValue Property="Supported" Bool="false" />
           </Record>
         </Annotation>
         <Annotation Term="Org.OData.Capabilities.V1.SkipSupported" Bool="false" />
@@ -35775,9 +36024,9 @@
             <PropertyValue Property="Referenceable" Bool="false" />
           </Record>
         </Annotation>
-        <Annotation Term="Org.OData.Capabilities.V1.SelectRestrictions">
+        <Annotation Term="Org.OData.Capabilities.V1.SelectSupport">
           <Record>
-            <PropertyValue Property="Selectable" Bool="false" />
+            <PropertyValue Property="Supported" Bool="false" />
           </Record>
         </Annotation>
         <Annotation Term="Org.OData.Capabilities.V1.SkipSupported" Bool="false" />
@@ -36355,9 +36604,9 @@
             <PropertyValue Property="Countable" Bool="false" />
           </Record>
         </Annotation>
-        <Annotation Term="Org.OData.Capabilities.V1.SelectRestrictions">
+        <Annotation Term="Org.OData.Capabilities.V1.SelectSupport">
           <Record>
-            <PropertyValue Property="Selectable" Bool="false" />
+            <PropertyValue Property="Supported" Bool="false" />
           </Record>
         </Annotation>
         <Annotation Term="Org.OData.Capabilities.V1.SkipSupported" Bool="false" />
@@ -40461,6 +40710,70 @@
         <Annotation Term="Org.OData.Capabilities.V1.TopSupported" Bool="false" />
       </Annotations>
     </Schema>
+    <Schema Namespace="microsoft.graph.partners.billing" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+      <EnumType Name="attributeSet">
+        <Member Name="full" Value="1" />
+        <Member Name="basic" Value="2" />
+        <Member Name="unknownFutureValue" Value="3" />
+      </EnumType>
+      <EnumType Name="billingPeriod">
+        <Member Name="current" Value="1" />
+        <Member Name="last" Value="2" />
+        <Member Name="unknownFutureValue" Value="3" />
+      </EnumType>
+      <ComplexType Name="blob">
+        <Property Name="name" Type="Edm.String" Nullable="false" />
+        <Property Name="partitionValue" Type="Edm.String" Nullable="false" />
+      </ComplexType>
+      <EntityType Name="azureUsage" BaseType="graph.entity">
+        <NavigationProperty Name="billed" Type="microsoft.graph.partners.billing.billedUsage" ContainsTarget="true" Nullable="false" />
+        <NavigationProperty Name="unbilled" Type="microsoft.graph.partners.billing.unbilledUsage" ContainsTarget="true" Nullable="false" />
+      </EntityType>
+      <EntityType Name="billedUsage" BaseType="graph.entity" />
+      <EntityType Name="billing" BaseType="graph.entity">
+        <NavigationProperty Name="manifests" Type="Collection(microsoft.graph.partners.billing.manifest)" ContainsTarget="true" />
+        <NavigationProperty Name="operations" Type="Collection(microsoft.graph.partners.billing.operation)" ContainsTarget="true" />
+        <NavigationProperty Name="usage" Type="microsoft.graph.partners.billing.azureUsage" ContainsTarget="true" Nullable="false" />
+      </EntityType>
+      <EntityType Name="exportSuccessOperation" BaseType="microsoft.graph.partners.billing.operation">
+        <NavigationProperty Name="resourceLocation" Type="microsoft.graph.partners.billing.manifest" Nullable="false" />
+      </EntityType>
+      <EntityType Name="failedOperation" BaseType="microsoft.graph.partners.billing.operation">
+        <Property Name="error" Type="graph.publicError" Nullable="false" />
+      </EntityType>
+      <EntityType Name="manifest" BaseType="graph.entity">
+        <Property Name="blobCount" Type="Edm.Int32" Nullable="false" />
+        <Property Name="blobs" Type="Collection(microsoft.graph.partners.billing.blob)" Nullable="false" />
+        <Property Name="createdDateTime" Type="Edm.DateTimeOffset" Nullable="false" />
+        <Property Name="dataFormat" Type="Edm.String" Nullable="false" />
+        <Property Name="eTag" Type="Edm.String" Nullable="false" />
+        <Property Name="partitionType" Type="Edm.String" Nullable="false" />
+        <Property Name="partnerTenantId" Type="Edm.String" Nullable="false" />
+        <Property Name="rootDirectory" Type="Edm.String" Nullable="false" />
+        <Property Name="sasToken" Type="Edm.String" Nullable="false" />
+        <Property Name="schemaVersion" Type="Edm.String" Nullable="false" />
+      </EntityType>
+      <EntityType Name="operation" BaseType="graph.entity">
+        <Property Name="createdDateTime" Type="Edm.DateTimeOffset" Nullable="false" />
+        <Property Name="lastActionDateTime" Type="Edm.DateTimeOffset" Nullable="false" />
+        <Property Name="status" Type="graph.longRunningOperationStatus" />
+      </EntityType>
+      <EntityType Name="runningOperation" BaseType="microsoft.graph.partners.billing.operation" />
+      <EntityType Name="unbilledUsage" BaseType="graph.entity" />
+      <Action Name="export" IsBound="true">
+        <Parameter Name="this" Type="microsoft.graph.partners.billing.billedUsage" />
+        <Parameter Name="invoiceId" Type="Edm.String" Unicode="false" />
+        <Parameter Name="attributeSet" Type="microsoft.graph.partners.billing.attributeSet" />
+        <ReturnType Type="microsoft.graph.partners.billing.operation" />
+      </Action>
+      <Action Name="export" IsBound="true">
+        <Parameter Name="this" Type="microsoft.graph.partners.billing.unbilledUsage" />
+        <Parameter Name="currencyCode" Type="Edm.String" Unicode="false" />
+        <Parameter Name="billingPeriod" Type="microsoft.graph.partners.billing.billingPeriod" />
+        <Parameter Name="attributeSet" Type="microsoft.graph.partners.billing.attributeSet" />
+        <ReturnType Type="microsoft.graph.partners.billing.operation" />
+      </Action>
+    </Schema>
     <Schema Namespace="microsoft.graph.security" xmlns="http://docs.oasis-open.org/odata/ns/edm">
       <EnumType Name="additionalDataOptions" IsFlags="true">
         <Member Name="allVersions" Value="1" />
@@ -40769,6 +41082,13 @@
         <Member Name="tool" Value="1" />
         <Member Name="unknownFutureValue" Value="2" />
       </EnumType>
+      <EnumType Name="ioTDeviceImportanceType">
+        <Member Name="unknown" Value="0" />
+        <Member Name="low" Value="1" />
+        <Member Name="normal" Value="2" />
+        <Member Name="high" Value="3" />
+        <Member Name="unknownFutureValue" Value="4" />
+      </EnumType>
       <EnumType Name="kubernetesPlatform">
         <Member Name="unknown" Value="0" />
         <Member Name="aks" Value="1" />
@@ -40792,6 +41112,11 @@
         <Member Name="unsupported" Value="3" />
         <Member Name="unknownFutureValue" Value="31" />
       </EnumType>
+      <EnumType Name="protocolType">
+        <Member Name="tcp" Value="0" />
+        <Member Name="udp" Value="1" />
+        <Member Name="unknownFutureValue" Value="2" />
+      </EnumType>
       <EnumType Name="purgeAreas" IsFlags="true">
         <Member Name="mailboxes" Value="1" />
         <Member Name="teamsMessages" Value="2" />
@@ -40812,6 +41137,13 @@
         <Member Name="dateCreated" Value="1" />
         <Member Name="dateModified" Value="2" />
         <Member Name="dateOfEvent" Value="3" />
+        <Member Name="unknownFutureValue" Value="4" />
+      </EnumType>
+      <EnumType Name="servicePrincipalType">
+        <Member Name="unknown" Value="0" />
+        <Member Name="application" Value="1" />
+        <Member Name="managedIdentity" Value="2" />
+        <Member Name="legacy" Value="3" />
         <Member Name="unknownFutureValue" Value="4" />
       </EnumType>
       <EnumType Name="serviceSource">
@@ -40965,6 +41297,12 @@
         <Property Name="vmMetadata" Type="microsoft.graph.security.vmMetadata" />
       </ComplexType>
       <ComplexType Name="dictionary" OpenType="true" />
+      <ComplexType Name="dnsEvidence" BaseType="microsoft.graph.security.alertEvidence">
+        <Property Name="dnsServerIp" Type="microsoft.graph.security.ipEvidence" />
+        <Property Name="domainName" Type="Edm.String" />
+        <Property Name="hostIpAddress" Type="microsoft.graph.security.ipEvidence" />
+        <Property Name="ipAddresses" Type="Collection(microsoft.graph.security.ipEvidence)" />
+      </ComplexType>
       <ComplexType Name="dynamicColumnValue" OpenType="true" />
       <ComplexType Name="emailSender">
         <Property Name="displayName" Type="Edm.String" />
@@ -41005,9 +41343,35 @@
         <Property Name="algorithm" Type="microsoft.graph.security.fileHashAlgorithm" Nullable="false" />
         <Property Name="value" Type="Edm.String" />
       </ComplexType>
+      <ComplexType Name="fileHashEvidence" BaseType="microsoft.graph.security.alertEvidence">
+        <Property Name="algorithm" Type="microsoft.graph.security.fileHashAlgorithm" Nullable="false" />
+        <Property Name="value" Type="Edm.String" />
+      </ComplexType>
       <ComplexType Name="formattedContent">
         <Property Name="content" Type="Edm.String" />
         <Property Name="format" Type="microsoft.graph.security.contentFormat" />
+      </ComplexType>
+      <ComplexType Name="gitHubOrganizationEvidence" BaseType="microsoft.graph.security.alertEvidence">
+        <Property Name="company" Type="Edm.String" />
+        <Property Name="displayName" Type="Edm.String" />
+        <Property Name="email" Type="Edm.String" />
+        <Property Name="login" Type="Edm.String" />
+        <Property Name="orgId" Type="Edm.String" />
+        <Property Name="webUrl" Type="Edm.String" />
+      </ComplexType>
+      <ComplexType Name="gitHubRepoEvidence" BaseType="microsoft.graph.security.alertEvidence">
+        <Property Name="baseUrl" Type="Edm.String" />
+        <Property Name="login" Type="Edm.String" />
+        <Property Name="owner" Type="Edm.String" />
+        <Property Name="ownerType" Type="Edm.String" />
+        <Property Name="repoId" Type="Edm.String" />
+      </ComplexType>
+      <ComplexType Name="gitHubUserEvidence" BaseType="microsoft.graph.security.alertEvidence">
+        <Property Name="email" Type="Edm.String" />
+        <Property Name="login" Type="Edm.String" />
+        <Property Name="name" Type="Edm.String" />
+        <Property Name="userId" Type="Edm.String" />
+        <Property Name="webUrl" Type="Edm.String" />
       </ComplexType>
       <ComplexType Name="googleCloudResourceEvidence" BaseType="microsoft.graph.security.alertEvidence">
         <Property Name="location" Type="Edm.String" />
@@ -41016,6 +41380,13 @@
         <Property Name="projectNumber" Type="Edm.Int64" />
         <Property Name="resourceName" Type="Edm.String" />
         <Property Name="resourceType" Type="Edm.String" />
+      </ComplexType>
+      <ComplexType Name="hostLogonSessionEvidence" BaseType="microsoft.graph.security.alertEvidence">
+        <Property Name="account" Type="microsoft.graph.security.userEvidence" />
+        <Property Name="endUtcDateTime" Type="Edm.DateTimeOffset" />
+        <Property Name="host" Type="microsoft.graph.security.deviceEvidence" />
+        <Property Name="sessionId" Type="Edm.String" />
+        <Property Name="startUtcDateTime" Type="Edm.DateTimeOffset" />
       </ComplexType>
       <ComplexType Name="hostPortBanner">
         <Property Name="banner" Type="Edm.String" Nullable="false" />
@@ -41053,6 +41424,34 @@
       <ComplexType Name="intelligenceProfileCountryOrRegionOfOrigin">
         <Property Name="code" Type="Edm.String" Nullable="false" />
         <Property Name="label" Type="Edm.String" Nullable="false" />
+      </ComplexType>
+      <ComplexType Name="ioTDeviceEvidence" BaseType="microsoft.graph.security.alertEvidence">
+        <Property Name="deviceId" Type="Edm.String" />
+        <Property Name="deviceName" Type="Edm.String" />
+        <Property Name="devicePageLink" Type="Edm.String" />
+        <Property Name="deviceSubType" Type="Edm.String" />
+        <Property Name="deviceType" Type="Edm.String" />
+        <Property Name="importance" Type="microsoft.graph.security.ioTDeviceImportanceType" />
+        <Property Name="ioTHub" Type="microsoft.graph.security.azureResourceEvidence" />
+        <Property Name="ioTSecurityAgentId" Type="Edm.String" />
+        <Property Name="ipAddress" Type="microsoft.graph.security.ipEvidence" />
+        <Property Name="isAuthorized" Type="Edm.Boolean" />
+        <Property Name="isProgramming" Type="Edm.Boolean" />
+        <Property Name="isScanner" Type="Edm.Boolean" />
+        <Property Name="macAddress" Type="Edm.String" />
+        <Property Name="manufacturer" Type="Edm.String" />
+        <Property Name="model" Type="Edm.String" />
+        <Property Name="nics" Type="microsoft.graph.security.nicEvidence" />
+        <Property Name="operatingSystem" Type="Edm.String" />
+        <Property Name="owners" Type="Collection(Edm.String)" />
+        <Property Name="protocols" Type="Collection(Edm.String)" />
+        <Property Name="purdueLayer" Type="Edm.String" />
+        <Property Name="sensor" Type="Edm.String" />
+        <Property Name="serialNumber" Type="Edm.String" />
+        <Property Name="site" Type="Edm.String" />
+        <Property Name="source" Type="Edm.String" />
+        <Property Name="sourceRef" Type="microsoft.graph.security.urlEvidence" />
+        <Property Name="zone" Type="Edm.String" />
       </ComplexType>
       <ComplexType Name="ipEvidence" BaseType="microsoft.graph.security.alertEvidence">
         <Property Name="countryLetterCode" Type="Edm.String" />
@@ -41131,6 +41530,24 @@
         <Property Name="query" Type="Edm.String" />
         <Property Name="urn" Type="Edm.String" />
       </ComplexType>
+      <ComplexType Name="malwareEvidence" BaseType="microsoft.graph.security.alertEvidence">
+        <Property Name="category" Type="Edm.String" />
+        <Property Name="files" Type="Collection(microsoft.graph.security.fileEvidence)" />
+        <Property Name="name" Type="Edm.String" />
+        <Property Name="processes" Type="Collection(microsoft.graph.security.processEvidence)" />
+      </ComplexType>
+      <ComplexType Name="networkConnectionEvidence" BaseType="microsoft.graph.security.alertEvidence">
+        <Property Name="destinationAddress" Type="microsoft.graph.security.ipEvidence" />
+        <Property Name="destinationPort" Type="Edm.Int32" />
+        <Property Name="protocol" Type="microsoft.graph.security.protocolType" />
+        <Property Name="sourceAddress" Type="microsoft.graph.security.ipEvidence" />
+        <Property Name="sourcePort" Type="Edm.Int32" />
+      </ComplexType>
+      <ComplexType Name="nicEvidence" BaseType="microsoft.graph.security.alertEvidence">
+        <Property Name="ipAddress" Type="microsoft.graph.security.ipEvidence" />
+        <Property Name="macAddress" Type="Edm.String" />
+        <Property Name="vlans" Type="Collection(Edm.String)" />
+      </ComplexType>
       <ComplexType Name="oauthApplicationEvidence" BaseType="microsoft.graph.security.alertEvidence">
         <Property Name="appId" Type="Edm.String" />
         <Property Name="displayName" Type="Edm.String" />
@@ -41176,9 +41593,29 @@
         <Property Name="error" Type="graph.publicError" />
         <Property Name="status" Type="microsoft.graph.security.eventStatusType" />
       </ComplexType>
+      <ComplexType Name="sasTokenEvidence" BaseType="microsoft.graph.security.alertEvidence">
+        <Property Name="allowedIpAddresses" Type="Edm.String" />
+        <Property Name="allowedResourceTypes" Type="Collection(Edm.String)" />
+        <Property Name="allowedServices" Type="Collection(Edm.String)" />
+        <Property Name="expiryDateTime" Type="Edm.DateTimeOffset" />
+        <Property Name="permissions" Type="Collection(Edm.String)" />
+        <Property Name="protocol" Type="Edm.String" />
+        <Property Name="signatureHash" Type="Edm.String" />
+        <Property Name="signedWith" Type="Edm.String" />
+        <Property Name="startDateTime" Type="Edm.DateTimeOffset" />
+        <Property Name="storageResource" Type="microsoft.graph.security.azureResourceEvidence" />
+      </ComplexType>
       <ComplexType Name="securityGroupEvidence" BaseType="microsoft.graph.security.alertEvidence">
         <Property Name="displayName" Type="Edm.String" />
         <Property Name="securityGroupId" Type="Edm.String" />
+      </ComplexType>
+      <ComplexType Name="servicePrincipalEvidence" BaseType="microsoft.graph.security.alertEvidence">
+        <Property Name="appId" Type="Edm.String" />
+        <Property Name="appOwnerTenantId" Type="Edm.String" />
+        <Property Name="servicePrincipalName" Type="Edm.String" />
+        <Property Name="servicePrincipalObjectId" Type="Edm.String" />
+        <Property Name="servicePrincipalType" Type="microsoft.graph.security.servicePrincipalType" />
+        <Property Name="tenantId" Type="Edm.String" />
       </ComplexType>
       <ComplexType Name="singlePropertySchema">
         <Property Name="name" Type="Edm.String" />
@@ -41196,6 +41633,17 @@
         <Property Name="surname" Type="Edm.String" />
       </ComplexType>
       <ComplexType Name="stringValueDictionary" OpenType="true" />
+      <ComplexType Name="submissionMailEvidence" BaseType="microsoft.graph.security.alertEvidence">
+        <Property Name="networkMessageId" Type="Edm.String" />
+        <Property Name="recipient" Type="Edm.String" />
+        <Property Name="reportType" Type="Edm.String" />
+        <Property Name="sender" Type="Edm.String" />
+        <Property Name="senderIp" Type="Edm.String" />
+        <Property Name="subject" Type="Edm.String" />
+        <Property Name="submissionDateTime" Type="Edm.DateTimeOffset" />
+        <Property Name="submissionId" Type="Edm.String" />
+        <Property Name="submitter" Type="Edm.String" />
+      </ComplexType>
       <ComplexType Name="topicModelingSettings">
         <Property Name="dynamicallyAdjustTopicCount" Type="Edm.Boolean" />
         <Property Name="ignoreNumbers" Type="Edm.Boolean" />
