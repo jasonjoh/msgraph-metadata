@@ -644,7 +644,7 @@
         <xsl:attribute name="IsComposable">false</xsl:attribute>
     </xsl:template>
 
-    <!-- Actions/Functions bound to  directoryObject should have the 'RequiresExplicitBinding' annotation-->
+    <!-- Actions/Functions bound to directoryObject should have the 'RequiresExplicitBinding' annotation-->
     <xsl:template match="edm:Schema[@Namespace='microsoft.graph']/edm:Action[@IsBound='true'][edm:Parameter[@Type='graph.directoryObject']] |
                          edm:Schema[@Namespace='microsoft.graph']/edm:Action[@IsBound='true'][edm:Parameter[@Type='Collection(graph.directoryObject)']] |
                          edm:Schema[@Namespace='microsoft.graph']/edm:Function[@IsBound='true'][edm:Parameter[@Type='graph.directoryObject']] |
@@ -653,6 +653,15 @@
             <xsl:copy-of select="@* | node()" />
             <Annotation Term="Org.OData.Core.V1.RequiresExplicitBinding"/>
         </xsl:copy>
+    </xsl:template>
+
+     <!-- Actions bound to Collection(graph.site) should have the 'RequiresExplicitBinding' annotation -->
+    <xsl:template match="edm:Schema[@Namespace='microsoft.graph']/edm:Action[@Name='add'][edm:Parameter[@Name='bindingParameter']][edm:Parameter[@Type='Collection(graph.site)']] |
+                         edm:Schema[@Namespace='microsoft.graph']/edm:Action[@Name='remove'][edm:Parameter[@Name='bindingParameter']][edm:Parameter[@Type='Collection(graph.site)']]">
+    <xsl:copy>
+        <xsl:copy-of select="@* | node()" />
+        <Annotation Term="Org.OData.Core.V1.RequiresExplicitBinding"/>
+    </xsl:copy>
     </xsl:template>
     
     <!--Delta function for events need the start and end date parameters-->
@@ -1686,19 +1695,8 @@
                 </xsl:when>
             </xsl:choose>
         
-            <!-- Remove Deletability for photo navigation properties of type profilePhoto -->
+            <!-- Remove Deletability for photo navigation properties of type profilePhoto; except user/photo and group/photo -->            
             
-            <xsl:choose>
-                <xsl:when test="not(edm:Annotations[@Target='microsoft.graph.user/photo'])">
-                    <xsl:element name="Annotations">
-                        <xsl:attribute name="Target">microsoft.graph.user/photo</xsl:attribute>
-                        <xsl:call-template name="DeleteRestrictionsTemplate">
-                            <xsl:with-param name="deletable">false</xsl:with-param>
-                        </xsl:call-template>                        
-                    </xsl:element>
-                </xsl:when>
-            </xsl:choose>
-        
             <xsl:choose>
                 <xsl:when test="not(edm:Annotations[@Target='microsoft.graph.contact/photo'])">
                     <xsl:element name="Annotations">
@@ -1714,17 +1712,6 @@
                 <xsl:when test="not(edm:Annotations[@Target='microsoft.graph.team/photo'])">
                     <xsl:element name="Annotations">
                         <xsl:attribute name="Target">microsoft.graph.team/photo</xsl:attribute>
-                        <xsl:call-template name="DeleteRestrictionsTemplate">
-                            <xsl:with-param name="deletable">false</xsl:with-param>
-                        </xsl:call-template>                        
-                    </xsl:element>
-                </xsl:when>
-            </xsl:choose>
-        
-            <xsl:choose>
-                <xsl:when test="not(edm:Annotations[@Target='microsoft.graph.group/photo'])">
-                    <xsl:element name="Annotations">
-                        <xsl:attribute name="Target">microsoft.graph.group/photo</xsl:attribute>
                         <xsl:call-template name="DeleteRestrictionsTemplate">
                             <xsl:with-param name="deletable">false</xsl:with-param>
                         </xsl:call-template>                        
@@ -2335,6 +2322,7 @@
     <!-- Remove directoryObject Capability Annotations -->
     <xsl:template match="edm:Schema[starts-with(@Namespace, 'microsoft.graph')]/edm:Annotations[@Target='microsoft.graph.directoryObject']/*[starts-with(@Term, 'Org.OData.Capabilities')]"/>
 
+    <!-- Add ExplicitOperationBindings for directoryObject entity type -->
     <xsl:template match="edm:Schema[starts-with(@Namespace, 'microsoft.graph')]/edm:Annotations[@Target='microsoft.graph.directoryObject']">
         <xsl:element name="Annotations">
           <xsl:attribute name="Target">microsoft.graph.directoryObject</xsl:attribute>    
@@ -2352,6 +2340,20 @@
             </Collection>
           </Annotation>
         </xsl:element>
+    </xsl:template>
+
+     <!-- Add ExplicitOperationBindings for followedSites and sites navigation props --> 
+    <xsl:template match="edm:Schema[@Namespace='microsoft.graph']/edm:EntityType[@Name='user']/edm:NavigationProperty[@Name='followedSites']|
+                         edm:Schema[@Namespace='microsoft.graph']/edm:EntityType[@Name='group']/edm:NavigationProperty[@Name='sites']">
+        <xsl:copy>
+            <xsl:apply-templates select="@* | node()"/>
+                <Annotation Term="Org.OData.Core.V1.ExplicitOperationBindings">
+                    <Collection>
+                        <String>microsoft.graph.add</String>
+                        <String>microsoft.graph.remove</String>
+                    </Collection>
+                </Annotation>
+        </xsl:copy>
     </xsl:template>
 
     <!-- Add Referenceable Annotations (for /$ref paths) -->
@@ -2461,12 +2463,10 @@
         </xsl:copy>
     </xsl:template>
 
-    <!-- Remove Deletability for photo navigation properties of type profilePhoto -->
-    <!-- If the grand-parent "Annotations" tag already exists, add the DeleteRestrictions annotation -->
-    <xsl:template match="edm:Schema[@Namespace='microsoft.graph']/edm:Annotations[@Target='microsoft.graph.user/photo']|
-                         edm:Schema[@Namespace='microsoft.graph']/edm:Annotations[@Target='microsoft.graph.contact/photo']|
-                         edm:Schema[@Namespace='microsoft.graph']/edm:Annotations[@Target='microsoft.graph.team/photo']|
-                         edm:Schema[@Namespace='microsoft.graph']/edm:Annotations[@Target='microsoft.graph.group/photo']">
+    <!-- Remove Deletability for photo navigation properties of type profilePhoto; user/photo and group/photo -->
+<!-- If the grand-parent "Annotations" tag already exists, add the DeleteRestrictions annotation -->
+    <xsl:template match="edm:Schema[@Namespace='microsoft.graph']/edm:Annotations[@Target='microsoft.graph.contact/photo']|
+                         edm:Schema[@Namespace='microsoft.graph']/edm:Annotations[@Target='microsoft.graph.team/photo']">
         <xsl:choose>
             <xsl:when test="not(edm:Annotation[@Term='Org.OData.Capabilities.V1.DeleteRestrictions'])">
                 <xsl:copy>
@@ -2484,12 +2484,10 @@
         </xsl:choose>
     </xsl:template>
     
-    <!-- Remove Deletability for photo navigation properties of type profilePhoto -->    
+    <!-- Remove Deletability for photo navigation properties of type profilePhoto; user/photo and group/photo -->    
     <!--If the DeleteRestrictions exists, update the Bool attribute value to false-->
-    <xsl:template match="edm:Schema[@Namespace='microsoft.graph']/edm:Annotations[@Target='microsoft.graph.user/photo']/edm:Annotation[@Term='Org.OData.Capabilities.V1.DeleteRestrictions']|
-                         edm:Schema[@Namespace='microsoft.graph']/edm:Annotations[@Target='microsoft.graph.contact/photo']/edm:Annotation[@Term='Org.OData.Capabilities.V1.DeleteRestrictions']|
-                         edm:Schema[@Namespace='microsoft.graph']/edm:Annotations[@Target='microsoft.graph.team/photo']/edm:Annotation[@Term='Org.OData.Capabilities.V1.DeleteRestrictions']|
-                         edm:Schema[@Namespace='microsoft.graph']/edm:Annotations[@Target='microsoft.graph.group/photo']/edm:Annotation[@Term='Org.OData.Capabilities.V1.DeleteRestrictions']">
+    <xsl:template match="edm:Schema[@Namespace='microsoft.graph']/edm:Annotations[@Target='microsoft.graph.contact/photo']/edm:Annotation[@Term='Org.OData.Capabilities.V1.DeleteRestrictions']|
+                         edm:Schema[@Namespace='microsoft.graph']/edm:Annotations[@Target='microsoft.graph.team/photo']/edm:Annotation[@Term='Org.OData.Capabilities.V1.DeleteRestrictions']">
        <xsl:copy>
         <xsl:attribute name="Term">
           <xsl:value-of select="@Term" />

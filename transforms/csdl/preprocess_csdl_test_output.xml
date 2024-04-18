@@ -313,6 +313,14 @@
             </Record>
           </Annotation>
         </NavigationProperty>
+        <NavigationProperty Name="followedSites" Type="Collection(graph.site)">
+          <Annotation Term="Org.OData.Core.V1.ExplicitOperationBindings" xmlns:edm="http://docs.oasis-open.org/odata/ns/edm">
+            <Collection>
+              <String>microsoft.graph.add</String>
+              <String>microsoft.graph.remove</String>
+            </Collection>
+          </Annotation>
+        </NavigationProperty>
       </EntityType>
       <EntityType Name="site" BaseType="graph.baseItem">
         <NavigationProperty Name="analytics" Type="graph.itemAnalytics" ContainsTarget="true">
@@ -325,6 +333,7 @@
             </Collection>
           </Annotation>
         </NavigationProperty>
+        <NavigationProperty Name="sites" Type="Collection(graph.site)" />
       </EntityType>
       <EntityType Name="baseSitePage" BaseType="graph.baseItem">
         <Property Name="pageLayout" Type="graph.pageLayoutType" />
@@ -722,14 +731,14 @@
           </Record>
         </Annotation>
       </Annotations>
-      <Annotations Target="microsoft.graph.user/photo">
+      <Annotations Target="microsoft.graph.contact/photo">
         <Annotation Term="Org.OData.Capabilities.V1.DeleteRestrictions">
           <Record>
             <PropertyValue Property="Deletable" Bool="false" />
           </Record>
         </Annotation>
       </Annotations>
-      <Annotations Target="microsoft.graph.group/photo">
+      <Annotations Target="microsoft.graph.team/photo">
         <Annotation Term="Org.OData.Capabilities.V1.InsertRestrictions">
           <Record>
             <PropertyValue Property="Insertable" Bool="false" />
@@ -1186,6 +1195,18 @@
         <Parameter Name="column" Type="Edm.Int32" Nullable="false" />
         <ReturnType Type="graph.workbookRange" />
       </Function>
+      <Action Name="add" IsBound="true">
+        <Parameter Name="bindingParameter" Type="Collection(graph.site)" />
+        <Parameter Name="value" Type="Collection(graph.site)" />
+        <ReturnType Type="Collection(graph.site)" />
+        <Annotation Term="Org.OData.Core.V1.RequiresExplicitBinding" xmlns:edm="http://docs.oasis-open.org/odata/ns/edm" />
+      </Action>
+      <Action Name="remove" IsBound="true">
+        <Parameter Name="bindingParameter" Type="Collection(graph.site)" />
+        <Parameter Name="value" Type="Collection(graph.site)" />
+        <ReturnType Type="Collection(graph.site)" />
+        <Annotation Term="Org.OData.Core.V1.RequiresExplicitBinding" xmlns:edm="http://docs.oasis-open.org/odata/ns/edm" />
+      </Action>
       <Action Name="accept" IsBound="true">
         <Parameter Name="bindingParameter" Type="graph.event" />
         <Parameter Name="SendResponse" Type="Edm.Boolean" />
@@ -1459,20 +1480,6 @@
       <Annotations Target="microsoft.graph.message/attachments">
         <Annotation Term="Org.OData.Capabilities.V1.SkipSupported" Bool="false" />
         <Annotation Term="Org.OData.Capabilities.V1.TopSupported" Bool="false" />
-      </Annotations>
-      <Annotations Target="microsoft.graph.contact/photo">
-        <Annotation Term="Org.OData.Capabilities.V1.DeleteRestrictions">
-          <Record>
-            <PropertyValue Property="Deletable" Bool="false" />
-          </Record>
-        </Annotation>
-      </Annotations>
-      <Annotations Target="microsoft.graph.team/photo">
-        <Annotation Term="Org.OData.Capabilities.V1.DeleteRestrictions">
-          <Record>
-            <PropertyValue Property="Deletable" Bool="false" />
-          </Record>
-        </Annotation>
       </Annotations>
       <Annotations Target="microsoft.graph.b2xIdentityUserFlow/apiConnectorConfiguration">
         <Annotation Term="Org.OData.Capabilities.V1.ReadRestrictions">
