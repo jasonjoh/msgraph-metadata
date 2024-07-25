@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <?xml-stylesheet type='text/xsl' href='preprocess_csdl.xsl'?>
 <edmx:Edmx Version="4.0" xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx">
   <edmx:DataServices>
@@ -562,7 +562,11 @@
             </Collection>
           </Annotation>
         </Property>
-      </EntityType>
+      </EntityType>	  
+	  <EntityType Name="workbookFunctionResult" BaseType="graph.entity">
+		<Property Name="error" Type="Edm.String" />
+		<Property Name="value" Type="Edm.Untyped" />
+	  </EntityType>
       <EntityType Name="authenticationEventsFlow" BaseType="graph.entity" Abstract="true" OpenType="true">
         <Property Name="conditions" Type="graph.authenticationConditions">
           <Annotation Term="Org.OData.Core.V1.Description" String="The conditions representing the context of the authentication request that will be used to decide whether the events policy will be invoked." />
@@ -595,6 +599,9 @@
           </Annotation>
         </NavigationProperty>
       </EntityType>
+      <Annotations Target="microsoft.graph.GraphService/invitations">
+        <Annotation Term="Org.OData.Capabilities.V1.IndexableByKey" Bool="false" />
+      </Annotations>
       <Annotations Target="microsoft.graph.directory/deletedItems">
         <Annotation Term="Org.OData.Capabilities.V1.DeleteRestrictions">
           <Record>
@@ -1195,6 +1202,13 @@
         <Parameter Name="column" Type="Edm.Int32" Nullable="false" />
         <ReturnType Type="graph.workbookRange" />
       </Function>
+	  <Action Name="days360" IsBound="true">
+		<Parameter Name="bindparameter" Type="graph.workbookFunctions" />
+		<Parameter Name="startDate" Type="Edm.Untyped" />
+		<Parameter Name="endDate" Type="Edm.Untyped" />
+		<Parameter Name="method" Type="Edm.Untyped" />
+		<ReturnType Type="graph.workbookFunctionResult" />
+	  </Action>
       <Action Name="add" IsBound="true">
         <Parameter Name="bindingParameter" Type="Collection(graph.site)" />
         <Parameter Name="value" Type="Collection(graph.site)" />

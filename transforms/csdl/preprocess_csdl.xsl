@@ -33,6 +33,14 @@
             <xsl:apply-templates select="@* | node()"/>
         </xsl:copy>
     </xsl:template>
+	
+	<!-- Changes Type attribute for properties and action/functions parameters from 'graph.Json' to 'Edm.UnTyped'-->
+	<xsl:template match="edm:Property[@Type='graph.Json'] | edm:Parameter[@Type='graph.Json']">
+        <xsl:copy>
+            <xsl:apply-templates select="@*"/>
+            <xsl:attribute name="Type">Edm.Untyped</xsl:attribute>
+        </xsl:copy>
+    </xsl:template>
 
     <!-- Adds ContainsTarget attribute to navigation properties. These typically represent scenarios where we need to provide an improvement
          to the generator. Specifically, scenarios that represent non-contained navigation to a collection. -->
@@ -1073,6 +1081,16 @@
     </xsl:template>
 
     <!-- Capability Annotations Templates -->
+    <xsl:template name="IndexableByKeyTemplate">
+        <xsl:param name="indexableByKey" />
+        <xsl:element name="Annotation">
+            <xsl:attribute name="Term">Org.OData.Capabilities.V1.IndexableByKey</xsl:attribute>
+            <xsl:attribute name="Bool">
+                <xsl:value-of select="$indexableByKey"/>
+            </xsl:attribute>
+        </xsl:element>
+    </xsl:template>
+
     <xsl:template name="CountRestrictionsTemplate">
         <xsl:param name="countable" />
         <xsl:element name="Annotation">
@@ -1815,28 +1833,46 @@
                     </xsl:element>
                 </xsl:when>
             </xsl:choose>
+
+            <!-- Set IndexableByKey to false for GraphService/invitations -->
+            <xsl:choose>
+                <xsl:when test="not(edm:Annotations[@Target='microsoft.graph.GraphService/invitations'])">
+                    <xsl:element name="Annotations">
+                        <xsl:attribute name="Target">microsoft.graph.GraphService/invitations</xsl:attribute>
+                        <xsl:call-template name="IndexableByKeyTemplate">
+                            <xsl:with-param name="indexableByKey">false</xsl:with-param>
+                        </xsl:call-template>
+                    </xsl:element>
+                </xsl:when>
+            </xsl:choose>
         
         </xsl:copy>
     </xsl:template>
 
     <!-- If the grand-parent "Annotations" tag already exists modify it -->
+    <!-- Set IndexableByKey to false for GraphService/invitations -->
+    <xsl:template match="edm:Schema[@Namespace='microsoft.graph']/edm:Annotations[@Target='microsoft.graph.GraphService/invitations']">
+        <xsl:copy>
+            <xsl:apply-templates select="@*|node()"/>
+            <xsl:if test="not(edm:Annotation[@Term='Org.OData.Capabilities.V1.IndexableByKey'])">
+                <xsl:call-template name="IndexableByKeyTemplate">
+                    <xsl:with-param name="indexableByKey">false</xsl:with-param>
+                </xsl:call-template>
+            </xsl:if>
+        </xsl:copy>
+    </xsl:template>
+    
+    <!-- If the grand-parent "Annotations" tag already exists modify it -->
     <!-- Add deletability for directory/deletedItems -->
     <xsl:template match="edm:Schema[@Namespace='microsoft.graph']/edm:Annotations[@Target='microsoft.graph.directory/deletedItems'] ">
-        <xsl:choose>
-            <xsl:when test="not(edm:Annotation[@Term='Org.OData.Capabilities.V1.DeleteRestrictions'])">
-                <xsl:copy>
-                    <xsl:copy-of select="@*|node()"/>
-                    <xsl:call-template name="DeleteRestrictionsTemplate">
-                        <xsl:with-param name="deletable">true</xsl:with-param>
-                    </xsl:call-template>
-                </xsl:copy>
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:copy>
-                    <xsl:apply-templates select="@* | node()"/>
-                </xsl:copy>
-            </xsl:otherwise>
-        </xsl:choose>        
+        <xsl:copy>
+            <xsl:apply-templates select="@*|node()"/>
+            <xsl:if test="not(edm:Annotation[@Term='Org.OData.Capabilities.V1.DeleteRestrictions'])">
+                <xsl:call-template name="DeleteRestrictionsTemplate">
+                    <xsl:with-param name="deletable">true</xsl:with-param>
+                </xsl:call-template>
+            </xsl:if>
+        </xsl:copy>        
     </xsl:template>
 
     <!-- If the parent "Annotation" tag already exists, modify it -->

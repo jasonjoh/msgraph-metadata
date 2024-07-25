@@ -520,6 +520,11 @@
         <Member Name="scheduler" Value="5" />
         <Member Name="teamMember" Value="6" />
       </EnumType>
+      <EnumType Name="bookingType">
+        <Member Name="unknown" Value="0" />
+        <Member Name="standard" Value="1" />
+        <Member Name="reserved" Value="2" />
+      </EnumType>
       <EnumType Name="broadcastMeetingAudience">
         <Member Name="roleIsAttendee" Value="0" />
         <Member Name="organization" Value="1" />
@@ -764,6 +769,12 @@
         <Member Name="otherExternalUser" Value="16" />
         <Member Name="serviceProvider" Value="32" />
         <Member Name="unknownFutureValue" Value="64" />
+      </EnumType>
+      <EnumType Name="conditionalAccessInsiderRiskLevels" IsFlags="true">
+        <Member Name="minor" Value="1" />
+        <Member Name="moderate" Value="2" />
+        <Member Name="elevated" Value="4" />
+        <Member Name="unknownFutureValue" Value="8" />
       </EnumType>
       <EnumType Name="conditionalAccessPolicyState">
         <Member Name="enabled" Value="0" />
@@ -1700,6 +1711,12 @@
         <Member Name="watermarkProtection" Value="1" />
         <Member Name="unknownFutureValue" Value="2" />
       </EnumType>
+      <EnumType Name="onPremisesDirectorySynchronizationDeletionPreventionType">
+        <Member Name="disabled" Value="0" />
+        <Member Name="enabledForCount" Value="1" />
+        <Member Name="enabledForPercentage" Value="2" />
+        <Member Name="unknownFutureValue" Value="3" />
+      </EnumType>
       <EnumType Name="operatingSystemUpgradeEligibility">
         <Member Name="upgraded" Value="0" />
         <Member Name="unknown" Value="1" />
@@ -1738,6 +1755,15 @@
         <Member Name="page" Value="1" />
         <Member Name="newsPost" Value="2" />
         <Member Name="unknownFutureValue" Value="3" />
+      </EnumType>
+      <EnumType Name="partnerTenantType">
+        <Member Name="microsoftSupport" Value="1" />
+        <Member Name="syndicatePartner" Value="2" />
+        <Member Name="breadthPartner" Value="3" />
+        <Member Name="breadthPartnerDelegatedAdmin" Value="4" />
+        <Member Name="resellerPartnerDelegatedAdmin" Value="5" />
+        <Member Name="valueAddedResellerPartnerDelegatedAdmin" Value="6" />
+        <Member Name="unknownFutureValue" Value="7" />
       </EnumType>
       <EnumType Name="permissionClassificationType">
         <Member Name="low" Value="1" />
@@ -2684,6 +2710,52 @@
         <Member Name="stapleDualRight" Value="30" />
         <Member Name="stapleDualBottom" Value="31" />
         <Member Name="unknownFutureValue" Value="32" />
+        <Member Name="stapleTripleLeft" Value="33" />
+        <Member Name="stapleTripleTop" Value="34" />
+        <Member Name="stapleTripleRight" Value="35" />
+        <Member Name="stapleTripleBottom" Value="36" />
+        <Member Name="bindLeft" Value="37" />
+        <Member Name="bindTop" Value="38" />
+        <Member Name="bindRight" Value="39" />
+        <Member Name="bindBottom" Value="40" />
+        <Member Name="foldAccordion" Value="41" />
+        <Member Name="foldDoubleGate" Value="42" />
+        <Member Name="foldGate" Value="43" />
+        <Member Name="foldHalf" Value="44" />
+        <Member Name="foldHalfZ" Value="45" />
+        <Member Name="foldLeftGate" Value="46" />
+        <Member Name="foldLetter" Value="47" />
+        <Member Name="foldParallel" Value="48" />
+        <Member Name="foldPoster" Value="49" />
+        <Member Name="foldRightGate" Value="50" />
+        <Member Name="foldZ" Value="51" />
+        <Member Name="foldEngineeringZ" Value="52" />
+        <Member Name="punchTopLeft" Value="53" />
+        <Member Name="punchBottomLeft" Value="54" />
+        <Member Name="punchTopRight" Value="55" />
+        <Member Name="punchBottomRight" Value="56" />
+        <Member Name="punchDualLeft" Value="57" />
+        <Member Name="punchDualTop" Value="58" />
+        <Member Name="punchDualRight" Value="59" />
+        <Member Name="punchDualBottom" Value="60" />
+        <Member Name="punchTripleLeft" Value="61" />
+        <Member Name="punchTripleTop" Value="62" />
+        <Member Name="punchTripleRight" Value="63" />
+        <Member Name="punchTripleBottom" Value="64" />
+        <Member Name="punchQuadLeft" Value="65" />
+        <Member Name="punchQuadTop" Value="66" />
+        <Member Name="punchQuadRight" Value="67" />
+        <Member Name="punchQuadBottom" Value="68" />
+        <Member Name="fold" Value="69" />
+        <Member Name="trim" Value="70" />
+        <Member Name="bale" Value="71" />
+        <Member Name="bookletMaker" Value="72" />
+        <Member Name="coat" Value="73" />
+        <Member Name="laminate" Value="74" />
+        <Member Name="trimAfterPages" Value="75" />
+        <Member Name="trimAfterDocuments" Value="76" />
+        <Member Name="trimAfterCopies" Value="77" />
+        <Member Name="trimAfterJob" Value="78" />
       </EnumType>
       <EnumType Name="printJobProcessingState">
         <Member Name="unknown" Value="0" />
@@ -3339,6 +3411,12 @@
         <Member Name="guest" Value="1" />
         <Member Name="unknownFutureValue" Value="3" />
       </EnumType>
+      <EnumType Name="siteArchiveStatus">
+        <Member Name="recentlyArchived" Value="0" />
+        <Member Name="fullyArchived" Value="1" />
+        <Member Name="reactivating" Value="2" />
+        <Member Name="unknownFutureValue" Value="3" />
+      </EnumType>
       <EnumType Name="siteSecurityLevel">
         <Member Name="userDefined" Value="0" />
         <Member Name="low" Value="1" />
@@ -3497,6 +3575,8 @@
         <Member Name="unknownFutureValue" Value="5" />
         <Member Name="teamifyGroup" Value="6" />
         <Member Name="createChannel" Value="7" />
+        <Member Name="archiveChannel" Value="8" />
+        <Member Name="unarchiveChannel" Value="9" />
       </EnumType>
       <EnumType Name="teamSpecialization">
         <Member Name="none" Value="0" />
@@ -3855,6 +3935,11 @@
         <Member Name="arm" Value="4" />
         <Member Name="neutral" Value="8" />
       </EnumType>
+      <EnumType Name="windowsAutopilotDeviceType">
+        <Member Name="windowsPc" Value="0" />
+        <Member Name="holoLens" Value="1" />
+        <Member Name="unknownFutureValue" Value="99" />
+      </EnumType>
       <EnumType Name="windowsDefenderProductStatus" IsFlags="true">
         <Member Name="noStatus" Value="0" />
         <Member Name="serviceNotRunning" Value="1" />
@@ -3907,6 +3992,11 @@
         <Member Name="holographic" Value="4" />
         <Member Name="team" Value="8" />
         <Member Name="unknownFutureValue" Value="16" />
+      </EnumType>
+      <EnumType Name="windowsDeviceUsageType">
+        <Member Name="singleUser" Value="0" />
+        <Member Name="shared" Value="1" />
+        <Member Name="unknownFutureValue" Value="2" />
       </EnumType>
       <EnumType Name="windowsHelloForBusinessPinUsage">
         <Member Name="allowed" Value="0" />
@@ -4065,11 +4155,21 @@
         <Member Name="notifyOnAppChangesWithoutDimming" Value="3" />
         <Member Name="neverNotify" Value="4" />
       </EnumType>
+      <EnumType Name="windowsUserType">
+        <Member Name="administrator" Value="0" />
+        <Member Name="standard" Value="1" />
+        <Member Name="unknownFutureValue" Value="2" />
+      </EnumType>
       <EnumType Name="workbookOperationStatus">
         <Member Name="notStarted" Value="0" />
         <Member Name="running" Value="1" />
         <Member Name="succeeded" Value="2" />
         <Member Name="failed" Value="3" />
+      </EnumType>
+      <EnumType Name="x509CertificateAffinityLevel">
+        <Member Name="low" Value="0" />
+        <Member Name="high" Value="1" />
+        <Member Name="unknownFutureValue" Value="2" />
       </EnumType>
       <EnumType Name="x509CertificateAuthenticationMode">
         <Member Name="x509CertificateSingleFactor" Value="0" />
@@ -4080,6 +4180,7 @@
         <Member Name="issuerSubject" Value="0" />
         <Member Name="policyOID" Value="1" />
         <Member Name="unknownFutureValue" Value="2" />
+        <Member Name="issuerSubjectAndPolicyOID" Value="3" />
       </EnumType>
       <ComplexType Name="aadUserConversationMemberResult" BaseType="graph.actionResultPart">
         <Property Name="userId" Type="Edm.String" />
@@ -4514,6 +4615,16 @@
         <Property Name="modifiedProperties" Type="Collection(graph.auditProperty)" />
         <Property Name="resourceId" Type="Edm.String" />
       </ComplexType>
+      <ComplexType Name="authenticationConditions">
+        <Property Name="applications" Type="graph.authenticationConditionsApplications" />
+      </ComplexType>
+      <ComplexType Name="authenticationConditionsApplications">
+        <NavigationProperty Name="includeApplications" Type="Collection(graph.authenticationConditionApplication)" ContainsTarget="true" />
+      </ComplexType>
+      <ComplexType Name="authenticationConfigurationValidation">
+        <Property Name="errors" Type="Collection(graph.genericError)" />
+        <Property Name="warnings" Type="Collection(graph.genericError)" />
+      </ComplexType>
       <ComplexType Name="authenticationMethodFeatureConfiguration">
         <Property Name="excludeTarget" Type="graph.featureTarget" />
         <Property Name="includeTarget" Type="graph.featureTarget" />
@@ -4573,6 +4684,9 @@
       <ComplexType Name="azureADRegistrationPolicy">
         <Property Name="allowedToRegister" Type="graph.deviceRegistrationMembership" />
         <Property Name="isAdminConfigurable" Type="Edm.Boolean" />
+      </ComplexType>
+      <ComplexType Name="azureAdTokenAuthentication" BaseType="graph.customExtensionAuthenticationConfiguration">
+        <Property Name="resourceId" Type="Edm.String" />
       </ComplexType>
       <ComplexType Name="bitLockerRemovableDrivePolicy">
         <Property Name="blockCrossOrganizationWriteAccess" Type="Edm.Boolean" Nullable="false" />
@@ -4886,6 +5000,7 @@
         <Property Name="clientApplications" Type="graph.conditionalAccessClientApplications" />
         <Property Name="clientAppTypes" Type="Collection(graph.conditionalAccessClientApp)" Nullable="false" />
         <Property Name="devices" Type="graph.conditionalAccessDevices" />
+        <Property Name="insiderRiskLevels" Type="graph.conditionalAccessInsiderRiskLevels" />
         <Property Name="locations" Type="graph.conditionalAccessLocations" />
         <Property Name="platforms" Type="graph.conditionalAccessPlatforms" />
         <Property Name="servicePrincipalRiskLevels" Type="Collection(graph.riskLevel)" Nullable="false" />
@@ -4971,6 +5086,12 @@
         <Property Name="includedContainers" Type="Collection(Edm.String)" />
       </ComplexType>
       <ComplexType Name="contentApprovalStatusColumn" />
+      <ComplexType Name="contentCustomization">
+        <Property Name="attributeCollection" Type="Collection(graph.keyValue)" Nullable="false" />
+        <Property Name="attributeCollectionRelativeUrl" Type="Edm.String" />
+        <Property Name="registrationCampaign" Type="Collection(graph.keyValue)" Nullable="false" />
+        <Property Name="registrationCampaignRelativeUrl" Type="Edm.String" />
+      </ComplexType>
       <ComplexType Name="contentTypeInfo">
         <Property Name="id" Type="Edm.String" />
         <Property Name="name" Type="Edm.String" />
@@ -5040,10 +5161,14 @@
         <Property Name="type" Type="Edm.String" />
       </ComplexType>
       <ComplexType Name="customExtensionClientConfiguration">
+        <Property Name="maximumRetries" Type="Edm.Int32" />
         <Property Name="timeoutInMilliseconds" Type="Edm.Int32" />
       </ComplexType>
       <ComplexType Name="customExtensionData" Abstract="true" />
       <ComplexType Name="customExtensionEndpointConfiguration" Abstract="true" />
+      <ComplexType Name="customExtensionOverwriteConfiguration">
+        <Property Name="clientConfiguration" Type="graph.customExtensionClientConfiguration" />
+      </ComplexType>
       <ComplexType Name="customSecurityAttributeValue" OpenType="true" />
       <ComplexType Name="customTimeZone" BaseType="graph.timeZoneBase">
         <Property Name="bias" Type="Edm.Int32" />
@@ -5405,6 +5530,10 @@
         <Property Name="message" Type="Edm.String" />
         <Property Name="responseCode" Type="Edm.String" />
       </ComplexType>
+      <ComplexType Name="genericError">
+        <Property Name="code" Type="Edm.String" />
+        <Property Name="message" Type="Edm.String" />
+      </ComplexType>
       <ComplexType Name="geoCoordinates">
         <Property Name="altitude" Type="Edm.Double" />
         <Property Name="latitude" Type="Edm.Double" />
@@ -5438,6 +5567,9 @@
         <Property Name="privateIpAddress" Type="Edm.String" />
         <Property Name="publicIpAddress" Type="Edm.String" />
         <Property Name="riskScore" Type="Edm.String" />
+      </ComplexType>
+      <ComplexType Name="httpRequestEndpoint" BaseType="graph.customExtensionEndpointConfiguration">
+        <Property Name="targetUrl" Type="Edm.String" />
       </ComplexType>
       <ComplexType Name="hyperlinkOrPictureColumn">
         <Property Name="isPicture" Type="Edm.Boolean" />
@@ -6107,6 +6239,34 @@
         <Property Name="contentSharingDisabled" Type="graph.onlineMeetingContentSharingDisabledReason" />
         <Property Name="videoDisabled" Type="graph.onlineMeetingVideoDisabledReason" />
       </ComplexType>
+      <ComplexType Name="onPremisesAccidentalDeletionPrevention">
+        <Property Name="alertThreshold" Type="Edm.Int32" />
+        <Property Name="synchronizationPreventionType" Type="graph.onPremisesDirectorySynchronizationDeletionPreventionType" />
+      </ComplexType>
+      <ComplexType Name="onPremisesDirectorySynchronizationConfiguration">
+        <Property Name="accidentalDeletionPrevention" Type="graph.onPremisesAccidentalDeletionPrevention" />
+      </ComplexType>
+      <ComplexType Name="onPremisesDirectorySynchronizationFeature">
+        <Property Name="blockCloudObjectTakeoverThroughHardMatchEnabled" Type="Edm.Boolean" />
+        <Property Name="blockSoftMatchEnabled" Type="Edm.Boolean" />
+        <Property Name="bypassDirSyncOverridesEnabled" Type="Edm.Boolean" />
+        <Property Name="cloudPasswordPolicyForPasswordSyncedUsersEnabled" Type="Edm.Boolean" />
+        <Property Name="concurrentCredentialUpdateEnabled" Type="Edm.Boolean" />
+        <Property Name="concurrentOrgIdProvisioningEnabled" Type="Edm.Boolean" />
+        <Property Name="deviceWritebackEnabled" Type="Edm.Boolean" />
+        <Property Name="directoryExtensionsEnabled" Type="Edm.Boolean" />
+        <Property Name="fopeConflictResolutionEnabled" Type="Edm.Boolean" />
+        <Property Name="groupWriteBackEnabled" Type="Edm.Boolean" />
+        <Property Name="passwordSyncEnabled" Type="Edm.Boolean" />
+        <Property Name="passwordWritebackEnabled" Type="Edm.Boolean" />
+        <Property Name="quarantineUponProxyAddressesConflictEnabled" Type="Edm.Boolean" />
+        <Property Name="quarantineUponUpnConflictEnabled" Type="Edm.Boolean" />
+        <Property Name="softMatchOnUpnEnabled" Type="Edm.Boolean" />
+        <Property Name="synchronizeUpnForManagedUsersEnabled" Type="Edm.Boolean" />
+        <Property Name="unifiedGroupWritebackEnabled" Type="Edm.Boolean" />
+        <Property Name="userForcePasswordChangeOnLogonEnabled" Type="Edm.Boolean" />
+        <Property Name="userWritebackEnabled" Type="Edm.Boolean" />
+      </ComplexType>
       <ComplexType Name="onPremisesExtensionAttributes">
         <Property Name="extensionAttribute1" Type="Edm.String" />
         <Property Name="extensionAttribute10" Type="Edm.String" />
@@ -6129,6 +6289,14 @@
         <Property Name="occurredDateTime" Type="Edm.DateTimeOffset" />
         <Property Name="propertyCausingError" Type="Edm.String" />
         <Property Name="value" Type="Edm.String" />
+      </ComplexType>
+      <ComplexType Name="onTokenIssuanceStartCustomExtensionHandler" BaseType="graph.onTokenIssuanceStartHandler">
+        <Property Name="configuration" Type="graph.customExtensionOverwriteConfiguration" />
+        <NavigationProperty Name="customExtension" Type="graph.onTokenIssuanceStartCustomExtension" />
+      </ComplexType>
+      <ComplexType Name="onTokenIssuanceStartHandler" Abstract="true" />
+      <ComplexType Name="onTokenIssuanceStartReturnClaim">
+        <Property Name="claimIdInApiResponse" Type="Edm.String" />
       </ComplexType>
       <ComplexType Name="operationError">
         <Property Name="code" Type="Edm.String" />
@@ -6160,6 +6328,14 @@
         <Property Name="altitudeAccuracy" Type="Edm.Double" />
         <Property Name="latitude" Type="Edm.Double" />
         <Property Name="longitude" Type="Edm.Double" />
+      </ComplexType>
+      <ComplexType Name="outOfBoxExperienceSetting">
+        <Property Name="deviceUsageType" Type="graph.windowsDeviceUsageType" Nullable="false" />
+        <Property Name="escapeLinkHidden" Type="Edm.Boolean" Nullable="false" />
+        <Property Name="eulaHidden" Type="Edm.Boolean" Nullable="false" />
+        <Property Name="keyboardSelectionPageSkipped" Type="Edm.Boolean" Nullable="false" />
+        <Property Name="privacySettingsHidden" Type="Edm.Boolean" Nullable="false" />
+        <Property Name="userType" Type="graph.windowsUserType" Nullable="false" />
       </ComplexType>
       <ComplexType Name="package">
         <Property Name="type" Type="Edm.String" />
@@ -6939,6 +7115,8 @@
         <Property Name="lastNonInteractiveSignInRequestId" Type="Edm.String" />
         <Property Name="lastSignInDateTime" Type="Edm.DateTimeOffset" />
         <Property Name="lastSignInRequestId" Type="Edm.String" />
+        <Property Name="lastSuccessfulSignInDateTime" Type="Edm.DateTimeOffset" />
+        <Property Name="lastSuccessfulSignInRequestId" Type="Edm.String" />
       </ComplexType>
       <ComplexType Name="signInFrequencySessionControl" BaseType="graph.conditionalAccessSessionControl">
         <Property Name="authenticationType" Type="graph.signInFrequencyAuthenticationType" />
@@ -6964,7 +7142,11 @@
         <Property Name="description" Type="Edm.String" />
         <Property Name="userId" Type="Edm.String" />
       </ComplexType>
+      <ComplexType Name="siteArchivalDetails">
+        <Property Name="archiveStatus" Type="graph.siteArchiveStatus" />
+      </ComplexType>
       <ComplexType Name="siteCollection">
+        <Property Name="archivalDetails" Type="graph.siteArchivalDetails" />
         <Property Name="dataLocationCode" Type="Edm.String" />
         <Property Name="hostname" Type="Edm.String" />
         <Property Name="root" Type="graph.root" />
@@ -7789,14 +7971,19 @@
       <ComplexType Name="x509CertificateAuthenticationModeConfiguration">
         <Property Name="rules" Type="Collection(graph.x509CertificateRule)" />
         <Property Name="x509CertificateAuthenticationDefaultMode" Type="graph.x509CertificateAuthenticationMode" />
+        <Property Name="x509CertificateDefaultRequiredAffinityLevel" Type="graph.x509CertificateAffinityLevel" />
       </ComplexType>
       <ComplexType Name="x509CertificateRule">
         <Property Name="identifier" Type="Edm.String" />
+        <Property Name="issuerSubjectIdentifier" Type="Edm.String" />
+        <Property Name="policyOidIdentifier" Type="Edm.String" />
         <Property Name="x509CertificateAuthenticationMode" Type="graph.x509CertificateAuthenticationMode" />
+        <Property Name="x509CertificateRequiredAffinityLevel" Type="graph.x509CertificateAffinityLevel" />
         <Property Name="x509CertificateRuleType" Type="graph.x509CertificateRuleType" />
       </ComplexType>
       <ComplexType Name="x509CertificateUserBinding">
         <Property Name="priority" Type="Edm.Int32" Nullable="false" />
+        <Property Name="trustAffinityLevel" Type="graph.x509CertificateAffinityLevel" />
         <Property Name="userProperty" Type="Edm.String" />
         <Property Name="x509CertificateField" Type="Edm.String" />
       </ComplexType>
@@ -8482,7 +8669,7 @@
         <Property Name="displayName" Type="Edm.String" />
         <Property Name="resources" Type="Collection(graph.auditResource)" />
       </EntityType>
-      <EntityType Name="auditLogRoot" BaseType="graph.entity">
+      <EntityType Name="auditLogRoot">
         <NavigationProperty Name="directoryAudits" Type="Collection(graph.directoryAudit)" ContainsTarget="true" />
         <NavigationProperty Name="provisioning" Type="Collection(graph.provisioningObjectSummary)" ContainsTarget="true" />
       </EntityType>
@@ -8501,10 +8688,20 @@
       <EntityType Name="authenticationCombinationConfiguration" BaseType="graph.entity" Abstract="true">
         <Property Name="appliesToCombinations" Type="Collection(graph.authenticationMethodModes)" Nullable="false" />
       </EntityType>
+      <EntityType Name="authenticationConditionApplication">
+        <Key>
+          <PropertyRef Name="appId" />
+        </Key>
+        <Property Name="appId" Type="Edm.String" Nullable="false" />
+      </EntityType>
       <EntityType Name="authenticationContextClassReference" BaseType="graph.entity">
         <Property Name="description" Type="Edm.String" />
         <Property Name="displayName" Type="Edm.String" />
         <Property Name="isAvailable" Type="Edm.Boolean" />
+      </EntityType>
+      <EntityType Name="authenticationEventListener" BaseType="graph.entity" Abstract="true" OpenType="true">
+        <Property Name="authenticationEventsFlowId" Type="Edm.String" />
+        <Property Name="conditions" Type="graph.authenticationConditions" />
       </EntityType>
       <EntityType Name="authenticationMethod" BaseType="graph.entity" Abstract="true" />
       <EntityType Name="authenticationMethodConfiguration" BaseType="graph.entity" Abstract="true">
@@ -8744,6 +8941,21 @@
         <NavigationProperty Name="operations" Type="Collection(graph.commsOperation)" ContainsTarget="true" />
         <NavigationProperty Name="participants" Type="Collection(graph.participant)" ContainsTarget="true" />
       </EntityType>
+      <EntityType Name="callRecording" BaseType="graph.entity">
+        <Property Name="content" Type="Edm.Stream" />
+        <Property Name="createdDateTime" Type="Edm.DateTimeOffset" />
+        <Property Name="meetingId" Type="Edm.String" />
+        <Property Name="meetingOrganizer" Type="graph.identitySet" />
+        <Property Name="recordingContentUrl" Type="Edm.String" />
+      </EntityType>
+      <EntityType Name="callTranscript" BaseType="graph.entity">
+        <Property Name="content" Type="Edm.Stream" />
+        <Property Name="createdDateTime" Type="Edm.DateTimeOffset" />
+        <Property Name="meetingId" Type="Edm.String" />
+        <Property Name="meetingOrganizer" Type="graph.identitySet" />
+        <Property Name="metadataContent" Type="Edm.Stream" />
+        <Property Name="transcriptContentUrl" Type="Edm.String" />
+      </EntityType>
       <EntityType Name="cancelMediaProcessingOperation" BaseType="graph.commsOperation" OpenType="true" />
       <EntityType Name="canvasLayout" BaseType="graph.entity">
         <NavigationProperty Name="horizontalSections" Type="Collection(graph.horizontalSection)" ContainsTarget="true" />
@@ -8757,6 +8969,7 @@
         <Property Name="description" Type="Edm.String" />
         <Property Name="displayName" Type="Edm.String" Nullable="false" />
         <Property Name="email" Type="Edm.String" />
+        <Property Name="isArchived" Type="Edm.Boolean" />
         <Property Name="isFavoriteByDefault" Type="Edm.Boolean" />
         <Property Name="membershipType" Type="graph.channelMembershipType" />
         <Property Name="summary" Type="graph.channelSummary" />
@@ -8874,6 +9087,34 @@
         <Property Name="clientContext" Type="Edm.String" />
         <Property Name="resultInfo" Type="graph.resultInfo" />
         <Property Name="status" Type="graph.operationStatus" Nullable="false" />
+      </EntityType>
+      <EntityType Name="companySubscription" BaseType="graph.entity">
+        <Property Name="commerceSubscriptionId" Type="Edm.String" />
+        <Property Name="createdDateTime" Type="Edm.DateTimeOffset" />
+        <Property Name="isTrial" Type="Edm.Boolean" />
+        <Property Name="nextLifecycleDateTime" Type="Edm.DateTimeOffset" />
+        <Property Name="ownerId" Type="Edm.String" />
+        <Property Name="ownerTenantId" Type="Edm.String" />
+        <Property Name="ownerType" Type="Edm.String" />
+        <Property Name="serviceStatus" Type="Collection(graph.servicePlanInfo)" Nullable="false" />
+        <Property Name="skuId" Type="Edm.String" />
+        <Property Name="skuPartNumber" Type="Edm.String" />
+        <Property Name="status" Type="Edm.String" />
+        <Property Name="totalLicenses" Type="Edm.Int32" />
+        <Annotation Term="Org.OData.Core.V1.AlternateKeys">
+          <Collection>
+            <Record Type="Org.OData.Core.V1.AlternateKey">
+              <PropertyValue Property="Key">
+                <Collection>
+                  <Record Type="Org.OData.Core.V1.PropertyRef">
+                    <PropertyValue Property="Alias" String="commerceSubscriptionId" />
+                    <PropertyValue Property="Name" PropertyPath="commerceSubscriptionId" />
+                  </Record>
+                </Collection>
+              </PropertyValue>
+            </Record>
+          </Collection>
+        </Annotation>
       </EntityType>
       <EntityType Name="complianceManagementPartner" BaseType="graph.entity">
         <Property Name="androidEnrollmentAssignments" Type="Collection(graph.complianceManagementPartnerAssignment)" />
@@ -9059,6 +9300,7 @@
         <Property Name="tenantId" Type="Edm.String" Nullable="false" />
         <Property Name="userSyncInbound" Type="graph.crossTenantUserSyncInbound" />
       </EntityType>
+      <EntityType Name="customAuthenticationExtension" BaseType="graph.customCalloutExtension" Abstract="true" />
       <EntityType Name="customCalloutExtension" BaseType="graph.entity" Abstract="true">
         <Property Name="authenticationConfiguration" Type="graph.customExtensionAuthenticationConfiguration" />
         <Property Name="clientConfiguration" Type="graph.customExtensionClientConfiguration" />
@@ -9550,6 +9792,8 @@
         <NavigationProperty Name="deletedItems" Type="Collection(graph.directoryObject)" ContainsTarget="true" />
         <NavigationProperty Name="deviceLocalCredentials" Type="Collection(graph.deviceLocalCredentialInfo)" ContainsTarget="true" />
         <NavigationProperty Name="federationConfigurations" Type="Collection(graph.identityProviderBase)" ContainsTarget="true" />
+        <NavigationProperty Name="onPremisesSynchronization" Type="Collection(graph.onPremisesDirectorySynchronization)" ContainsTarget="true" />
+        <NavigationProperty Name="subscriptions" Type="Collection(graph.companySubscription)" ContainsTarget="true" />
       </EntityType>
       <EntityType Name="directoryAudit" BaseType="graph.entity">
         <Property Name="activityDateTime" Type="Edm.DateTimeOffset" Nullable="false" />
@@ -9874,6 +10118,20 @@
         <Property Name="issuer" Type="Edm.String" Nullable="false" />
         <Property Name="name" Type="Edm.String" Nullable="false" />
         <Property Name="subject" Type="Edm.String" Nullable="false" />
+        <Annotation Term="Org.OData.Core.V1.AlternateKeys">
+          <Collection>
+            <Record Type="Org.OData.Core.V1.AlternateKey">
+              <PropertyValue Property="Key">
+                <Collection>
+                  <Record Type="Org.OData.Core.V1.PropertyRef">
+                    <PropertyValue Property="Alias" String="name" />
+                    <PropertyValue Property="Name" PropertyPath="name" />
+                  </Record>
+                </Collection>
+              </PropertyValue>
+            </Record>
+          </Collection>
+        </Annotation>
       </EntityType>
       <EntityType Name="fido2AuthenticationMethod" BaseType="graph.authenticationMethod">
         <Property Name="aaGuid" Type="Edm.String" />
@@ -9997,7 +10255,9 @@
         <NavigationProperty Name="webparts" Type="Collection(graph.webPart)" ContainsTarget="true" />
       </EntityType>
       <EntityType Name="identityContainer">
+        <NavigationProperty Name="authenticationEventListeners" Type="Collection(graph.authenticationEventListener)" ContainsTarget="true" />
         <NavigationProperty Name="conditionalAccess" Type="graph.conditionalAccessRoot" ContainsTarget="true" />
+        <NavigationProperty Name="customAuthenticationExtensions" Type="Collection(graph.customAuthenticationExtension)" ContainsTarget="true" />
       </EntityType>
       <EntityType Name="identityGovernance">
         <NavigationProperty Name="accessReviews" Type="graph.accessReviewSet" ContainsTarget="true" />
@@ -10048,6 +10308,10 @@
       </EntityType>
       <EntityType Name="informationProtection">
         <NavigationProperty Name="bitlocker" Type="graph.bitlocker" ContainsTarget="true" />
+      </EntityType>
+      <EntityType Name="insightsSettings" BaseType="graph.entity">
+        <Property Name="disabledForGroup" Type="Edm.String" />
+        <Property Name="isEnabledInOrganization" Type="Edm.Boolean" />
       </EntityType>
       <EntityType Name="internalDomainFederation" BaseType="graph.samlOrWsFedProvider">
         <Property Name="activeSignInUri" Type="Edm.String" />
@@ -10917,12 +11181,24 @@
         <Property Name="videoTeleconferenceId" Type="Edm.String" />
         <Property Name="watermarkProtection" Type="graph.watermarkProtectionValues" />
         <NavigationProperty Name="attendanceReports" Type="Collection(graph.meetingAttendanceReport)" ContainsTarget="true" />
+        <NavigationProperty Name="recordings" Type="Collection(graph.callRecording)" ContainsTarget="true" />
+        <NavigationProperty Name="transcripts" Type="Collection(graph.callTranscript)" ContainsTarget="true" />
       </EntityType>
       <EntityType Name="onPremisesConditionalAccessSettings" BaseType="graph.entity">
         <Property Name="enabled" Type="Edm.Boolean" Nullable="false" />
         <Property Name="excludedGroups" Type="Collection(Edm.Guid)" Nullable="false" />
         <Property Name="includedGroups" Type="Collection(Edm.Guid)" Nullable="false" />
         <Property Name="overrideDefaultRule" Type="Edm.Boolean" Nullable="false" />
+      </EntityType>
+      <EntityType Name="onPremisesDirectorySynchronization" BaseType="graph.entity">
+        <Property Name="configuration" Type="graph.onPremisesDirectorySynchronizationConfiguration" />
+        <Property Name="features" Type="graph.onPremisesDirectorySynchronizationFeature" Nullable="false" />
+      </EntityType>
+      <EntityType Name="onTokenIssuanceStartCustomExtension" BaseType="graph.customAuthenticationExtension">
+        <Property Name="claimsForTokenConfiguration" Type="Collection(graph.onTokenIssuanceStartReturnClaim)" />
+      </EntityType>
+      <EntityType Name="onTokenIssuanceStartListener" BaseType="graph.authenticationEventListener">
+        <Property Name="handler" Type="graph.onTokenIssuanceStartHandler" />
       </EntityType>
       <EntityType Name="openTypeExtension" BaseType="graph.extension" OpenType="true">
         <Property Name="extensionName" Type="Edm.String" Nullable="false" />
@@ -10939,6 +11215,7 @@
         <Property Name="mobileDeviceManagementAuthority" Type="graph.mdmAuthority" Nullable="false" />
         <Property Name="onPremisesLastSyncDateTime" Type="Edm.DateTimeOffset" />
         <Property Name="onPremisesSyncEnabled" Type="Edm.Boolean" />
+        <Property Name="partnerTenantType" Type="graph.partnerTenantType" />
         <Property Name="postalCode" Type="Edm.String" />
         <Property Name="preferredLanguage" Type="Edm.String" />
         <Property Name="privacyProfile" Type="graph.privacyProfile" />
@@ -10965,6 +11242,7 @@
         <Property Name="bannerLogo" Type="Edm.Stream" />
         <Property Name="bannerLogoRelativeUrl" Type="Edm.String" />
         <Property Name="cdnList" Type="Collection(Edm.String)" />
+        <Property Name="contentCustomization" Type="graph.contentCustomization" />
         <Property Name="customAccountResetCredentialsUrl" Type="Edm.String" />
         <Property Name="customCannotAccessYourAccountText" Type="Edm.String" />
         <Property Name="customCannotAccessYourAccountUrl" Type="Edm.String" />
@@ -11035,6 +11313,7 @@
         <Property Name="password" Type="Edm.String" />
       </EntityType>
       <EntityType Name="peopleAdminSettings" BaseType="graph.entity">
+        <NavigationProperty Name="itemInsights" Type="graph.insightsSettings" ContainsTarget="true" />
         <NavigationProperty Name="profileCardProperties" Type="Collection(graph.profileCardProperty)" ContainsTarget="true" />
         <NavigationProperty Name="pronouns" Type="graph.pronounsSettings" ContainsTarget="true" />
       </EntityType>
@@ -11093,6 +11372,12 @@
       </EntityType>
       <EntityType Name="pinnedChatMessageInfo" BaseType="graph.entity">
         <NavigationProperty Name="message" Type="graph.chatMessage" />
+      </EntityType>
+      <EntityType Name="place" BaseType="graph.entity" Abstract="true">
+        <Property Name="address" Type="graph.physicalAddress" />
+        <Property Name="displayName" Type="Edm.String" Nullable="false" />
+        <Property Name="geoCoordinates" Type="graph.outlookGeoCoordinates" />
+        <Property Name="phone" Type="Edm.String" />
       </EntityType>
       <EntityType Name="planner" BaseType="graph.entity">
         <NavigationProperty Name="buckets" Type="Collection(graph.plannerBucket)" ContainsTarget="true" />
@@ -11577,6 +11862,25 @@
         <NavigationProperty Name="directory" Type="graph.rbacApplication" ContainsTarget="true" />
         <NavigationProperty Name="entitlementManagement" Type="graph.rbacApplication" ContainsTarget="true" />
       </EntityType>
+      <EntityType Name="room" BaseType="graph.place">
+        <Property Name="audioDeviceName" Type="Edm.String" />
+        <Property Name="bookingType" Type="graph.bookingType" />
+        <Property Name="building" Type="Edm.String" />
+        <Property Name="capacity" Type="Edm.Int32" />
+        <Property Name="displayDeviceName" Type="Edm.String" />
+        <Property Name="emailAddress" Type="Edm.String" />
+        <Property Name="floorLabel" Type="Edm.String" />
+        <Property Name="floorNumber" Type="Edm.Int32" />
+        <Property Name="isWheelChairAccessible" Type="Edm.Boolean" />
+        <Property Name="label" Type="Edm.String" />
+        <Property Name="nickname" Type="Edm.String" Nullable="false" />
+        <Property Name="tags" Type="Collection(Edm.String)" />
+        <Property Name="videoDeviceName" Type="Edm.String" />
+      </EntityType>
+      <EntityType Name="roomList" BaseType="graph.place">
+        <Property Name="emailAddress" Type="Edm.String" />
+        <NavigationProperty Name="rooms" Type="Collection(graph.room)" ContainsTarget="true" />
+      </EntityType>
       <EntityType Name="samlOrWsFedExternalDomainFederation" BaseType="graph.samlOrWsFedProvider">
         <NavigationProperty Name="domains" Type="Collection(graph.externalDomainName)" ContainsTarget="true" />
       </EntityType>
@@ -11633,7 +11937,7 @@
         <Property Name="userImpact" Type="Edm.String" />
         <Property Name="vendorInformation" Type="graph.securityVendorInformation" />
       </EntityType>
-      <EntityType Name="security" BaseType="graph.entity">
+      <EntityType Name="security">
         <NavigationProperty Name="alerts" Type="Collection(graph.alert)" ContainsTarget="true" />
         <NavigationProperty Name="alerts_v2" Type="Collection(microsoft.graph.security.alert)" ContainsTarget="true" />
         <NavigationProperty Name="cases" Type="microsoft.graph.security.casesRoot" ContainsTarget="true" />
@@ -12491,6 +12795,7 @@
         <NavigationProperty Name="presence" Type="graph.presence" ContainsTarget="true" />
         <NavigationProperty Name="registeredDevices" Type="Collection(graph.directoryObject)" />
         <NavigationProperty Name="scopedRoleMemberOf" Type="Collection(graph.scopedRoleMembership)" ContainsTarget="true" />
+        <NavigationProperty Name="settings" Type="graph.userSettings" ContainsTarget="true" />
         <NavigationProperty Name="teamwork" Type="graph.userTeamwork" ContainsTarget="true" />
         <NavigationProperty Name="todo" Type="graph.todo" ContainsTarget="true" />
         <NavigationProperty Name="transitiveMemberOf" Type="Collection(graph.directoryObject)" />
@@ -12749,6 +13054,9 @@
         <Property Name="windowsScore" Type="Edm.Double" Nullable="false" />
         <Property Name="workFromAnywhereScore" Type="Edm.Double" Nullable="false" />
       </EntityType>
+      <EntityType Name="userInsightsSettings" BaseType="graph.entity">
+        <Property Name="isEnabled" Type="Edm.Boolean" Nullable="false" />
+      </EntityType>
       <EntityType Name="userInstallStateSummary" BaseType="graph.entity">
         <Property Name="failedDeviceCount" Type="Edm.Int32" Nullable="false" />
         <Property Name="installedDeviceCount" Type="Edm.Int32" Nullable="false" />
@@ -12775,6 +13083,9 @@
       </EntityType>
       <EntityType Name="userScopeTeamsAppInstallation" BaseType="graph.teamsAppInstallation">
         <NavigationProperty Name="chat" Type="graph.chat" />
+      </EntityType>
+      <EntityType Name="userSettings" BaseType="graph.entity">
+        <NavigationProperty Name="itemInsights" Type="graph.userInsightsSettings" ContainsTarget="true" />
       </EntityType>
       <EntityType Name="userSignInInsight" BaseType="graph.governanceInsight">
         <Property Name="lastSignInDateTime" Type="Edm.DateTimeOffset" />
@@ -13201,6 +13512,22 @@
         <Property Name="isBundle" Type="Edm.Boolean" Nullable="false" />
         <Property Name="minimumSupportedOperatingSystem" Type="graph.windowsMinimumOperatingSystem" Nullable="false" />
       </EntityType>
+      <EntityType Name="windowsAutopilotDeploymentProfile" BaseType="graph.entity" Abstract="true">
+        <Property Name="createdDateTime" Type="Edm.DateTimeOffset" Nullable="false" />
+        <Property Name="description" Type="Edm.String" />
+        <Property Name="deviceNameTemplate" Type="Edm.String" />
+        <Property Name="deviceType" Type="graph.windowsAutopilotDeviceType" Nullable="false" />
+        <Property Name="displayName" Type="Edm.String" />
+        <Property Name="hardwareHashExtractionEnabled" Type="Edm.Boolean" />
+        <Property Name="lastModifiedDateTime" Type="Edm.DateTimeOffset" Nullable="false" />
+        <Property Name="locale" Type="Edm.String" />
+        <Property Name="managementServiceAppId" Type="Edm.String" />
+        <Property Name="outOfBoxExperienceSetting" Type="graph.outOfBoxExperienceSetting" />
+        <Property Name="preprovisioningAllowed" Type="Edm.Boolean" />
+        <Property Name="roleScopeTagIds" Type="Collection(Edm.String)" />
+        <NavigationProperty Name="assignedDevices" Type="Collection(graph.windowsAutopilotDeviceIdentity)" ContainsTarget="true" />
+      </EntityType>
+      <EntityType Name="windowsAutopilotDeploymentProfileAssignment" BaseType="graph.entity" />
       <EntityType Name="windowsAutopilotDeviceIdentity" BaseType="graph.entity">
         <Property Name="addressableUserName" Type="Edm.String" />
         <Property Name="azureActiveDirectoryDeviceId" Type="Edm.String" />
@@ -13721,6 +14048,10 @@
         <Property Name="certificateUserBindings" Type="Collection(graph.x509CertificateUserBinding)" />
         <NavigationProperty Name="includeTargets" Type="Collection(graph.authenticationMethodTarget)" ContainsTarget="true" />
       </EntityType>
+      <EntityType Name="x509CertificateCombinationConfiguration" BaseType="graph.authenticationCombinationConfiguration">
+        <Property Name="allowedIssuerSkis" Type="Collection(Edm.String)" Nullable="false" />
+        <Property Name="allowedPolicyOIDs" Type="Collection(Edm.String)" Nullable="false" />
+      </EntityType>
       <Action Name="abort" IsBound="true">
         <Parameter Name="bindingParameter" Type="graph.printJob" />
         <Parameter Name="reason" Type="Edm.String" Unicode="false" />
@@ -13985,6 +14316,10 @@
         <Parameter Name="bindingParameter" Type="Collection(graph.serviceUpdateMessage)" />
         <Parameter Name="messageIds" Type="Collection(Edm.String)" Unicode="false" />
         <ReturnType Type="Edm.Boolean" />
+      </Action>
+      <Action Name="archive" IsBound="true">
+        <Parameter Name="bindingParameter" Type="graph.channel" />
+        <Parameter Name="shouldSetSpoSiteReadOnlyForMembers" Type="Edm.Boolean" />
       </Action>
       <Action Name="archive" IsBound="true">
         <Parameter Name="bindingParameter" Type="graph.team" />
@@ -14702,6 +15037,9 @@
       <Action Name="createUploadSession" IsBound="true">
         <Parameter Name="bindingParameter" Type="graph.driveItem" />
         <Parameter Name="item" Type="graph.driveItemUploadableProperties" />
+        <Parameter Name="deferCommit" Type="Edm.Boolean">
+          <Annotation Term="Org.OData.Core.V1.OptionalParameter" />
+        </Parameter>
         <ReturnType Type="graph.uploadSession" />
       </Action>
       <Action Name="createUploadSession" IsBound="true">
@@ -15155,6 +15493,7 @@
       </Action>
       <Action Name="forward" IsBound="true">
         <Parameter Name="bindingParameter" Type="graph.message" />
+        <Parameter Name="Message" Type="graph.message" />
         <Parameter Name="Comment" Type="Edm.String" Unicode="false" />
         <Parameter Name="ToRecipients" Type="Collection(graph.recipient)" />
       </Action>
@@ -16659,6 +16998,7 @@
       </Action>
       <Action Name="reply" IsBound="true">
         <Parameter Name="bindingParameter" Type="graph.message" />
+        <Parameter Name="Message" Type="graph.message" />
         <Parameter Name="Comment" Type="Edm.String" Unicode="false" />
       </Action>
       <Action Name="reply" IsBound="true">
@@ -16667,6 +17007,7 @@
       </Action>
       <Action Name="replyAll" IsBound="true">
         <Parameter Name="bindingParameter" Type="graph.message" />
+        <Parameter Name="Message" Type="graph.message" />
         <Parameter Name="Comment" Type="Edm.String" Unicode="false" />
       </Action>
       <Action Name="reprocess" IsBound="true">
@@ -17249,6 +17590,9 @@
         <ReturnType Type="Edm.Boolean" />
       </Action>
       <Action Name="unarchive" IsBound="true">
+        <Parameter Name="bindingParameter" Type="graph.channel" />
+      </Action>
+      <Action Name="unarchive" IsBound="true">
         <Parameter Name="bindingParameter" Type="graph.team" />
       </Action>
       <Action Name="unassignUserFromDevice" IsBound="true">
@@ -17342,6 +17686,16 @@
         <Parameter Name="number" Type="graph.Json" />
         <Parameter Name="decimals" Type="graph.Json" />
         <ReturnType Type="graph.workbookFunctionResult" />
+      </Action>
+      <Action Name="validateAuthenticationConfiguration" IsBound="true">
+        <Parameter Name="bindingParameter" Type="Collection(graph.customAuthenticationExtension)" />
+        <Parameter Name="endpointConfiguration" Type="graph.customExtensionEndpointConfiguration" />
+        <Parameter Name="authenticationConfiguration" Type="graph.customExtensionAuthenticationConfiguration" />
+        <ReturnType Type="graph.authenticationConfigurationValidation" />
+      </Action>
+      <Action Name="validateAuthenticationConfiguration" IsBound="true">
+        <Parameter Name="bindingParameter" Type="graph.customAuthenticationExtension" />
+        <ReturnType Type="graph.authenticationConfigurationValidation" />
       </Action>
       <Action Name="validateCredentials" IsBound="true">
         <Parameter Name="bindingParameter" Type="Collection(graph.synchronizationJob)" />
@@ -18356,6 +18710,7 @@
           <NavigationPropertyBinding Path="certificateBasedAuthConfiguration" Target="certificateBasedAuthConfiguration" />
         </EntitySet>
         <EntitySet Name="permissionGrants" EntityType="microsoft.graph.resourceSpecificPermissionGrant" />
+        <EntitySet Name="places" EntityType="microsoft.graph.place" />
         <EntitySet Name="schemaExtensions" EntityType="microsoft.graph.schemaExtension" />
         <EntitySet Name="servicePrincipals" EntityType="microsoft.graph.servicePrincipal">
           <NavigationPropertyBinding Path="appManagementPolicies" Target="policies/appManagementPolicies" />
@@ -19450,6 +19805,94 @@
           </Record>
         </Annotation>
         <Annotation Term="Org.OData.Capabilities.V1.TopSupported" Bool="true" />
+        <Annotation Term="Org.OData.Core.V1.Revisions">
+          <Collection>
+            <Record>
+              <PropertyValue Property="Date" Date="2024-04-10" />
+              <PropertyValue Property="Description" String="The legacy Graph Security API is deprecated and will stop returning data on January 31, 2025. Please use the new Graph Security API." />
+              <PropertyValue Property="Kind">
+                <EnumMember>Org.OData.Core.V1.RevisionKind/Deprecated</EnumMember>
+              </PropertyValue>
+              <PropertyValue Property="RemovalDate" Date="2026-04-10" />
+              <PropertyValue Property="Version" String="2024-01/Deprecation" />
+            </Record>
+          </Collection>
+        </Annotation>
+      </Annotations>
+      <Annotations Target="microsoft.graph.alertFeedback">
+        <Annotation Term="Org.OData.Core.V1.Revisions">
+          <Collection>
+            <Record>
+              <PropertyValue Property="Date" Date="2024-04-10" />
+              <PropertyValue Property="Description" String="The legacy Graph Security API is deprecated and will stop returning data on January 31, 2025. Please use the new Graph Security API." />
+              <PropertyValue Property="Kind">
+                <EnumMember>Org.OData.Core.V1.RevisionKind/Deprecated</EnumMember>
+              </PropertyValue>
+              <PropertyValue Property="RemovalDate" Date="2026-04-10" />
+              <PropertyValue Property="Version" String="2024-01/Deprecation" />
+            </Record>
+          </Collection>
+        </Annotation>
+      </Annotations>
+      <Annotations Target="microsoft.graph.alertHistoryState">
+        <Annotation Term="Org.OData.Core.V1.Revisions">
+          <Collection>
+            <Record>
+              <PropertyValue Property="Date" Date="2024-04-10" />
+              <PropertyValue Property="Description" String="The legacy Graph Security API is deprecated and will stop returning data on January 31, 2025. Please use the new Graph Security API." />
+              <PropertyValue Property="Kind">
+                <EnumMember>Org.OData.Core.V1.RevisionKind/Deprecated</EnumMember>
+              </PropertyValue>
+              <PropertyValue Property="RemovalDate" Date="2026-04-10" />
+              <PropertyValue Property="Version" String="2024-01/Deprecation" />
+            </Record>
+          </Collection>
+        </Annotation>
+      </Annotations>
+      <Annotations Target="microsoft.graph.alertSeverity">
+        <Annotation Term="Org.OData.Core.V1.Revisions">
+          <Collection>
+            <Record>
+              <PropertyValue Property="Date" Date="2024-04-10" />
+              <PropertyValue Property="Description" String="The legacy Graph Security API is deprecated and will stop returning data on January 31, 2025. Please use the new Graph Security API." />
+              <PropertyValue Property="Kind">
+                <EnumMember>Org.OData.Core.V1.RevisionKind/Deprecated</EnumMember>
+              </PropertyValue>
+              <PropertyValue Property="RemovalDate" Date="2026-04-10" />
+              <PropertyValue Property="Version" String="2024-01/Deprecation" />
+            </Record>
+          </Collection>
+        </Annotation>
+      </Annotations>
+      <Annotations Target="microsoft.graph.alertStatus">
+        <Annotation Term="Org.OData.Core.V1.Revisions">
+          <Collection>
+            <Record>
+              <PropertyValue Property="Date" Date="2024-04-10" />
+              <PropertyValue Property="Description" String="The legacy Graph Security API is deprecated and will stop returning data on January 31, 2025. Please use the new Graph Security API." />
+              <PropertyValue Property="Kind">
+                <EnumMember>Org.OData.Core.V1.RevisionKind/Deprecated</EnumMember>
+              </PropertyValue>
+              <PropertyValue Property="RemovalDate" Date="2026-04-10" />
+              <PropertyValue Property="Version" String="2024-01/Deprecation" />
+            </Record>
+          </Collection>
+        </Annotation>
+      </Annotations>
+      <Annotations Target="microsoft.graph.alertTrigger">
+        <Annotation Term="Org.OData.Core.V1.Revisions">
+          <Collection>
+            <Record>
+              <PropertyValue Property="Date" Date="2024-04-10" />
+              <PropertyValue Property="Description" String="The legacy Graph Security API is deprecated and will stop returning data on January 31, 2025. Please use the new Graph Security API." />
+              <PropertyValue Property="Kind">
+                <EnumMember>Org.OData.Core.V1.RevisionKind/Deprecated</EnumMember>
+              </PropertyValue>
+              <PropertyValue Property="RemovalDate" Date="2026-04-10" />
+              <PropertyValue Property="Version" String="2024-01/Deprecation" />
+            </Record>
+          </Collection>
+        </Annotation>
       </Annotations>
       <Annotations Target="microsoft.graph.allDevicesAssignmentTarget">
         <Annotation Term="Org.OData.Core.V1.Description" String="Represents an assignment to all managed devices in the tenant." />
@@ -20109,6 +20552,13 @@
         <Annotation Term="Org.OData.Capabilities.V1.ChangeTracking">
           <Record>
             <PropertyValue Property="Supported" Bool="true" />
+          </Record>
+        </Annotation>
+      </Annotations>
+      <Annotations Target="microsoft.graph.application/federatedIdentityCredentials">
+        <Annotation Term="Org.OData.Capabilities.V1.UpdateRestrictions">
+          <Record>
+            <PropertyValue Property="Upsertable" Bool="true" />
           </Record>
         </Annotation>
       </Annotations>
@@ -20822,8 +21272,47 @@
       <Annotations Target="microsoft.graph.cleanWindowsDevice(microsoft.graph.managedDevice, Edm.Boolean)">
         <Annotation Term="Org.OData.Core.V1.Description" String="Clean Windows device" />
       </Annotations>
+      <Annotations Target="microsoft.graph.cloudAppSecurityState">
+        <Annotation Term="Org.OData.Core.V1.Revisions">
+          <Collection>
+            <Record>
+              <PropertyValue Property="Date" Date="2024-04-10" />
+              <PropertyValue Property="Description" String="The legacy Graph Security API is deprecated and will stop returning data on January 31, 2025. Please use the new Graph Security API." />
+              <PropertyValue Property="Kind">
+                <EnumMember>Org.OData.Core.V1.RevisionKind/Deprecated</EnumMember>
+              </PropertyValue>
+              <PropertyValue Property="RemovalDate" Date="2026-04-10" />
+              <PropertyValue Property="Version" String="2024-01/Deprecation" />
+            </Record>
+          </Collection>
+        </Annotation>
+      </Annotations>
       <Annotations Target="microsoft.graph.commit(microsoft.graph.mobileAppContentFile, microsoft.graph.fileEncryptionInfo)">
         <Annotation Term="Org.OData.Core.V1.Description" String="Commits a file of a given app." />
+      </Annotations>
+      <Annotations Target="microsoft.graph.companySubscription">
+        <Annotation Term="Org.OData.Capabilities.V1.CountRestrictions">
+          <Record>
+            <PropertyValue Property="Countable" Bool="false" />
+          </Record>
+        </Annotation>
+        <Annotation Term="Org.OData.Capabilities.V1.ExpandRestrictions">
+          <Record>
+            <PropertyValue Property="Expandable" Bool="false" />
+          </Record>
+        </Annotation>
+        <Annotation Term="Org.OData.Capabilities.V1.FilterRestrictions">
+          <Record>
+            <PropertyValue Property="Filterable" Bool="true" />
+          </Record>
+        </Annotation>
+        <Annotation Term="Org.OData.Capabilities.V1.NavigationRestrictions">
+          <Record>
+            <PropertyValue Property="Referenceable" Bool="false" />
+          </Record>
+        </Annotation>
+        <Annotation Term="Org.OData.Capabilities.V1.SkipSupported" Bool="false" />
+        <Annotation Term="Org.OData.Capabilities.V1.TopSupported" Bool="false" />
       </Annotations>
       <Annotations Target="microsoft.graph.complianceManagementPartner">
         <Annotation Term="Org.OData.Core.V1.Description" String="Compliance management partner for all platforms" />
@@ -20969,6 +21458,36 @@
       </Annotations>
       <Annotations Target="microsoft.graph.configurationManagerCollectionAssignmentTarget/collectionId">
         <Annotation Term="Org.OData.Core.V1.Description" String="The collection Id that is the target of the assignment." />
+      </Annotations>
+      <Annotations Target="microsoft.graph.connectionDirection">
+        <Annotation Term="Org.OData.Core.V1.Revisions">
+          <Collection>
+            <Record>
+              <PropertyValue Property="Date" Date="2024-04-10" />
+              <PropertyValue Property="Description" String="The legacy Graph Security API is deprecated and will stop returning data on January 31, 2025. Please use the new Graph Security API." />
+              <PropertyValue Property="Kind">
+                <EnumMember>Org.OData.Core.V1.RevisionKind/Deprecated</EnumMember>
+              </PropertyValue>
+              <PropertyValue Property="RemovalDate" Date="2026-04-10" />
+              <PropertyValue Property="Version" String="2024-01/Deprecation" />
+            </Record>
+          </Collection>
+        </Annotation>
+      </Annotations>
+      <Annotations Target="microsoft.graph.connectionStatus">
+        <Annotation Term="Org.OData.Core.V1.Revisions">
+          <Collection>
+            <Record>
+              <PropertyValue Property="Date" Date="2024-04-10" />
+              <PropertyValue Property="Description" String="The legacy Graph Security API is deprecated and will stop returning data on January 31, 2025. Please use the new Graph Security API." />
+              <PropertyValue Property="Kind">
+                <EnumMember>Org.OData.Core.V1.RevisionKind/Deprecated</EnumMember>
+              </PropertyValue>
+              <PropertyValue Property="RemovalDate" Date="2026-04-10" />
+              <PropertyValue Property="Version" String="2024-01/Deprecation" />
+            </Record>
+          </Collection>
+        </Annotation>
       </Annotations>
       <Annotations Target="microsoft.graph.contact/extensions">
         <Annotation Term="Org.OData.Capabilities.V1.ChangeTracking">
@@ -23296,6 +23815,21 @@
       <Annotations Target="microsoft.graph.editionUpgradeLicenseType/productKey">
         <Annotation Term="Org.OData.Core.V1.Description" String="Product Key Type" />
       </Annotations>
+      <Annotations Target="microsoft.graph.emailRole">
+        <Annotation Term="Org.OData.Core.V1.Revisions">
+          <Collection>
+            <Record>
+              <PropertyValue Property="Date" Date="2024-04-10" />
+              <PropertyValue Property="Description" String="The legacy Graph Security API is deprecated and will stop returning data on January 31, 2025. Please use the new Graph Security API." />
+              <PropertyValue Property="Kind">
+                <EnumMember>Org.OData.Core.V1.RevisionKind/Deprecated</EnumMember>
+              </PropertyValue>
+              <PropertyValue Property="RemovalDate" Date="2026-04-10" />
+              <PropertyValue Property="Version" String="2024-01/Deprecation" />
+            </Record>
+          </Collection>
+        </Annotation>
+      </Annotations>
       <Annotations Target="microsoft.graph.enablement">
         <Annotation Term="Org.OData.Core.V1.Description" String="Possible values of a property" />
       </Annotations>
@@ -23543,6 +24077,51 @@
       </Annotations>
       <Annotations Target="microsoft.graph.fileEncryptionInfo/profileIdentifier">
         <Annotation Term="Org.OData.Core.V1.Description" String="The profile identifier. Maps to the strategy used to encrypt the file. Currently, only ProfileVersion1 is supported." />
+      </Annotations>
+      <Annotations Target="microsoft.graph.fileHash">
+        <Annotation Term="Org.OData.Core.V1.Revisions">
+          <Collection>
+            <Record>
+              <PropertyValue Property="Date" Date="2024-04-10" />
+              <PropertyValue Property="Description" String="The legacy Graph Security API is deprecated and will stop returning data on January 31, 2025. Please use the new Graph Security API." />
+              <PropertyValue Property="Kind">
+                <EnumMember>Org.OData.Core.V1.RevisionKind/Deprecated</EnumMember>
+              </PropertyValue>
+              <PropertyValue Property="RemovalDate" Date="2026-04-10" />
+              <PropertyValue Property="Version" String="2024-01/Deprecation" />
+            </Record>
+          </Collection>
+        </Annotation>
+      </Annotations>
+      <Annotations Target="microsoft.graph.fileHashType">
+        <Annotation Term="Org.OData.Core.V1.Revisions">
+          <Collection>
+            <Record>
+              <PropertyValue Property="Date" Date="2024-04-10" />
+              <PropertyValue Property="Description" String="The legacy Graph Security API is deprecated and will stop returning data on January 31, 2025. Please use the new Graph Security API." />
+              <PropertyValue Property="Kind">
+                <EnumMember>Org.OData.Core.V1.RevisionKind/Deprecated</EnumMember>
+              </PropertyValue>
+              <PropertyValue Property="RemovalDate" Date="2026-04-10" />
+              <PropertyValue Property="Version" String="2024-01/Deprecation" />
+            </Record>
+          </Collection>
+        </Annotation>
+      </Annotations>
+      <Annotations Target="microsoft.graph.fileSecurityState">
+        <Annotation Term="Org.OData.Core.V1.Revisions">
+          <Collection>
+            <Record>
+              <PropertyValue Property="Date" Date="2024-04-10" />
+              <PropertyValue Property="Description" String="The legacy Graph Security API is deprecated and will stop returning data on January 31, 2025. Please use the new Graph Security API." />
+              <PropertyValue Property="Kind">
+                <EnumMember>Org.OData.Core.V1.RevisionKind/Deprecated</EnumMember>
+              </PropertyValue>
+              <PropertyValue Property="RemovalDate" Date="2026-04-10" />
+              <PropertyValue Property="Version" String="2024-01/Deprecation" />
+            </Record>
+          </Collection>
+        </Annotation>
       </Annotations>
       <Annotations Target="microsoft.graph.firewallCertificateRevocationListCheckMethodType">
         <Annotation Term="Org.OData.Core.V1.Description" String="Possible values for firewallCertificateRevocationListCheckMethod" />
@@ -24024,6 +24603,21 @@
       </Annotations>
       <Annotations Target="microsoft.graph.groupAssignmentTarget/groupId">
         <Annotation Term="Org.OData.Core.V1.Description" String="The group Id that is the target of the assignment." />
+      </Annotations>
+      <Annotations Target="microsoft.graph.hostSecurityState">
+        <Annotation Term="Org.OData.Core.V1.Revisions">
+          <Collection>
+            <Record>
+              <PropertyValue Property="Date" Date="2024-04-10" />
+              <PropertyValue Property="Description" String="The legacy Graph Security API is deprecated and will stop returning data on January 31, 2025. Please use the new Graph Security API." />
+              <PropertyValue Property="Kind">
+                <EnumMember>Org.OData.Core.V1.RevisionKind/Deprecated</EnumMember>
+              </PropertyValue>
+              <PropertyValue Property="RemovalDate" Date="2026-04-10" />
+              <PropertyValue Property="Version" String="2024-01/Deprecation" />
+            </Record>
+          </Collection>
+        </Annotation>
       </Annotations>
       <Annotations Target="microsoft.graph.identityContainer/conditionalAccess">
         <Annotation Term="Org.OData.Capabilities.V1.DeleteRestrictions">
@@ -25718,6 +26312,21 @@
       <Annotations Target="microsoft.graph.locateDeviceActionResult/deviceLocation">
         <Annotation Term="Org.OData.Core.V1.Description" String="device location" />
       </Annotations>
+      <Annotations Target="microsoft.graph.logonType">
+        <Annotation Term="Org.OData.Core.V1.Revisions">
+          <Collection>
+            <Record>
+              <PropertyValue Property="Date" Date="2024-04-10" />
+              <PropertyValue Property="Description" String="The legacy Graph Security API is deprecated and will stop returning data on January 31, 2025. Please use the new Graph Security API." />
+              <PropertyValue Property="Kind">
+                <EnumMember>Org.OData.Core.V1.RevisionKind/Deprecated</EnumMember>
+              </PropertyValue>
+              <PropertyValue Property="RemovalDate" Date="2026-04-10" />
+              <PropertyValue Property="Version" String="2024-01/Deprecation" />
+            </Record>
+          </Collection>
+        </Annotation>
+      </Annotations>
       <Annotations Target="microsoft.graph.logoutSharedAppleDeviceActiveUser(microsoft.graph.managedDevice)">
         <Annotation Term="Org.OData.Core.V1.Description" String="Logout shared Apple device active user" />
       </Annotations>
@@ -26003,6 +26612,21 @@
               <EnumMember>Org.OData.Capabilities.V1.NavigationType/Single</EnumMember>
             </PropertyValue>
           </Record>
+        </Annotation>
+      </Annotations>
+      <Annotations Target="microsoft.graph.malwareState">
+        <Annotation Term="Org.OData.Core.V1.Revisions">
+          <Collection>
+            <Record>
+              <PropertyValue Property="Date" Date="2024-04-10" />
+              <PropertyValue Property="Description" String="The legacy Graph Security API is deprecated and will stop returning data on January 31, 2025. Please use the new Graph Security API." />
+              <PropertyValue Property="Kind">
+                <EnumMember>Org.OData.Core.V1.RevisionKind/Deprecated</EnumMember>
+              </PropertyValue>
+              <PropertyValue Property="RemovalDate" Date="2026-04-10" />
+              <PropertyValue Property="Version" String="2024-01/Deprecation" />
+            </Record>
+          </Collection>
         </Annotation>
       </Annotations>
       <Annotations Target="microsoft.graph.malwareStateForWindowsDevice">
@@ -27643,6 +28267,21 @@
         <Annotation Term="Org.OData.Capabilities.V1.SkipSupported" Bool="true" />
         <Annotation Term="Org.OData.Capabilities.V1.TopSupported" Bool="true" />
       </Annotations>
+      <Annotations Target="microsoft.graph.networkConnection">
+        <Annotation Term="Org.OData.Core.V1.Revisions">
+          <Collection>
+            <Record>
+              <PropertyValue Property="Date" Date="2024-04-10" />
+              <PropertyValue Property="Description" String="The legacy Graph Security API is deprecated and will stop returning data on January 31, 2025. Please use the new Graph Security API." />
+              <PropertyValue Property="Kind">
+                <EnumMember>Org.OData.Core.V1.RevisionKind/Deprecated</EnumMember>
+              </PropertyValue>
+              <PropertyValue Property="RemovalDate" Date="2026-04-10" />
+              <PropertyValue Property="Version" String="2024-01/Deprecation" />
+            </Record>
+          </Collection>
+        </Annotation>
+      </Annotations>
       <Annotations Target="microsoft.graph.notificationMessageTemplate">
         <Annotation Term="Org.OData.Core.V1.Description" String="Notification messages are messages that are sent to end users who are determined to be not-compliant with the compliance policies defined by the administrator. Administrators choose notifications and configure them in the Intune Admin Console using the compliance policy creation page under the “Actions for non-compliance” section. Use the notificationMessageTemplate object to create your own custom notifications for administrators to choose while configuring actions for non-compliance." />
       </Annotations>
@@ -27845,6 +28484,27 @@
           </Record>
         </Annotation>
       </Annotations>
+      <Annotations Target="microsoft.graph.outOfBoxExperienceSetting">
+        <Annotation Term="Org.OData.Core.V1.Description" String="The Windows Autopilot Deployment Profile settings used by the device for the out-of-box experience. Supports: $select, $top, $skip. $Search, $orderBy and $filter are not supported." />
+      </Annotations>
+      <Annotations Target="microsoft.graph.outOfBoxExperienceSetting/deviceUsageType">
+        <Annotation Term="Org.OData.Core.V1.Description" String="The Entra join authentication type. Possible values are singleUser and shared. The default is singleUser." />
+      </Annotations>
+      <Annotations Target="microsoft.graph.outOfBoxExperienceSetting/escapeLinkHidden">
+        <Annotation Term="Org.OData.Core.V1.Description" String="When TRUE, the link that allows user to start over with a different account on company sign-in is hidden. When false, the link that allows user to start over with a different account on company sign-in is available. Default value is FALSE." />
+      </Annotations>
+      <Annotations Target="microsoft.graph.outOfBoxExperienceSetting/eulaHidden">
+        <Annotation Term="Org.OData.Core.V1.Description" String="When TRUE, EULA is hidden to the end user during OOBE. When FALSE, EULA is shown to the end user during OOBE. Default value is FALSE." />
+      </Annotations>
+      <Annotations Target="microsoft.graph.outOfBoxExperienceSetting/keyboardSelectionPageSkipped">
+        <Annotation Term="Org.OData.Core.V1.Description" String="When TRUE, the keyboard selection page is hidden to the end user during OOBE if Language and Region are set. When FALSE, the keyboard selection page is skipped during OOBE." />
+      </Annotations>
+      <Annotations Target="microsoft.graph.outOfBoxExperienceSetting/privacySettingsHidden">
+        <Annotation Term="Org.OData.Core.V1.Description" String="When TRUE, privacy settings is hidden to the end user during OOBE. When FALSE, privacy settings is shown to the end user during OOBE. Default value is FALSE." />
+      </Annotations>
+      <Annotations Target="microsoft.graph.outOfBoxExperienceSetting/userType">
+        <Annotation Term="Org.OData.Core.V1.Description" String="The type of user. Possible values are administrator and standard. Default value is administrator. Yes No&#xD;&#xA;" />
+      </Annotations>
       <Annotations Target="microsoft.graph.permission/grantedTo">
         <Annotation Term="Org.OData.Core.V1.Revisions">
           <Collection>
@@ -28038,6 +28698,36 @@
       </Annotations>
       <Annotations Target="microsoft.graph.prereleaseFeatures/userDefined">
         <Annotation Term="Org.OData.Core.V1.Description" String="User Defined, default value, no intent." />
+      </Annotations>
+      <Annotations Target="microsoft.graph.process">
+        <Annotation Term="Org.OData.Core.V1.Revisions">
+          <Collection>
+            <Record>
+              <PropertyValue Property="Date" Date="2024-04-10" />
+              <PropertyValue Property="Description" String="The legacy Graph Security API is deprecated and will stop returning data on January 31, 2025. Please use the new Graph Security API." />
+              <PropertyValue Property="Kind">
+                <EnumMember>Org.OData.Core.V1.RevisionKind/Deprecated</EnumMember>
+              </PropertyValue>
+              <PropertyValue Property="RemovalDate" Date="2026-04-10" />
+              <PropertyValue Property="Version" String="2024-01/Deprecation" />
+            </Record>
+          </Collection>
+        </Annotation>
+      </Annotations>
+      <Annotations Target="microsoft.graph.processIntegrityLevel">
+        <Annotation Term="Org.OData.Core.V1.Revisions">
+          <Collection>
+            <Record>
+              <PropertyValue Property="Date" Date="2024-04-10" />
+              <PropertyValue Property="Description" String="The legacy Graph Security API is deprecated and will stop returning data on January 31, 2025. Please use the new Graph Security API." />
+              <PropertyValue Property="Kind">
+                <EnumMember>Org.OData.Core.V1.RevisionKind/Deprecated</EnumMember>
+              </PropertyValue>
+              <PropertyValue Property="RemovalDate" Date="2026-04-10" />
+              <PropertyValue Property="Version" String="2024-01/Deprecation" />
+            </Record>
+          </Collection>
+        </Annotation>
       </Annotations>
       <Annotations Target="microsoft.graph.provisioningObjectSummary">
         <Annotation Term="Org.OData.Capabilities.V1.CountRestrictions">
@@ -28517,6 +29207,66 @@
       <Annotations Target="microsoft.graph.recoverPasscode(microsoft.graph.managedDevice)">
         <Annotation Term="Org.OData.Core.V1.Description" String="Recover passcode" />
       </Annotations>
+      <Annotations Target="microsoft.graph.registryHive">
+        <Annotation Term="Org.OData.Core.V1.Revisions">
+          <Collection>
+            <Record>
+              <PropertyValue Property="Date" Date="2024-04-10" />
+              <PropertyValue Property="Description" String="The legacy Graph Security API is deprecated and will stop returning data on January 31, 2025. Please use the new Graph Security API." />
+              <PropertyValue Property="Kind">
+                <EnumMember>Org.OData.Core.V1.RevisionKind/Deprecated</EnumMember>
+              </PropertyValue>
+              <PropertyValue Property="RemovalDate" Date="2026-04-10" />
+              <PropertyValue Property="Version" String="2024-01/Deprecation" />
+            </Record>
+          </Collection>
+        </Annotation>
+      </Annotations>
+      <Annotations Target="microsoft.graph.registryKeyState">
+        <Annotation Term="Org.OData.Core.V1.Revisions">
+          <Collection>
+            <Record>
+              <PropertyValue Property="Date" Date="2024-04-10" />
+              <PropertyValue Property="Description" String="The legacy Graph Security API is deprecated and will stop returning data on January 31, 2025. Please use the new Graph Security API." />
+              <PropertyValue Property="Kind">
+                <EnumMember>Org.OData.Core.V1.RevisionKind/Deprecated</EnumMember>
+              </PropertyValue>
+              <PropertyValue Property="RemovalDate" Date="2026-04-10" />
+              <PropertyValue Property="Version" String="2024-01/Deprecation" />
+            </Record>
+          </Collection>
+        </Annotation>
+      </Annotations>
+      <Annotations Target="microsoft.graph.registryOperation">
+        <Annotation Term="Org.OData.Core.V1.Revisions">
+          <Collection>
+            <Record>
+              <PropertyValue Property="Date" Date="2024-04-10" />
+              <PropertyValue Property="Description" String="The legacy Graph Security API is deprecated and will stop returning data on January 31, 2025. Please use the new Graph Security API." />
+              <PropertyValue Property="Kind">
+                <EnumMember>Org.OData.Core.V1.RevisionKind/Deprecated</EnumMember>
+              </PropertyValue>
+              <PropertyValue Property="RemovalDate" Date="2026-04-10" />
+              <PropertyValue Property="Version" String="2024-01/Deprecation" />
+            </Record>
+          </Collection>
+        </Annotation>
+      </Annotations>
+      <Annotations Target="microsoft.graph.registryValueType">
+        <Annotation Term="Org.OData.Core.V1.Revisions">
+          <Collection>
+            <Record>
+              <PropertyValue Property="Date" Date="2024-04-10" />
+              <PropertyValue Property="Description" String="The legacy Graph Security API is deprecated and will stop returning data on January 31, 2025. Please use the new Graph Security API." />
+              <PropertyValue Property="Kind">
+                <EnumMember>Org.OData.Core.V1.RevisionKind/Deprecated</EnumMember>
+              </PropertyValue>
+              <PropertyValue Property="RemovalDate" Date="2026-04-10" />
+              <PropertyValue Property="Version" String="2024-01/Deprecation" />
+            </Record>
+          </Collection>
+        </Annotation>
+      </Annotations>
       <Annotations Target="microsoft.graph.relyingPartyDetailedSummary">
         <Annotation Term="Org.OData.Capabilities.V1.FilterRestrictions">
           <Record>
@@ -28936,6 +29686,51 @@
           </Record>
         </Annotation>
         <Annotation Term="Org.OData.Capabilities.V1.TopSupported" Bool="true" />
+      </Annotations>
+      <Annotations Target="microsoft.graph.securityNetworkProtocol">
+        <Annotation Term="Org.OData.Core.V1.Revisions">
+          <Collection>
+            <Record>
+              <PropertyValue Property="Date" Date="2024-04-10" />
+              <PropertyValue Property="Description" String="The legacy Graph Security API is deprecated and will stop returning data on January 31, 2025. Please use the new Graph Security API." />
+              <PropertyValue Property="Kind">
+                <EnumMember>Org.OData.Core.V1.RevisionKind/Deprecated</EnumMember>
+              </PropertyValue>
+              <PropertyValue Property="RemovalDate" Date="2026-04-10" />
+              <PropertyValue Property="Version" String="2024-01/Deprecation" />
+            </Record>
+          </Collection>
+        </Annotation>
+      </Annotations>
+      <Annotations Target="microsoft.graph.securityResource">
+        <Annotation Term="Org.OData.Core.V1.Revisions">
+          <Collection>
+            <Record>
+              <PropertyValue Property="Date" Date="2024-04-10" />
+              <PropertyValue Property="Description" String="The legacy Graph Security API is deprecated and will stop returning data on January 31, 2025. Please use the new Graph Security API." />
+              <PropertyValue Property="Kind">
+                <EnumMember>Org.OData.Core.V1.RevisionKind/Deprecated</EnumMember>
+              </PropertyValue>
+              <PropertyValue Property="RemovalDate" Date="2026-04-10" />
+              <PropertyValue Property="Version" String="2024-01/Deprecation" />
+            </Record>
+          </Collection>
+        </Annotation>
+      </Annotations>
+      <Annotations Target="microsoft.graph.securityResourceType">
+        <Annotation Term="Org.OData.Core.V1.Revisions">
+          <Collection>
+            <Record>
+              <PropertyValue Property="Date" Date="2024-04-10" />
+              <PropertyValue Property="Description" String="The legacy Graph Security API is deprecated and will stop returning data on January 31, 2025. Please use the new Graph Security API." />
+              <PropertyValue Property="Kind">
+                <EnumMember>Org.OData.Core.V1.RevisionKind/Deprecated</EnumMember>
+              </PropertyValue>
+              <PropertyValue Property="RemovalDate" Date="2026-04-10" />
+              <PropertyValue Property="Version" String="2024-01/Deprecation" />
+            </Record>
+          </Collection>
+        </Annotation>
       </Annotations>
       <Annotations Target="microsoft.graph.sendTestMessage(microsoft.graph.notificationMessageTemplate)">
         <Annotation Term="Org.OData.Core.V1.Description" String="Sends test message using the specified notificationMessageTemplate in the default locale" />
@@ -29742,6 +30537,21 @@
           <Record>
             <PropertyValue Property="Updatable" Bool="false" />
           </Record>
+        </Annotation>
+      </Annotations>
+      <Annotations Target="microsoft.graph.userAccountSecurityType">
+        <Annotation Term="Org.OData.Core.V1.Revisions">
+          <Collection>
+            <Record>
+              <PropertyValue Property="Date" Date="2024-04-10" />
+              <PropertyValue Property="Description" String="The legacy Graph Security API is deprecated and will stop returning data on January 31, 2025. Please use the new Graph Security API." />
+              <PropertyValue Property="Kind">
+                <EnumMember>Org.OData.Core.V1.RevisionKind/Deprecated</EnumMember>
+              </PropertyValue>
+              <PropertyValue Property="RemovalDate" Date="2026-04-10" />
+              <PropertyValue Property="Version" String="2024-01/Deprecation" />
+            </Record>
+          </Collection>
         </Annotation>
       </Annotations>
       <Annotations Target="microsoft.graph.userExperienceAnalyticsAppHealthApplicationPerformance">
@@ -30644,6 +31454,21 @@
         <Annotation Term="Org.OData.Capabilities.V1.SkipSupported" Bool="false" />
         <Annotation Term="Org.OData.Capabilities.V1.TopSupported" Bool="true" />
       </Annotations>
+      <Annotations Target="microsoft.graph.userSecurityState">
+        <Annotation Term="Org.OData.Core.V1.Revisions">
+          <Collection>
+            <Record>
+              <PropertyValue Property="Date" Date="2024-04-10" />
+              <PropertyValue Property="Description" String="The legacy Graph Security API is deprecated and will stop returning data on January 31, 2025. Please use the new Graph Security API." />
+              <PropertyValue Property="Kind">
+                <EnumMember>Org.OData.Core.V1.RevisionKind/Deprecated</EnumMember>
+              </PropertyValue>
+              <PropertyValue Property="RemovalDate" Date="2026-04-10" />
+              <PropertyValue Property="Version" String="2024-01/Deprecation" />
+            </Record>
+          </Collection>
+        </Annotation>
+      </Annotations>
       <Annotations Target="microsoft.graph.visibilitySetting">
         <Annotation Term="Org.OData.Core.V1.Description" String="Generic visibility state." />
       </Annotations>
@@ -30742,6 +31567,21 @@
       </Annotations>
       <Annotations Target="microsoft.graph.vppTokenSyncStatus/none">
         <Annotation Term="Org.OData.Core.V1.Description" String="Default status." />
+      </Annotations>
+      <Annotations Target="microsoft.graph.vulnerabilityState">
+        <Annotation Term="Org.OData.Core.V1.Revisions">
+          <Collection>
+            <Record>
+              <PropertyValue Property="Date" Date="2024-04-10" />
+              <PropertyValue Property="Description" String="The legacy Graph Security API is deprecated and will stop returning data on January 31, 2025. Please use the new Graph Security API." />
+              <PropertyValue Property="Kind">
+                <EnumMember>Org.OData.Core.V1.RevisionKind/Deprecated</EnumMember>
+              </PropertyValue>
+              <PropertyValue Property="RemovalDate" Date="2026-04-10" />
+              <PropertyValue Property="Version" String="2024-01/Deprecation" />
+            </Record>
+          </Collection>
+        </Annotation>
       </Annotations>
       <Annotations Target="microsoft.graph.webApp">
         <Annotation Term="Org.OData.Core.V1.Description" String="Contains properties and inherited properties for web apps." />
@@ -32343,6 +33183,51 @@
       <Annotations Target="microsoft.graph.windowsArchitecture/x86">
         <Annotation Term="Org.OData.Core.V1.Description" String="Whether or not the X86 Windows architecture type is supported." />
       </Annotations>
+      <Annotations Target="microsoft.graph.windowsAutopilotDeploymentProfile">
+        <Annotation Term="Org.OData.Core.V1.Description" String="Windows Autopilot Deployment Profile" />
+      </Annotations>
+      <Annotations Target="microsoft.graph.windowsAutopilotDeploymentProfile/assignedDevices">
+        <Annotation Term="Org.OData.Core.V1.Description" String="The list of assigned devices for the profile." />
+      </Annotations>
+      <Annotations Target="microsoft.graph.windowsAutopilotDeploymentProfile/createdDateTime">
+        <Annotation Term="Org.OData.Core.V1.Description" String="The date and time of when the deployment profile was created. The value cannot be modified and is automatically populated when the profile was created. The timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 would look like this: '2014-01-01T00:00:00Z'. Supports: $select, $top, $skip. $Search, $orderBy and $filter are not supported. Read-Only." />
+      </Annotations>
+      <Annotations Target="microsoft.graph.windowsAutopilotDeploymentProfile/description">
+        <Annotation Term="Org.OData.Core.V1.Description" String="A description of the deployment profile. Max allowed length is 1500 chars. Supports: $select, $top, $skip, $orderBy. $Search and $filter are not supported." />
+      </Annotations>
+      <Annotations Target="microsoft.graph.windowsAutopilotDeploymentProfile/deviceNameTemplate">
+        <Annotation Term="Org.OData.Core.V1.Description" String="The template used to name the Autopilot device. This can be a custom text and can also contain either the serial number of the device, or a randomly generated number. The total length of the text generated by the template can be no more than 15 characters. Supports: $select, $top, $skip. $Search, $orderBy and $filter are not supported." />
+      </Annotations>
+      <Annotations Target="microsoft.graph.windowsAutopilotDeploymentProfile/deviceType">
+        <Annotation Term="Org.OData.Core.V1.Description" String="The Windows device type that this profile is applicable to. Possible values include windowsPc, holoLens, and virtualMachine. The default is windowsPc. Supports: $select, $top, $skip. $Search, $orderBy and $filter are not supported." />
+      </Annotations>
+      <Annotations Target="microsoft.graph.windowsAutopilotDeploymentProfile/displayName">
+        <Annotation Term="Org.OData.Core.V1.Description" String="The display name of the deployment profile. Max allowed length is 200 chars. Returned by default. Supports: $select, $top, $skip, $orderby. $Search and $filter are not supported." />
+      </Annotations>
+      <Annotations Target="microsoft.graph.windowsAutopilotDeploymentProfile/hardwareHashExtractionEnabled">
+        <Annotation Term="Org.OData.Core.V1.Description" String="Indicates whether the profile supports the extraction of hardware hash values and registration of the device into Windows Autopilot. When TRUE, indicates if hardware extraction and Windows Autopilot registration will happen on the next successful check-in. When FALSE, hardware hash extraction and Windows Autopilot registration will not happen. Default value is FALSE. Supports: $select, $top, $skip. $Search, $orderBy and $filter are not supported." />
+      </Annotations>
+      <Annotations Target="microsoft.graph.windowsAutopilotDeploymentProfile/lastModifiedDateTime">
+        <Annotation Term="Org.OData.Core.V1.Description" String="The date and time of when the deployment profile was last modified. The value cannot be updated manually and is automatically populated when any changes are made to the profile. The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 would look like this: '2014-01-01T00:00:00Z'. Supports: $select, $top, $skip. $Search, $orderBy and $filter are not supported Read-Only." />
+      </Annotations>
+      <Annotations Target="microsoft.graph.windowsAutopilotDeploymentProfile/locale">
+        <Annotation Term="Org.OData.Core.V1.Description" String="The locale (language) to be used when configuring the device. E.g. en-US. The default value is os-default. Supports: $select, $top, $skip. $Search, $orderBy and $filter are not supported." />
+      </Annotations>
+      <Annotations Target="microsoft.graph.windowsAutopilotDeploymentProfile/managementServiceAppId">
+        <Annotation Term="Org.OData.Core.V1.Description" String="The Entra management service App ID which gets used during client device-based enrollment discovery. Supports: $select, $top, $skip. $Search, $orderBy and $filter are not supported." />
+      </Annotations>
+      <Annotations Target="microsoft.graph.windowsAutopilotDeploymentProfile/outOfBoxExperienceSetting">
+        <Annotation Term="Org.OData.Core.V1.Description" String="The Windows Autopilot Deployment Profile settings used by the device for the out-of-box experience. Supports: $select, $top, $skip. $Search, $orderBy and $filter are not supported." />
+      </Annotations>
+      <Annotations Target="microsoft.graph.windowsAutopilotDeploymentProfile/preprovisioningAllowed">
+        <Annotation Term="Org.OData.Core.V1.Description" String="Indicates whether the user is allowed to use Windows Autopilot for pre-provisioned deployment mode during Out of Box experience (OOBE). When TRUE, indicates that Windows Autopilot for pre-provisioned deployment mode for OOBE is allowed to be used. When false, Windows Autopilot for pre-provisioned deployment mode for OOBE is not allowed. The default is FALSE." />
+      </Annotations>
+      <Annotations Target="microsoft.graph.windowsAutopilotDeploymentProfile/roleScopeTagIds">
+        <Annotation Term="Org.OData.Core.V1.Description" String="List of role scope tags for the deployment profile. " />
+      </Annotations>
+      <Annotations Target="microsoft.graph.windowsAutopilotDeploymentProfileAssignment">
+        <Annotation Term="Org.OData.Core.V1.Description" String="An assignment of a Windows Autopilot deployment profile to an AAD group." />
+      </Annotations>
       <Annotations Target="microsoft.graph.windowsAutopilotDeviceIdentity">
         <Annotation Term="Org.OData.Core.V1.Description" String="The windowsAutopilotDeviceIdentity resource represents a Windows Autopilot Device." />
       </Annotations>
@@ -32393,6 +33278,15 @@
       </Annotations>
       <Annotations Target="microsoft.graph.windowsAutopilotDeviceIdentity/userPrincipalName">
         <Annotation Term="Org.OData.Core.V1.Description" String="User Principal Name." />
+      </Annotations>
+      <Annotations Target="microsoft.graph.windowsAutopilotDeviceType/holoLens">
+        <Annotation Term="Org.OData.Core.V1.Description" String="Indicates that the device type is a HoloLens." />
+      </Annotations>
+      <Annotations Target="microsoft.graph.windowsAutopilotDeviceType/unknownFutureValue">
+        <Annotation Term="Org.OData.Core.V1.Description" String="Evolvable enumeration sentinel value. Do not use." />
+      </Annotations>
+      <Annotations Target="microsoft.graph.windowsAutopilotDeviceType/windowsPc">
+        <Annotation Term="Org.OData.Core.V1.Description" String="Default. Indicates that the device type  is a Windows PC." />
       </Annotations>
       <Annotations Target="microsoft.graph.windowsDefenderAdvancedThreatProtectionConfiguration">
         <Annotation Term="Org.OData.Core.V1.Description" String="Windows Defender AdvancedThreatProtection Configuration." />
@@ -32587,6 +33481,15 @@
         <Annotation Term="Org.OData.Core.V1.Description" String="Indicates support for Team Windows device type." />
       </Annotations>
       <Annotations Target="microsoft.graph.windowsDeviceType/unknownFutureValue">
+        <Annotation Term="Org.OData.Core.V1.Description" String="Evolvable enumeration sentinel value. Do not use." />
+      </Annotations>
+      <Annotations Target="microsoft.graph.windowsDeviceUsageType/shared">
+        <Annotation Term="Org.OData.Core.V1.Description" String="Indicates that a device is a multi-user device." />
+      </Annotations>
+      <Annotations Target="microsoft.graph.windowsDeviceUsageType/singleUser">
+        <Annotation Term="Org.OData.Core.V1.Description" String="Default. Indicates that a device is a single-user device." />
+      </Annotations>
+      <Annotations Target="microsoft.graph.windowsDeviceUsageType/unknownFutureValue">
         <Annotation Term="Org.OData.Core.V1.Description" String="Evolvable enumeration sentinel value. Do not use." />
       </Annotations>
       <Annotations Target="microsoft.graph.windowsFirewallNetworkProfile">
@@ -33826,6 +34729,15 @@
       <Annotations Target="microsoft.graph.windowsUserAccountControlSettings/userDefined">
         <Annotation Term="Org.OData.Core.V1.Description" String="User Defined, default value, no intent." />
       </Annotations>
+      <Annotations Target="microsoft.graph.windowsUserType/administrator">
+        <Annotation Term="Org.OData.Core.V1.Description" String="Indicates that the user has administrator privileges." />
+      </Annotations>
+      <Annotations Target="microsoft.graph.windowsUserType/standard">
+        <Annotation Term="Org.OData.Core.V1.Description" String="Indicates that the user is a low-rights user without administrator privileges." />
+      </Annotations>
+      <Annotations Target="microsoft.graph.windowsUserType/unknownFutureValue">
+        <Annotation Term="Org.OData.Core.V1.Description" String="Evolvable enumeration sentinel value. Do not use." />
+      </Annotations>
       <Annotations Target="microsoft.graph.windowsWebApp">
         <Annotation Term="Org.OData.Core.V1.Description" String="Contains properties and inherited properties for Windows web apps." />
       </Annotations>
@@ -34023,6 +34935,7 @@
         <Member Name="scheduledAlerts" Value="1073741845" />
         <Member Name="microsoftDefenderThreatIntelligenceAnalytics" Value="1073741846" />
         <Member Name="builtInMl" Value="1073741847" />
+        <Member Name="microsoftInsiderRiskManagement" Value="1073741848" />
         <Member Name="microsoftSentinel" Value="268435456" />
       </EnumType>
       <EnumType Name="detectionStatus">
@@ -34216,6 +35129,7 @@
         <Member Name="unknownFutureValue" Value="255" />
         <Member Name="microsoftDefenderForCloud" Value="256" />
         <Member Name="microsoftSentinel" Value="512" />
+        <Member Name="microsoftInsiderRiskManagement" Value="1024" />
       </EnumType>
       <EnumType Name="sourceType" IsFlags="true">
         <Member Name="mailbox" Value="1" />
@@ -34291,6 +35205,20 @@
         <Property Name="instanceName" Type="Edm.String" />
         <Property Name="saasAppId" Type="Edm.Int64" />
         <Property Name="stream" Type="microsoft.graph.security.stream" />
+      </ComplexType>
+      <ComplexType Name="cloudLogonRequestEvidence" BaseType="microsoft.graph.security.alertEvidence">
+        <Property Name="requestId" Type="Edm.String" />
+      </ComplexType>
+      <ComplexType Name="cloudLogonSessionEvidence" BaseType="microsoft.graph.security.alertEvidence">
+        <Property Name="account" Type="microsoft.graph.security.userEvidence" />
+        <Property Name="browser" Type="Edm.String" />
+        <Property Name="deviceName" Type="Edm.String" />
+        <Property Name="operatingSystem" Type="Edm.String" />
+        <Property Name="previousLogonDateTime" Type="Edm.DateTimeOffset" />
+        <Property Name="protocol" Type="Edm.String" />
+        <Property Name="sessionId" Type="Edm.String" />
+        <Property Name="startUtcDateTime" Type="Edm.DateTimeOffset" />
+        <Property Name="userAgent" Type="Edm.String" />
       </ComplexType>
       <ComplexType Name="containerEvidence" BaseType="microsoft.graph.security.alertEvidence">
         <Property Name="args" Type="Collection(Edm.String)" />
@@ -34893,6 +35821,7 @@
         <Property Name="resolvingComment" Type="Edm.String" />
         <Property Name="severity" Type="microsoft.graph.security.alertSeverity" Nullable="false" />
         <Property Name="status" Type="microsoft.graph.security.incidentStatus" Nullable="false" />
+        <Property Name="summary" Type="Edm.String" />
         <Property Name="systemTags" Type="Collection(Edm.String)" />
         <Property Name="tenantId" Type="Edm.String" />
         <NavigationProperty Name="alerts" Type="Collection(microsoft.graph.security.alert)" />
