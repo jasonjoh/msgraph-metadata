@@ -796,6 +796,12 @@
         <Member Name="meeting" Value="2" />
         <Member Name="unknownFutureValue" Value="3" />
       </EnumType>
+      <EnumType Name="clickSource">
+        <Member Name="unknown" Value="0" />
+        <Member Name="qrCode" Value="1" />
+        <Member Name="phishingUrl" Value="2" />
+        <Member Name="unknownFutureValue" Value="3" />
+      </EnumType>
       <EnumType Name="clonableTeamParts" IsFlags="true">
         <Member Name="apps" Value="1" />
         <Member Name="tabs" Value="2" />
@@ -9666,6 +9672,7 @@
       </ComplexType>
       <ComplexType Name="userSimulationEventInfo">
         <Property Name="browser" Type="Edm.String" />
+        <Property Name="clickSource" Type="graph.clickSource" />
         <Property Name="eventDateTime" Type="Edm.DateTimeOffset" />
         <Property Name="eventName" Type="Edm.String" />
         <Property Name="ipAddress" Type="Edm.String" />
@@ -13371,7 +13378,7 @@
         <Property Name="displayName" Type="Edm.String" Nullable="false" />
         <Property Name="status" Type="graph.fileStorageContainerStatus" />
         <Property Name="viewpoint" Type="graph.fileStorageContainerViewpoint" />
-        <NavigationProperty Name="drive" Type="graph.drive" ContainsTarget="true" />
+        <NavigationProperty Name="drive" Type="graph.drive" />
         <NavigationProperty Name="permissions" Type="Collection(graph.permission)" ContainsTarget="true" />
       </EntityType>
       <EntityType Name="filterOperatorSchema" BaseType="graph.entity">

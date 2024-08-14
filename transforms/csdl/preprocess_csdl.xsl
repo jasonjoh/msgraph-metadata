@@ -531,7 +531,8 @@
                          edm:Schema[@Namespace='microsoft.graph']/edm:EntityType[@Name='group']/edm:NavigationProperty[@Name='rejectedSenders']/@ContainsTarget|
                          edm:Schema[@Namespace='microsoft.graph']/edm:EntityType[@Name='connectedOrganization']/edm:NavigationProperty[@Name='externalSponsors']/@ContainsTarget|
                          edm:Schema[@Namespace='microsoft.graph']/edm:EntityType[@Name='connectedOrganization']/edm:NavigationProperty[@Name='internalSponsors']/@ContainsTarget|
-                         edm:Schema[@Namespace='microsoft.graph']/edm:EntityType[@Name='accessPackageCatalog']/edm:NavigationProperty[@Name='accessPackages']/@ContainsTarget">
+                         edm:Schema[@Namespace='microsoft.graph']/edm:EntityType[@Name='accessPackageCatalog']/edm:NavigationProperty[@Name='accessPackages']/@ContainsTarget|
+                         edm:Schema[@Namespace='microsoft.graph']/edm:EntityType[@Name='fileStorageContainer']/edm:NavigationProperty[@Name='drive']/@ContainsTarget">
         <xsl:apply-templates select="@* | node()"/>
     </xsl:template>
 
@@ -644,12 +645,6 @@
     <!-- Replace graph.report return type with Edm.Stream return type for report functions that start with 'get' -->
     <xsl:template match="edm:Schema[@Namespace='microsoft.graph']/edm:Function[starts-with(@Name, 'get')][edm:ReturnType[@Type='graph.report']]/edm:ReturnType/@Type">
        <xsl:attribute name="Type">Edm.Stream</xsl:attribute>
-    </xsl:template>
-
-    <!-- Set IsComposable to false for all functions with a ReturnType of graph.workbookRange. -->
-    <!-- This is to prevent overgeneration of composable functions in the OpenAPI. -->
-    <xsl:template match="edm:Schema[@Namespace='microsoft.graph']/edm:Function[edm:ReturnType[@Type='graph.workbookRange']]/@IsComposable">
-        <xsl:attribute name="IsComposable">false</xsl:attribute>
     </xsl:template>
 
     <!-- Actions/Functions bound to directoryObject should have the 'RequiresExplicitBinding' annotation-->
