@@ -1364,6 +1364,8 @@
         <Member Name="organizationAndFederated" Value="2" />
         <Member Name="everyone" Value="3" />
         <Member Name="unknownFutureValue" Value="4" />
+        <Member Name="invited" Value="5" />
+        <Member Name="organizationExcludingGuests" Value="6" />
       </EnumType>
       <EnumType Name="locationType">
         <Member Name="default" Value="0" />
@@ -8603,6 +8605,7 @@
         <Property Name="spa" Type="graph.spaApplication" />
         <Property Name="tags" Type="Collection(Edm.String)" Nullable="false" />
         <Property Name="tokenEncryptionKeyId" Type="Edm.Guid" />
+        <Property Name="uniqueName" Type="Edm.String" />
         <Property Name="web" Type="graph.webApplication" />
         <NavigationProperty Name="appManagementPolicies" Type="Collection(graph.appManagementPolicy)">
           <Annotation Term="Org.OData.Capabilities.V1.NavigationRestrictions">
@@ -8674,6 +8677,16 @@
                   <Record Type="Org.OData.Core.V1.PropertyRef">
                     <PropertyValue Property="Alias" String="appId" />
                     <PropertyValue Property="Name" PropertyPath="appId" />
+                  </Record>
+                </Collection>
+              </PropertyValue>
+            </Record>
+            <Record Type="Org.OData.Core.V1.AlternateKey">
+              <PropertyValue Property="Key">
+                <Collection>
+                  <Record Type="Org.OData.Core.V1.PropertyRef">
+                    <PropertyValue Property="Alias" String="uniqueName" />
+                    <PropertyValue Property="Name" PropertyPath="uniqueName" />
                   </Record>
                 </Collection>
               </PropertyValue>
@@ -10681,6 +10694,7 @@
         <Property Name="securityEnabled" Type="Edm.Boolean" />
         <Property Name="securityIdentifier" Type="Edm.String" />
         <Property Name="theme" Type="Edm.String" />
+        <Property Name="uniqueName" Type="Edm.String" />
         <Property Name="unseenCount" Type="Edm.Int32" />
         <Property Name="visibility" Type="Edm.String" />
         <NavigationProperty Name="acceptedSenders" Type="Collection(graph.directoryObject)">
@@ -10960,6 +10974,20 @@
             </Record>
           </Annotation>
         </NavigationProperty>
+        <Annotation Term="Org.OData.Core.V1.AlternateKeys">
+          <Collection>
+            <Record Type="Org.OData.Core.V1.AlternateKey">
+              <PropertyValue Property="Key">
+                <Collection>
+                  <Record Type="Org.OData.Core.V1.PropertyRef">
+                    <PropertyValue Property="Alias" String="uniqueName" />
+                    <PropertyValue Property="Name" PropertyPath="uniqueName" />
+                  </Record>
+                </Collection>
+              </PropertyValue>
+            </Record>
+          </Collection>
+        </Annotation>
       </EntityType>
       <EntityType Name="groupLifecyclePolicy" BaseType="graph.entity">
         <Property Name="alternateNotificationEmails" Type="Edm.String" />
@@ -19452,42 +19480,42 @@
         <Parameter Name="User" Type="Edm.String" Nullable="false" Unicode="false" />
         <ReturnType Type="Collection(graph.calendarRoleType)" Nullable="false" />
       </Function>
-      <Function Name="boundingRect" IsBound="true" IsComposable="false">
+      <Function Name="boundingRect" IsBound="true" IsComposable="true">
         <Parameter Name="bindparameter" Type="graph.workbookRange" />
         <Parameter Name="anotherRange" Type="Edm.String" Unicode="false" />
         <ReturnType Type="graph.workbookRange" />
       </Function>
-      <Function Name="cell" IsBound="true" IsComposable="false">
+      <Function Name="cell" IsBound="true" IsComposable="true">
         <Parameter Name="bindparameter" Type="graph.workbookRange" />
         <Parameter Name="row" Type="Edm.Int32" Nullable="false" />
         <Parameter Name="column" Type="Edm.Int32" Nullable="false" />
         <ReturnType Type="graph.workbookRange" />
       </Function>
-      <Function Name="cell" IsBound="true" IsComposable="false">
+      <Function Name="cell" IsBound="true" IsComposable="true">
         <Parameter Name="bindparameter" Type="graph.workbookWorksheet" />
         <Parameter Name="row" Type="Edm.Int32" Nullable="false" />
         <Parameter Name="column" Type="Edm.Int32" Nullable="false" />
         <ReturnType Type="graph.workbookRange" />
       </Function>
-      <Function Name="column" IsBound="true" IsComposable="false">
+      <Function Name="column" IsBound="true" IsComposable="true">
         <Parameter Name="bindparameter" Type="graph.workbookRange" />
         <Parameter Name="column" Type="Edm.Int32" Nullable="false" />
         <ReturnType Type="graph.workbookRange" />
       </Function>
-      <Function Name="columnsAfter" IsBound="true" IsComposable="false">
+      <Function Name="columnsAfter" IsBound="true" IsComposable="true">
         <Parameter Name="bindparameter" Type="graph.workbookRange" />
         <ReturnType Type="graph.workbookRange" />
       </Function>
-      <Function Name="columnsAfter" IsBound="true" IsComposable="false">
+      <Function Name="columnsAfter" IsBound="true" IsComposable="true">
         <Parameter Name="bindparameter" Type="graph.workbookRange" />
         <Parameter Name="count" Type="Edm.Int32" />
         <ReturnType Type="graph.workbookRange" />
       </Function>
-      <Function Name="columnsBefore" IsBound="true" IsComposable="false">
+      <Function Name="columnsBefore" IsBound="true" IsComposable="true">
         <Parameter Name="bindparameter" Type="graph.workbookRange" />
         <ReturnType Type="graph.workbookRange" />
       </Function>
-      <Function Name="columnsBefore" IsBound="true" IsComposable="false">
+      <Function Name="columnsBefore" IsBound="true" IsComposable="true">
         <Parameter Name="bindparameter" Type="graph.workbookRange" />
         <Parameter Name="count" Type="Edm.Int32" />
         <ReturnType Type="graph.workbookRange" />
@@ -19520,11 +19548,11 @@
         <Parameter Name="bindparameter" Type="Collection(graph.workbookTableRow)" />
         <ReturnType Type="Edm.Int32" Nullable="false" />
       </Function>
-      <Function Name="dataBodyRange" IsBound="true" IsComposable="false">
+      <Function Name="dataBodyRange" IsBound="true" IsComposable="true">
         <Parameter Name="bindparameter" Type="graph.workbookTable" />
         <ReturnType Type="graph.workbookRange" />
       </Function>
-      <Function Name="dataBodyRange" IsBound="true" IsComposable="false">
+      <Function Name="dataBodyRange" IsBound="true" IsComposable="true">
         <Parameter Name="bindparameter" Type="graph.workbookTableColumn" />
         <ReturnType Type="graph.workbookRange" />
       </Function>
@@ -19666,11 +19694,11 @@
         <Parameter Name="bindingParameter" Type="graph.applePushNotificationCertificate" />
         <ReturnType Type="Edm.String" Unicode="false" />
       </Function>
-      <Function Name="entireColumn" IsBound="true" IsComposable="false">
+      <Function Name="entireColumn" IsBound="true" IsComposable="true">
         <Parameter Name="bindparameter" Type="graph.workbookRange" />
         <ReturnType Type="graph.workbookRange" />
       </Function>
-      <Function Name="entireRow" IsBound="true" IsComposable="false">
+      <Function Name="entireRow" IsBound="true" IsComposable="true">
         <Parameter Name="bindparameter" Type="graph.workbookRange" />
         <ReturnType Type="graph.workbookRange" />
       </Function>
@@ -19963,11 +19991,11 @@
         <Parameter Name="bindingParameter" Type="Collection(graph.managedAppRegistration)" />
         <ReturnType Type="Collection(Edm.String)" Unicode="false" />
       </Function>
-      <Function Name="headerRowRange" IsBound="true" IsComposable="false">
+      <Function Name="headerRowRange" IsBound="true" IsComposable="true">
         <Parameter Name="bindparameter" Type="graph.workbookTable" />
         <ReturnType Type="graph.workbookRange" />
       </Function>
-      <Function Name="headerRowRange" IsBound="true" IsComposable="false">
+      <Function Name="headerRowRange" IsBound="true" IsComposable="true">
         <Parameter Name="bindparameter" Type="graph.workbookTableColumn" />
         <ReturnType Type="graph.workbookRange" />
       </Function>
@@ -19997,7 +20025,7 @@
         <Parameter Name="bindingParameter" Type="graph.serviceHealthIssue" />
         <ReturnType Type="Edm.Stream" />
       </Function>
-      <Function Name="intersection" IsBound="true" IsComposable="false">
+      <Function Name="intersection" IsBound="true" IsComposable="true">
         <Parameter Name="bindparameter" Type="graph.workbookRange" />
         <Parameter Name="anotherRange" Type="Edm.String" Unicode="false" />
         <ReturnType Type="graph.workbookRange" />
@@ -20051,15 +20079,15 @@
         <Parameter Name="index" Type="Edm.Int32" Nullable="false" />
         <ReturnType Type="graph.workbookTableRow" />
       </Function>
-      <Function Name="lastCell" IsBound="true" IsComposable="false">
+      <Function Name="lastCell" IsBound="true" IsComposable="true">
         <Parameter Name="bindparameter" Type="graph.workbookRange" />
         <ReturnType Type="graph.workbookRange" />
       </Function>
-      <Function Name="lastColumn" IsBound="true" IsComposable="false">
+      <Function Name="lastColumn" IsBound="true" IsComposable="true">
         <Parameter Name="bindparameter" Type="graph.workbookRange" />
         <ReturnType Type="graph.workbookRange" />
       </Function>
-      <Function Name="lastRow" IsBound="true" IsComposable="false">
+      <Function Name="lastRow" IsBound="true" IsComposable="true">
         <Parameter Name="bindparameter" Type="graph.workbookRange" />
         <ReturnType Type="graph.workbookRange" />
       </Function>
@@ -20084,37 +20112,37 @@
         <Parameter Name="period" Type="Edm.String" Unicode="false" />
         <ReturnType Type="graph.report" />
       </Function>
-      <Function Name="offsetRange" IsBound="true" IsComposable="false">
+      <Function Name="offsetRange" IsBound="true" IsComposable="true">
         <Parameter Name="bindparameter" Type="graph.workbookRange" />
         <Parameter Name="rowOffset" Type="Edm.Int32" Nullable="false" />
         <Parameter Name="columnOffset" Type="Edm.Int32" Nullable="false" />
         <ReturnType Type="graph.workbookRange" />
       </Function>
-      <Function Name="range" IsBound="true" IsComposable="false">
+      <Function Name="range" IsBound="true" IsComposable="true">
         <Parameter Name="bindparameter" Type="graph.workbookNamedItem" />
         <ReturnType Type="graph.workbookRange" />
       </Function>
-      <Function Name="range" IsBound="true" IsComposable="false">
+      <Function Name="range" IsBound="true" IsComposable="true">
         <Parameter Name="bindparameter" Type="graph.workbookRangeView" />
         <ReturnType Type="graph.workbookRange" />
       </Function>
-      <Function Name="range" IsBound="true" IsComposable="false">
+      <Function Name="range" IsBound="true" IsComposable="true">
         <Parameter Name="bindparameter" Type="graph.workbookTable" />
         <ReturnType Type="graph.workbookRange" />
       </Function>
-      <Function Name="range" IsBound="true" IsComposable="false">
+      <Function Name="range" IsBound="true" IsComposable="true">
         <Parameter Name="bindparameter" Type="graph.workbookTableColumn" />
         <ReturnType Type="graph.workbookRange" />
       </Function>
-      <Function Name="range" IsBound="true" IsComposable="false">
+      <Function Name="range" IsBound="true" IsComposable="true">
         <Parameter Name="bindparameter" Type="graph.workbookTableRow" />
         <ReturnType Type="graph.workbookRange" />
       </Function>
-      <Function Name="range" IsBound="true" IsComposable="false">
+      <Function Name="range" IsBound="true" IsComposable="true">
         <Parameter Name="bindparameter" Type="graph.workbookWorksheet" />
         <ReturnType Type="graph.workbookRange" />
       </Function>
-      <Function Name="range" IsBound="true" IsComposable="false">
+      <Function Name="range" IsBound="true" IsComposable="true">
         <Parameter Name="bindparameter" Type="graph.workbookWorksheet" />
         <Parameter Name="address" Type="Edm.String" Unicode="false" />
         <ReturnType Type="graph.workbookRange" />
@@ -20129,31 +20157,31 @@
         <Parameter Name="EndDateTime" Type="Edm.String" Unicode="false" />
         <ReturnType Type="Collection(graph.reminder)" Nullable="false" />
       </Function>
-      <Function Name="resizedRange" IsBound="true" IsComposable="false">
+      <Function Name="resizedRange" IsBound="true" IsComposable="true">
         <Parameter Name="bindparameter" Type="graph.workbookRange" />
         <Parameter Name="deltaRows" Type="Edm.Int32" Nullable="false" />
         <Parameter Name="deltaColumns" Type="Edm.Int32" Nullable="false" />
         <ReturnType Type="graph.workbookRange" />
       </Function>
-      <Function Name="row" IsBound="true" IsComposable="false">
+      <Function Name="row" IsBound="true" IsComposable="true">
         <Parameter Name="bindparameter" Type="graph.workbookRange" />
         <Parameter Name="row" Type="Edm.Int32" Nullable="false" />
         <ReturnType Type="graph.workbookRange" />
       </Function>
-      <Function Name="rowsAbove" IsBound="true" IsComposable="false">
+      <Function Name="rowsAbove" IsBound="true" IsComposable="true">
         <Parameter Name="bindparameter" Type="graph.workbookRange" />
         <ReturnType Type="graph.workbookRange" />
       </Function>
-      <Function Name="rowsAbove" IsBound="true" IsComposable="false">
+      <Function Name="rowsAbove" IsBound="true" IsComposable="true">
         <Parameter Name="bindparameter" Type="graph.workbookRange" />
         <Parameter Name="count" Type="Edm.Int32" />
         <ReturnType Type="graph.workbookRange" />
       </Function>
-      <Function Name="rowsBelow" IsBound="true" IsComposable="false">
+      <Function Name="rowsBelow" IsBound="true" IsComposable="true">
         <Parameter Name="bindparameter" Type="graph.workbookRange" />
         <ReturnType Type="graph.workbookRange" />
       </Function>
-      <Function Name="rowsBelow" IsBound="true" IsComposable="false">
+      <Function Name="rowsBelow" IsBound="true" IsComposable="true">
         <Parameter Name="bindparameter" Type="graph.workbookRange" />
         <Parameter Name="count" Type="Edm.Int32" />
         <ReturnType Type="graph.workbookRange" />
@@ -20200,11 +20228,11 @@
         <Parameter Name="key" Type="Edm.String" Nullable="false" Unicode="false" />
         <ReturnType Type="graph.workbookTableRow" />
       </Function>
-      <Function Name="totalRowRange" IsBound="true" IsComposable="false">
+      <Function Name="totalRowRange" IsBound="true" IsComposable="true">
         <Parameter Name="bindparameter" Type="graph.workbookTable" />
         <ReturnType Type="graph.workbookRange" />
       </Function>
-      <Function Name="totalRowRange" IsBound="true" IsComposable="false">
+      <Function Name="totalRowRange" IsBound="true" IsComposable="true">
         <Parameter Name="bindparameter" Type="graph.workbookTableColumn" />
         <ReturnType Type="graph.workbookRange" />
       </Function>
@@ -20212,20 +20240,20 @@
         <Parameter Name="bindingParameter" Type="graph.authenticationStrengthPolicy" />
         <ReturnType Type="graph.authenticationStrengthUsage" />
       </Function>
-      <Function Name="usedRange" IsBound="true" IsComposable="false">
+      <Function Name="usedRange" IsBound="true" IsComposable="true">
         <Parameter Name="bindparameter" Type="graph.workbookRange" />
         <ReturnType Type="graph.workbookRange" />
       </Function>
-      <Function Name="usedRange" IsBound="true" IsComposable="false">
+      <Function Name="usedRange" IsBound="true" IsComposable="true">
         <Parameter Name="bindparameter" Type="graph.workbookRange" />
         <Parameter Name="valuesOnly" Type="Edm.Boolean" Nullable="false" />
         <ReturnType Type="graph.workbookRange" />
       </Function>
-      <Function Name="usedRange" IsBound="true" IsComposable="false">
+      <Function Name="usedRange" IsBound="true" IsComposable="true">
         <Parameter Name="bindparameter" Type="graph.workbookWorksheet" />
         <ReturnType Type="graph.workbookRange" />
       </Function>
-      <Function Name="usedRange" IsBound="true" IsComposable="false">
+      <Function Name="usedRange" IsBound="true" IsComposable="true">
         <Parameter Name="bindparameter" Type="graph.workbookWorksheet" />
         <Parameter Name="valuesOnly" Type="Edm.Boolean" Nullable="false" />
         <ReturnType Type="graph.workbookRange" />
@@ -26709,6 +26737,11 @@
             </PropertyValue>
           </Record>
         </Annotation>
+        <Annotation Term="Org.OData.Capabilities.V1.UpdateRestrictions">
+          <Record>
+            <PropertyValue Property="Upsertable" Bool="true" />
+          </Record>
+        </Annotation>
       </Annotations>
       <Annotations Target="microsoft.graph.GraphService/servicePrincipals">
         <Annotation Term="Org.OData.Capabilities.V1.ReadRestrictions">
@@ -26731,6 +26764,11 @@
                 </Record>
               </Collection>
             </PropertyValue>
+          </Record>
+        </Annotation>
+        <Annotation Term="Org.OData.Capabilities.V1.UpdateRestrictions">
+          <Record>
+            <PropertyValue Property="Upsertable" Bool="true" />
           </Record>
         </Annotation>
       </Annotations>
