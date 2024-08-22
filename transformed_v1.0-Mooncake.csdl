@@ -2603,10 +2603,12 @@
         <Property Name="decryptionKey" Type="Edm.String" />
         <Property Name="downloadUrl" Type="Edm.String" />
       </ComplexType>
-      <ComplexType Name="appManagementConfiguration">
+      <ComplexType Name="appManagementApplicationConfiguration" BaseType="graph.appManagementConfiguration" />
+      <ComplexType Name="appManagementConfiguration" Abstract="true">
         <Property Name="keyCredentials" Type="Collection(graph.keyCredentialConfiguration)" />
         <Property Name="passwordCredentials" Type="Collection(graph.passwordCredentialConfiguration)" />
       </ComplexType>
+      <ComplexType Name="appManagementServicePrincipalConfiguration" BaseType="graph.appManagementConfiguration" />
       <ComplexType Name="appRole">
         <Property Name="allowedMemberTypes" Type="Collection(Edm.String)" Nullable="false" />
         <Property Name="description" Type="Edm.String" />
@@ -3069,6 +3071,7 @@
       <ComplexType Name="currencyColumn">
         <Property Name="locale" Type="Edm.String" />
       </ComplexType>
+      <ComplexType Name="customAppManagementConfiguration" BaseType="graph.appManagementConfiguration" />
       <ComplexType Name="customExtensionAuthenticationConfiguration" Abstract="true" />
       <ComplexType Name="customExtensionCallbackConfiguration">
         <Property Name="timeoutDuration" Type="Edm.Duration" />
@@ -5717,7 +5720,7 @@
       </EntityType>
       <EntityType Name="appManagementPolicy" BaseType="graph.policyBase">
         <Property Name="isEnabled" Type="Edm.Boolean" Nullable="false" />
-        <Property Name="restrictions" Type="graph.appManagementConfiguration" />
+        <Property Name="restrictions" Type="graph.customAppManagementConfiguration" />
         <NavigationProperty Name="appliesTo" Type="Collection(graph.directoryObject)" />
       </EntityType>
       <EntityType Name="appRoleAssignment" BaseType="graph.directoryObject">
@@ -5770,6 +5773,7 @@
         <Property Name="displayName" Type="Edm.String" />
         <Property Name="resources" Type="Collection(graph.auditResource)" />
       </EntityType>
+      <EntityType Name="auditLogRoot" />
       <EntityType Name="authentication" BaseType="graph.entity">
         <NavigationProperty Name="microsoftAuthenticatorMethods" Type="Collection(graph.microsoftAuthenticatorAuthenticationMethod)" ContainsTarget="true" />
       </EntityType>
@@ -9667,9 +9671,9 @@
         <Property Name="url" Type="Edm.String" />
       </EntityType>
       <EntityType Name="tenantAppManagementPolicy" BaseType="graph.policyBase">
-        <Property Name="applicationRestrictions" Type="graph.appManagementConfiguration" />
+        <Property Name="applicationRestrictions" Type="graph.appManagementApplicationConfiguration" />
         <Property Name="isEnabled" Type="Edm.Boolean" Nullable="false" />
-        <Property Name="servicePrincipalRestrictions" Type="graph.appManagementConfiguration" />
+        <Property Name="servicePrincipalRestrictions" Type="graph.appManagementServicePrincipalConfiguration" />
       </EntityType>
       <EntityType Name="tenantRelationship" />
       <EntityType Name="termsAndConditions" BaseType="graph.entity">
@@ -13267,6 +13271,7 @@
         </EntitySet>
         <Singleton Name="admin" Type="microsoft.graph.admin" />
         <Singleton Name="appCatalogs" Type="microsoft.graph.appCatalogs" />
+        <Singleton Name="auditLogs" Type="microsoft.graph.auditLogRoot" />
         <Singleton Name="deviceAppManagement" Type="microsoft.graph.deviceAppManagement" />
         <Singleton Name="deviceManagement" Type="microsoft.graph.deviceManagement" />
         <Singleton Name="directory" Type="microsoft.graph.directory">
