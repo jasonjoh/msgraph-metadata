@@ -2893,6 +2893,8 @@
       </ComplexType>
       <ComplexType Name="chatMessageReaction">
         <Property Name="createdDateTime" Type="Edm.DateTimeOffset" Nullable="false" />
+        <Property Name="displayName" Type="Edm.String" />
+        <Property Name="reactionContentUrl" Type="Edm.String" />
         <Property Name="reactionType" Type="Edm.String" Nullable="false" />
         <Property Name="user" Type="graph.chatMessageReactionIdentitySet" Nullable="false" />
       </ComplexType>
@@ -3067,6 +3069,9 @@
       <ComplexType Name="crossTenantAccessPolicyTargetConfiguration">
         <Property Name="accessType" Type="graph.crossTenantAccessPolicyTargetConfigurationAccessType" />
         <Property Name="targets" Type="Collection(graph.crossTenantAccessPolicyTarget)" />
+      </ComplexType>
+      <ComplexType Name="crossTenantUserSyncInbound">
+        <Property Name="isSyncAllowed" Type="Edm.Boolean" />
       </ComplexType>
       <ComplexType Name="currencyColumn">
         <Property Name="locale" Type="Edm.String" />
@@ -4536,6 +4541,7 @@
         <Property Name="teamId" Type="Edm.String" />
       </ComplexType>
       <ComplexType Name="teamsAppAuthorization">
+        <Property Name="clientAppId" Type="Edm.String" />
         <Property Name="requiredPermissionSet" Type="graph.teamsAppPermissionSet" />
       </ComplexType>
       <ComplexType Name="teamsAppInstalledEventMessageDetail" BaseType="graph.eventMessageDetail">
@@ -5300,6 +5306,10 @@
       <EntityType Name="administrativeUnit" BaseType="graph.directoryObject" OpenType="true">
         <Property Name="description" Type="Edm.String" />
         <Property Name="displayName" Type="Edm.String" />
+        <Property Name="isMemberManagementRestricted" Type="Edm.Boolean" />
+        <Property Name="membershipRule" Type="Edm.String" />
+        <Property Name="membershipRuleProcessingState" Type="Edm.String" />
+        <Property Name="membershipType" Type="Edm.String" />
         <Property Name="visibility" Type="Edm.String" />
         <NavigationProperty Name="members" Type="Collection(graph.directoryObject)">
           <Annotation Term="Org.OData.Validation.V1.DerivedTypeConstraint" xmlns:edm="http://docs.oasis-open.org/odata/ns/edm">
@@ -6241,6 +6251,15 @@
         <Property Name="inboundTrust" Type="graph.crossTenantAccessPolicyInboundTrust" />
         <Property Name="isServiceProvider" Type="Edm.Boolean" />
         <Property Name="tenantId" Type="Edm.String" Nullable="false" />
+        <NavigationProperty Name="identitySynchronization" Type="graph.crossTenantIdentitySyncPolicyPartner" ContainsTarget="true" />
+      </EntityType>
+      <EntityType Name="crossTenantIdentitySyncPolicyPartner">
+        <Key>
+          <PropertyRef Name="tenantId" />
+        </Key>
+        <Property Name="displayName" Type="Edm.String" />
+        <Property Name="tenantId" Type="Edm.String" Nullable="false" />
+        <Property Name="userSyncInbound" Type="graph.crossTenantUserSyncInbound" />
       </EntityType>
       <EntityType Name="customCalloutExtension" BaseType="graph.entity" Abstract="true">
         <Property Name="authenticationConfiguration" Type="graph.customExtensionAuthenticationConfiguration" />
@@ -6311,6 +6330,7 @@
         <Property Name="enrollmentType" Type="Edm.String" />
         <Property Name="isCompliant" Type="Edm.Boolean" />
         <Property Name="isManaged" Type="Edm.Boolean" />
+        <Property Name="isManagementRestricted" Type="Edm.Boolean" />
         <Property Name="isRooted" Type="Edm.Boolean" />
         <Property Name="managementType" Type="Edm.String" />
         <Property Name="manufacturer" Type="Edm.String" />
@@ -7339,6 +7359,7 @@
         <Property Name="hideFromAddressLists" Type="Edm.Boolean" />
         <Property Name="isArchived" Type="Edm.Boolean" />
         <Property Name="isAssignableToRole" Type="Edm.Boolean" />
+        <Property Name="isManagementRestricted" Type="Edm.Boolean" />
         <Property Name="isSubscribedByMail" Type="Edm.Boolean" />
         <Property Name="licenseProcessingState" Type="graph.licenseProcessingState" />
         <Property Name="mail" Type="Edm.String" />
@@ -8315,7 +8336,13 @@
         <Property Name="userId" Type="Edm.String" />
         <Property Name="userPrincipalName" Type="Edm.String" />
         <Property Name="wiFiMacAddress" Type="Edm.String" />
-        <NavigationProperty Name="deviceCategory" Type="graph.deviceCategory" ContainsTarget="true" />
+        <NavigationProperty Name="deviceCategory" Type="graph.deviceCategory" ContainsTarget="true">
+          <Annotation Term="Org.OData.Capabilities.V1.NavigationRestrictions">
+            <Record>
+              <PropertyValue Property="Referenceable" Bool="true" />
+            </Record>
+          </Annotation>
+        </NavigationProperty>
         <NavigationProperty Name="deviceCompliancePolicyStates" Type="Collection(graph.deviceCompliancePolicyState)" ContainsTarget="true" />
         <NavigationProperty Name="deviceConfigurationStates" Type="Collection(graph.deviceConfigurationState)" ContainsTarget="true" />
         <NavigationProperty Name="logCollectionRequests" Type="Collection(graph.deviceLogCollectionResponse)" ContainsTarget="true" />
@@ -9521,6 +9548,8 @@
         <NavigationProperty Name="appliesTo" Type="Collection(graph.directoryObject)" />
       </EntityType>
       <EntityType Name="subscribedSku" BaseType="graph.entity">
+        <Property Name="accountId" Type="Edm.String" />
+        <Property Name="accountName" Type="Edm.String" />
         <Property Name="appliesTo" Type="Edm.String" />
         <Property Name="capabilityStatus" Type="Edm.String" />
         <Property Name="consumedUnits" Type="Edm.Int32" />
@@ -9528,6 +9557,7 @@
         <Property Name="servicePlans" Type="Collection(graph.servicePlanInfo)" Nullable="false" />
         <Property Name="skuId" Type="Edm.Guid" />
         <Property Name="skuPartNumber" Type="Edm.String" />
+        <Property Name="subscriptionIds" Type="Collection(Edm.String)" />
       </EntityType>
       <EntityType Name="subscription" BaseType="graph.entity">
         <Property Name="applicationId" Type="Edm.String" />
@@ -9905,6 +9935,7 @@
         <Property Name="identities" Type="Collection(graph.objectIdentity)" />
         <Property Name="imAddresses" Type="Collection(Edm.String)" />
         <Property Name="interests" Type="Collection(Edm.String)" />
+        <Property Name="isManagementRestricted" Type="Edm.Boolean" />
         <Property Name="isResourceAccount" Type="Edm.Boolean" />
         <Property Name="jobTitle" Type="Edm.String" />
         <Property Name="lastPasswordChangeDateTime" Type="Edm.DateTimeOffset" />
@@ -14612,6 +14643,11 @@
             <PropertyValue Property="Insertable" Bool="false" />
           </Record>
         </Annotation>
+        <Annotation Term="Org.OData.Capabilities.V1.NavigationRestrictions">
+          <Record>
+            <PropertyValue Property="Referenceable" Bool="false" />
+          </Record>
+        </Annotation>
         <Annotation Term="Org.OData.Capabilities.V1.SelectRestrictions">
           <Record>
             <PropertyValue Property="Selectable" Bool="false" />
@@ -14676,6 +14712,11 @@
         <Annotation Term="Org.OData.Capabilities.V1.InsertRestrictions">
           <Record>
             <PropertyValue Property="Insertable" Bool="false" />
+          </Record>
+        </Annotation>
+        <Annotation Term="Org.OData.Capabilities.V1.NavigationRestrictions">
+          <Record>
+            <PropertyValue Property="Referenceable" Bool="false" />
           </Record>
         </Annotation>
         <Annotation Term="Org.OData.Capabilities.V1.SkipSupported" Bool="false" />
@@ -15179,6 +15220,37 @@
         </Annotation>
         <Annotation Term="Org.OData.Capabilities.V1.SkipSupported" Bool="true" />
         <Annotation Term="Org.OData.Capabilities.V1.TopSupported" Bool="true" />
+      </Annotations>
+      <Annotations Target="microsoft.graph.crossTenantIdentitySyncPolicyPartner">
+        <Annotation Term="Org.OData.Capabilities.V1.CountRestrictions">
+          <Record>
+            <PropertyValue Property="Countable" Bool="true" />
+          </Record>
+        </Annotation>
+        <Annotation Term="Org.OData.Capabilities.V1.ExpandRestrictions">
+          <Record>
+            <PropertyValue Property="Expandable" Bool="false" />
+          </Record>
+        </Annotation>
+        <Annotation Term="Org.OData.Capabilities.V1.FilterRestrictions">
+          <Record>
+            <PropertyValue Property="Filterable" Bool="true" />
+          </Record>
+        </Annotation>
+        <Annotation Term="Org.OData.Capabilities.V1.NavigationRestrictions">
+          <Record>
+            <PropertyValue Property="Referenceable" Bool="false" />
+          </Record>
+        </Annotation>
+        <Annotation Term="Org.OData.Capabilities.V1.SkipSupported" Bool="true" />
+        <Annotation Term="Org.OData.Capabilities.V1.TopSupported" Bool="true" />
+        <Annotation Term="Org.OData.Capabilities.V1.UpdateRestrictions">
+          <Record>
+            <PropertyValue Property="UpdateMethod">
+              <EnumMember>Org.OData.Capabilities.V1.HttpMethod/PUT</EnumMember>
+            </PropertyValue>
+          </Record>
+        </Annotation>
       </Annotations>
       <Annotations Target="microsoft.graph.defaultManagedAppProtection">
         <Annotation Term="Org.OData.Core.V1.Description" String="Policy used to configure detailed management settings for a specified set of apps for all users not targeted by a TargetedManagedAppProtection Policy" />
@@ -21991,6 +22063,11 @@
             <PropertyValue Property="Filterable" Bool="true" />
           </Record>
         </Annotation>
+        <Annotation Term="Org.OData.Capabilities.V1.NavigationRestrictions">
+          <Record>
+            <PropertyValue Property="Referenceable" Bool="false" />
+          </Record>
+        </Annotation>
         <Annotation Term="Org.OData.Capabilities.V1.SelectRestrictions">
           <Record>
             <PropertyValue Property="Selectable" Bool="true" />
@@ -27251,6 +27328,15 @@
       </Annotations>
       <Annotations Target="microsoft.graph.GraphService/invitations">
         <Annotation Term="Org.OData.Capabilities.V1.IndexableByKey" Bool="false" />
+      </Annotations>
+      <Annotations Target="microsoft.graph.servicePrincipal/claimsPolicy">
+        <Annotation Term="Org.OData.Capabilities.V1.UpdateRestrictions">
+          <Record>
+            <PropertyValue Property="UpdateMethod">
+              <EnumMember>Org.OData.Capabilities.V1.HttpMethod/PATCH Org.OData.Capabilities.V1.HttpMethod/PUT</EnumMember>
+            </PropertyValue>
+          </Record>
+        </Annotation>
       </Annotations>
     </Schema>
     <Schema Namespace="microsoft.graph.security" xmlns="http://docs.oasis-open.org/odata/ns/edm">
