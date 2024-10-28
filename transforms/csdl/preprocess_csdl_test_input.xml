@@ -101,6 +101,14 @@
             <EntityType Name="authentication" BaseType="graph.entity">
                 <Property Name="signInPreferences" Type="graph.signInPreferences" />
             </EntityType>
+            <EntityType Name="managedDevice" BaseType="graph.entity">
+                <NavigationProperty Name="users" Type="Collection(graph.user)" />
+                <NavigationProperty Name="deviceCategory" Type="graph.deviceCategory" />
+            </EntityType>
+            <EntityType Name="deviceCategory" BaseType="graph.entity">
+                <Property Name="description" Type="Edm.String" />
+                <Property Name="displayName" Type="Edm.String" />
+            </EntityType>
             <EntityType Name="organizationalBrandingProperties" BaseType="graph.entity" Abstract="true">
                 <Property Name="backgroundImage" Type="Edm.Stream" />
                 <Property Name="bannerLogo" Type="Edm.Stream" />
@@ -121,6 +129,11 @@
             <EntityType Name="authenticationEventsFlow" BaseType="graph.entity" Abstract="true" OpenType="true">
                 <Property Name="conditions" Type="graph.authenticationConditions">
                     <Annotation Term="Org.OData.Core.V1.Description" String="The conditions representing the context of the authentication request that will be used to decide whether the events policy will be invoked." />
+                </Property>                
+            </EntityType>
+            <EntityType Name="authentication" BaseType="graph.entity" Abstract="true" OpenType="true">
+                <Property Name="requirements" Type="graph.strongAuthenticationRequirements">
+                    <Annotation Term="Org.OData.Core.V1.Description" String="The settings and preferences for per-user Microsoft Entra multifactor authentication." />
                 </Property>                
             </EntityType>
             <ComplexType Name="onAttributeCollectionExternalUsersSelfServiceSignUp" BaseType="graph.onAttributeCollectionHandler">
@@ -442,6 +455,20 @@
 				<Parameter Name="method" Type="graph.Json" />
 				<ReturnType Type="graph.workbookFunctionResult" />
 			</Action>
+            <Action Name="verify" EntitySetPath="bindingParameter" IsBound="true">
+                <Parameter Name="bindingParameter" Type="graph.domain" Nullable="false" />
+                <Parameter Name="forceTakeover" Type="Edm.Boolean">
+                    <Annotation Term="Org.OData.Core.V1.OptionalParameter" />
+                </Parameter>
+                <ReturnType Type="graph.domain" />
+            </Action>
+            <Action Name="restore" IsBound="true">
+                <Parameter Name="bindingParameter" Type="graph.directoryObject" Nullable="false" />
+                <Parameter Name="autoReconcileProxyConflict" Type="Edm.Boolean">
+                    <Annotation Term="Org.OData.Core.V1.OptionalParameter" />
+                </Parameter>
+                <ReturnType Type="graph.directoryObject" />
+            </Action>
             <Action Name="add" IsBound="true">
                 <Parameter Name="bindingParameter" Type="Collection(graph.site)" />
                 <Parameter Name="value" Type="Collection(graph.site)" />

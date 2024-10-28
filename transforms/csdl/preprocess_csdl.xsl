@@ -36,10 +36,19 @@
 	
 	<!-- Changes Type attribute for properties and action/functions parameters from 'graph.Json' to 'Edm.UnTyped'-->
 	<xsl:template match="edm:Property[@Type='graph.Json'] | edm:Parameter[@Type='graph.Json']">
-        <xsl:copy>
-            <xsl:apply-templates select="@*"/>
-            <xsl:attribute name="Type">Edm.Untyped</xsl:attribute>
-        </xsl:copy>
+        <xsl:choose>
+            <xsl:when test="$open-api-generation='True'">
+                <xsl:copy>
+                    <xsl:apply-templates select="@*"/>
+                    <xsl:attribute name="Type">Edm.Untyped</xsl:attribute>
+                </xsl:copy>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:copy>
+                    <xsl:apply-templates select="@* | node()"/>
+                </xsl:copy>    
+            </xsl:otherwise>
+        </xsl:choose>
     </xsl:template>
 
     <!-- Adds ContainsTarget attribute to navigation properties. These typically represent scenarios where we need to provide an improvement
@@ -637,6 +646,14 @@
     <xsl:template match="edm:Schema[@Namespace='microsoft.graph']/edm:Function[@Name='delta'][edm:Parameter[@Name='token']][edm:Parameter[@Type='Collection(graph.site)']]"/>
     <xsl:template match="edm:Schema[@Namespace='microsoft.graph']/edm:Function[@Name='additionalAccess'][edm:Parameter[@Name='accessPackageId']][edm:Parameter[@Type='Collection(graph.accessPackageAssignment)']][1]"/>
 
+    <!-- Remove action parameter -->
+    <!-- This should be a temp fix, tracking: https://github.com/microsoft/OpenAPI.NET.OData/issues/582 -->
+    <xsl:template match="edm:Schema[@Namespace='microsoft.graph']/edm:Action[@Name='restore']/edm:Parameter[@Name='autoReconcileProxyConflict']"/>
+
+    <!-- Remove action parameter -->
+    <!-- This should be a temp fix, tracking: https://github.com/microsoft/OpenAPI.NET.OData/issues/582 -->
+    <xsl:template match="edm:Schema[@Namespace='microsoft.graph']/edm:Action[@Name='verify']/edm:Parameter[@Name='forceTakeover']"/>
+
     <!-- Remove action parameters -->
     <!-- This should be a temp fix, tracking: https://github.com/microsoftgraph/MSGraph-SDK-Code-Generator/issues/261 -->
     <!-- <xsl:template match="edm:Schema[@Namespace='microsoft.graph']/edm:Action[@Name='createUploadSession']/edm:Parameter[@Name='deferCommit']"/> -->
@@ -653,7 +670,7 @@
                          edm:Schema[@Namespace='microsoft.graph']/edm:Function[@IsBound='true'][edm:Parameter[@Type='graph.directoryObject']] |
                          edm:Schema[@Namespace='microsoft.graph']/edm:Function[@IsBound='true'][edm:Parameter[@Type='Collection(graph.directoryObject)']]">
         <xsl:copy>
-            <xsl:copy-of select="@* | node()" />
+            <xsl:apply-templates select="@* | node()" />
             <Annotation Term="Org.OData.Core.V1.RequiresExplicitBinding"/>
         </xsl:copy>
     </xsl:template>
@@ -962,6 +979,18 @@
             </xsl:call-template>
         </xsl:copy>
     </xsl:template>
+    <!-- Add paths for user authentication requirements by adding annotations to read and update the complex property-->
+    <xsl:template match="edm:Schema[@Namespace='microsoft.graph']/edm:EntityType[@Name='authentication']/edm:Property[@Name='requirements']">
+        <xsl:copy>
+            <xsl:apply-templates select="@* | node()"/>
+            <xsl:call-template name="ReadRestrictionsTemplate">
+                <xsl:with-param name="readable">true</xsl:with-param>
+            </xsl:call-template>
+            <xsl:call-template name="UpdateRestrictionsTemplate">
+                <xsl:with-param name="updatable">true</xsl:with-param>
+            </xsl:call-template>
+        </xsl:copy>
+    </xsl:template>
     <!-- Add paths for user serviceProvisioningErrors by adding annotations to read complex property-->
     <xsl:template match="edm:Schema[@Namespace='microsoft.graph']/edm:EntityType[@Name='user']/edm:Property[@Name='serviceProvisioningErrors']|
                          edm:Schema[@Namespace='microsoft.graph']/edm:EntityType[@Name='group']/edm:Property[@Name='serviceProvisioningErrors']|
@@ -1192,6 +1221,17 @@
         <xsl:element name="PropertyValue">
             <xsl:attribute name="Property">Insertable</xsl:attribute>
             <xsl:attribute name="Bool"><xsl:value-of select="$insertable" /></xsl:attribute>
+        </xsl:element>
+    </xsl:template>
+    <xsl:template name="PatchPutRestrictionsTemplate">
+        <xsl:element name="Annotation">
+            <xsl:attribute name="Term">Org.OData.Capabilities.V1.UpdateRestrictions</xsl:attribute>
+            <xsl:element name="Record" namespace="{namespace-uri()}">
+                <xsl:element name="PropertyValue">
+                    <xsl:attribute name="Property">UpdateMethod</xsl:attribute>
+                    <xsl:element name="EnumMember">Org.OData.Capabilities.V1.HttpMethod/PATCH Org.OData.Capabilities.V1.HttpMethod/PUT</xsl:element>
+                </xsl:element>                
+            </xsl:element>
         </xsl:element>
     </xsl:template>
     <xsl:template name="UpdateRestrictionsTemplate">
@@ -1840,7 +1880,45 @@
                     </xsl:element>
                 </xsl:when>
             </xsl:choose>
+
+            <!-- Set PATCH and PUT for servicePrincipal/claimsPolicy -->
+            <xsl:choose>
+                <xsl:when test="not(edm:Annotations[@Target='microsoft.graph.servicePrincipal/claimsPolicy'])">
+                    <xsl:element name="Annotations">
+                        <xsl:attribute name="Target">microsoft.graph.servicePrincipal/claimsPolicy</xsl:attribute>
+                        <xsl:call-template name="PatchPutRestrictionsTemplate">                            
+                        </xsl:call-template>
+                    </xsl:element>
+                </xsl:when>
+            </xsl:choose>
         
+        </xsl:copy>
+    </xsl:template>
+
+    <!-- If the grand-parent "Annotations" tag already exists modify it -->
+    <!-- Set PATCH and PUT for servicePrincipal/claimsPolicy -->
+    <xsl:template match="edm:Schema[@Namespace='microsoft.graph']/edm:Annotations[@Target='microsoft.graph.servicePrincipal/claimsPolicy']">
+        <xsl:copy>
+            <xsl:apply-templates select="@*|node()"/>
+            <xsl:if test="not(edm:Annotation[@Term='Org.OData.Capabilities.V1.UpdateRestrictions'])">
+                <xsl:call-template name="PatchPutRestrictionsTemplate">
+                </xsl:call-template>
+            </xsl:if>
+        </xsl:copy>
+    </xsl:template>
+
+    <!-- If the parent "Annotation" tag already exists, modify it -->
+    <!-- Set PATCH and PUT for servicePrincipal/claimsPolicy -->
+    <xsl:template match="edm:Schema[@Namespace='microsoft.graph']/edm:Annotations[@Target='microsoft.graph.servicePrincipal/claimsPolicy']/edm:Annotation[@Term='Org.OData.Capabilities.V1.UpdateRestrictions']">
+        <xsl:copy>
+            <xsl:copy-of select="@*"/>
+            <xsl:element name="Record" namespace="{namespace-uri()}">
+                <xsl:copy-of select="edm:Record/edm:PropertyValue"/>
+                    <xsl:element name="PropertyValue">
+                        <xsl:attribute name="Property">UpdateMethod</xsl:attribute>
+                        <xsl:element name="EnumMember">Org.OData.Capabilities.V1.HttpMethod/PATCH Org.OData.Capabilities.V1.HttpMethod/PUT</xsl:element>
+                    </xsl:element>                
+            </xsl:element>
         </xsl:copy>
     </xsl:template>
 
@@ -2419,6 +2497,7 @@
                         edm:Schema[@Namespace='microsoft.graph']/edm:EntityType[@Name='servicePrincipal']/edm:NavigationProperty[@Name='claimsMappingPolicies']|
                         edm:Schema[@Namespace='microsoft.graph']/edm:EntityType[@Name='servicePrincipal']/edm:NavigationProperty[@Name='homeRealmDiscoveryPolicies']|
                         edm:Schema[@Namespace='microsoft.graph']/edm:EntityType[@Name='user']/edm:NavigationProperty[@Name='manager']|
+                        edm:Schema[@Namespace='microsoft.graph']/edm:EntityType[@Name='managedDevice']/edm:NavigationProperty[@Name='deviceCategory']|
                         edm:Schema[@Namespace='microsoft.graph']/edm:ComplexType[@Name='userFlowApiConnectorConfiguration']/edm:NavigationProperty[@Name='postAttributeCollection']|
                         edm:Schema[@Namespace='microsoft.graph']/edm:ComplexType[@Name='userFlowApiConnectorConfiguration']/edm:NavigationProperty[@Name='postFederationSignup']">
         <xsl:copy>
