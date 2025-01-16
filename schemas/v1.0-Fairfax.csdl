@@ -781,6 +781,12 @@
         <Member Name="disabled" Value="1" />
         <Member Name="enabledForReportingButNotEnforced" Value="2" />
       </EnumType>
+      <EnumType Name="conditionalAccessTransferMethods" IsFlags="true">
+        <Member Name="none" Value="0" />
+        <Member Name="deviceCodeFlow" Value="1" />
+        <Member Name="authenticationTransfer" Value="2" />
+        <Member Name="unknownFutureValue" Value="4" />
+      </EnumType>
       <EnumType Name="connectedOrganizationState">
         <Member Name="configured" Value="0" />
         <Member Name="proposed" Value="1" />
@@ -1199,6 +1205,11 @@
         <Member Name="lsHash" Value="5" />
         <Member Name="ctph" Value="6" />
         <Member Name="unknownFutureValue" Value="127" />
+      </EnumType>
+      <EnumType Name="fileStorageContainerStatus">
+        <Member Name="inactive" Value="0" />
+        <Member Name="active" Value="1" />
+        <Member Name="unknownFutureValue" Value="2" />
       </EnumType>
       <EnumType Name="filterMode">
         <Member Name="include" Value="0" />
@@ -3419,6 +3430,13 @@
         <Member Name="reactivating" Value="2" />
         <Member Name="unknownFutureValue" Value="3" />
       </EnumType>
+      <EnumType Name="siteLockState">
+        <Member Name="unlocked" Value="0" />
+        <Member Name="lockedReadOnly" Value="1" />
+        <Member Name="lockedNoAccess" Value="2" />
+        <Member Name="lockedNoAdditions" Value="3" />
+        <Member Name="unknownFutureValue" Value="4" />
+      </EnumType>
       <EnumType Name="siteSecurityLevel">
         <Member Name="userDefined" Value="0" />
         <Member Name="low" Value="1" />
@@ -3916,6 +3934,11 @@
         <Member Name="detection" Value="0" />
         <Member Name="requirement" Value="1" />
       </EnumType>
+      <EnumType Name="win32LobAutoUpdateSupersededAppsState">
+        <Member Name="notConfigured" Value="0" />
+        <Member Name="enabled" Value="1" />
+        <Member Name="unknownFutureValue" Value="2" />
+      </EnumType>
       <EnumType Name="windows10EditionType">
         <Member Name="windows10Enterprise" Value="0" />
         <Member Name="windows10EnterpriseN" Value="1" />
@@ -4176,6 +4199,11 @@
       <EnumType Name="x509CertificateAuthenticationMode">
         <Member Name="x509CertificateSingleFactor" Value="0" />
         <Member Name="x509CertificateMultiFactor" Value="1" />
+        <Member Name="unknownFutureValue" Value="2" />
+      </EnumType>
+      <EnumType Name="x509CertificateCRLValidationConfigurationState">
+        <Member Name="disabled" Value="0" />
+        <Member Name="enabled" Value="1" />
         <Member Name="unknownFutureValue" Value="2" />
       </EnumType>
       <EnumType Name="x509CertificateRuleType">
@@ -4996,6 +5024,9 @@
         <Property Name="includeAuthenticationContextClassReferences" Type="Collection(Edm.String)" Nullable="false" />
         <Property Name="includeUserActions" Type="Collection(Edm.String)" Nullable="false" />
       </ComplexType>
+      <ComplexType Name="conditionalAccessAuthenticationFlows">
+        <Property Name="transferMethods" Type="graph.conditionalAccessTransferMethods" Nullable="false" />
+      </ComplexType>
       <ComplexType Name="conditionalAccessClientApplications">
         <Property Name="excludeServicePrincipals" Type="Collection(Edm.String)" Nullable="false" />
         <Property Name="includeServicePrincipals" Type="Collection(Edm.String)" Nullable="false" />
@@ -5003,6 +5034,7 @@
       </ComplexType>
       <ComplexType Name="conditionalAccessConditionSet">
         <Property Name="applications" Type="graph.conditionalAccessApplications" />
+        <Property Name="authenticationFlows" Type="graph.conditionalAccessAuthenticationFlows" />
         <Property Name="clientApplications" Type="graph.conditionalAccessClientApplications" />
         <Property Name="clientAppTypes" Type="Collection(graph.conditionalAccessClientApp)" Nullable="false" />
         <Property Name="devices" Type="graph.conditionalAccessDevices" />
@@ -5496,6 +5528,17 @@
         <Property Name="name" Type="Edm.String" />
         <Property Name="path" Type="Edm.String" />
         <Property Name="riskScore" Type="Edm.String" />
+      </ComplexType>
+      <ComplexType Name="fileStorageContainerCustomPropertyDictionary" BaseType="graph.Dictionary" OpenType="true" />
+      <ComplexType Name="fileStorageContainerCustomPropertyValue">
+        <Property Name="isSearchable" Type="Edm.Boolean" />
+        <Property Name="value" Type="Edm.String" Nullable="false" />
+      </ComplexType>
+      <ComplexType Name="fileStorageContainerSettings">
+        <Property Name="isOcrEnabled" Type="Edm.Boolean" />
+      </ComplexType>
+      <ComplexType Name="fileStorageContainerViewpoint">
+        <Property Name="effectiveRole" Type="Edm.String" Nullable="false" />
       </ComplexType>
       <ComplexType Name="fileSystemInfo">
         <Property Name="createdDateTime" Type="Edm.DateTimeOffset" />
@@ -6775,6 +6818,9 @@
         <Property Name="startDate" Type="Edm.Date" />
         <Property Name="type" Type="graph.recurrenceRangeType" />
       </ComplexType>
+      <ComplexType Name="recycleBinSettings">
+        <Property Name="retentionPeriodOverrideDays" Type="Edm.Int32" />
+      </ComplexType>
       <ComplexType Name="redirectUriSettings">
         <Property Name="index" Type="Edm.Int32" />
         <Property Name="uri" Type="Edm.String" />
@@ -7734,10 +7780,14 @@
         <Property Name="type" Type="graph.websiteType" />
       </ComplexType>
       <ComplexType Name="win32LobAppAssignmentSettings" BaseType="graph.mobileAppAssignmentSettings">
+        <Property Name="autoUpdateSettings" Type="graph.win32LobAppAutoUpdateSettings" />
         <Property Name="deliveryOptimizationPriority" Type="graph.win32LobAppDeliveryOptimizationPriority" Nullable="false" />
         <Property Name="installTimeSettings" Type="graph.mobileAppInstallTimeSettings" />
         <Property Name="notifications" Type="graph.win32LobAppNotification" Nullable="false" />
         <Property Name="restartSettings" Type="graph.win32LobAppRestartSettings" />
+      </ComplexType>
+      <ComplexType Name="win32LobAppAutoUpdateSettings">
+        <Property Name="autoUpdateSupersededAppsState" Type="graph.win32LobAutoUpdateSupersededAppsState" Nullable="false" />
       </ComplexType>
       <ComplexType Name="win32LobAppFileSystemRule" BaseType="graph.win32LobAppRule">
         <Property Name="check32BitOn64System" Type="Edm.Boolean" Nullable="false" />
@@ -7981,6 +8031,10 @@
         <Property Name="rules" Type="Collection(graph.x509CertificateRule)" />
         <Property Name="x509CertificateAuthenticationDefaultMode" Type="graph.x509CertificateAuthenticationMode" />
         <Property Name="x509CertificateDefaultRequiredAffinityLevel" Type="graph.x509CertificateAffinityLevel" />
+      </ComplexType>
+      <ComplexType Name="x509CertificateCRLValidationConfiguration">
+        <Property Name="exemptedCertificateAuthoritiesSubjectKeyIdentifiers" Type="Collection(Edm.String)" />
+        <Property Name="state" Type="graph.x509CertificateCRLValidationConfigurationState" Nullable="false" />
       </ComplexType>
       <ComplexType Name="x509CertificateRule">
         <Property Name="identifier" Type="Edm.String" />
@@ -8966,15 +9020,21 @@
         <NavigationProperty Name="participants" Type="Collection(graph.participant)" ContainsTarget="true" />
       </EntityType>
       <EntityType Name="callRecording" BaseType="graph.entity">
+        <Property Name="callId" Type="Edm.String" />
         <Property Name="content" Type="Edm.Stream" />
+        <Property Name="contentCorrelationId" Type="Edm.String" />
         <Property Name="createdDateTime" Type="Edm.DateTimeOffset" />
+        <Property Name="endDateTime" Type="Edm.DateTimeOffset" />
         <Property Name="meetingId" Type="Edm.String" />
         <Property Name="meetingOrganizer" Type="graph.identitySet" />
         <Property Name="recordingContentUrl" Type="Edm.String" />
       </EntityType>
       <EntityType Name="callTranscript" BaseType="graph.entity">
+        <Property Name="callId" Type="Edm.String" />
         <Property Name="content" Type="Edm.Stream" />
+        <Property Name="contentCorrelationId" Type="Edm.String" />
         <Property Name="createdDateTime" Type="Edm.DateTimeOffset" />
+        <Property Name="endDateTime" Type="Edm.DateTimeOffset" />
         <Property Name="meetingId" Type="Edm.String" />
         <Property Name="meetingOrganizer" Type="graph.identitySet" />
         <Property Name="metadataContent" Type="Edm.Stream" />
@@ -9897,6 +9957,7 @@
         <Property Name="supportedServices" Type="Collection(Edm.String)" Nullable="false" />
         <NavigationProperty Name="domainNameReferences" Type="Collection(graph.directoryObject)" />
         <NavigationProperty Name="federationConfiguration" Type="Collection(graph.internalDomainFederation)" ContainsTarget="true" />
+        <NavigationProperty Name="rootDomain" Type="graph.domain" />
         <NavigationProperty Name="serviceConfigurationRecords" Type="Collection(graph.domainDnsRecord)" ContainsTarget="true" />
         <NavigationProperty Name="verificationDnsRecords" Type="Collection(graph.domainDnsRecord)" ContainsTarget="true" />
       </EntityType>
@@ -10180,6 +10241,24 @@
         <Property Name="contentBytes" Type="Edm.Binary" />
         <Property Name="contentId" Type="Edm.String" />
         <Property Name="contentLocation" Type="Edm.String" />
+      </EntityType>
+      <EntityType Name="fileStorage" BaseType="graph.entity">
+        <NavigationProperty Name="containers" Type="Collection(graph.fileStorageContainer)" ContainsTarget="true" />
+        <NavigationProperty Name="deletedContainers" Type="Collection(graph.fileStorageContainer)" ContainsTarget="true" />
+      </EntityType>
+      <EntityType Name="fileStorageContainer" BaseType="graph.entity">
+        <Property Name="containerTypeId" Type="Edm.Guid" Nullable="false" />
+        <Property Name="createdDateTime" Type="Edm.DateTimeOffset" Nullable="false" />
+        <Property Name="customProperties" Type="graph.fileStorageContainerCustomPropertyDictionary" />
+        <Property Name="description" Type="Edm.String" />
+        <Property Name="displayName" Type="Edm.String" Nullable="false" />
+        <Property Name="lockState" Type="graph.siteLockState" />
+        <Property Name="settings" Type="graph.fileStorageContainerSettings" Nullable="false" />
+        <Property Name="status" Type="graph.fileStorageContainerStatus" />
+        <Property Name="viewpoint" Type="graph.fileStorageContainerViewpoint" />
+        <NavigationProperty Name="drive" Type="graph.drive" ContainsTarget="true" />
+        <NavigationProperty Name="permissions" Type="Collection(graph.permission)" ContainsTarget="true" />
+        <NavigationProperty Name="recycleBin" Type="graph.recycleBin" ContainsTarget="true" />
       </EntityType>
       <EntityType Name="filterOperatorSchema" BaseType="graph.entity">
         <Property Name="arity" Type="graph.scopeOperatorType" Nullable="false" />
@@ -11776,6 +11855,15 @@
         <Property Name="recordingAccessToken" Type="Edm.String" />
         <Property Name="recordingLocation" Type="Edm.String" />
       </EntityType>
+      <EntityType Name="recycleBin" BaseType="graph.baseItem" OpenType="true">
+        <Property Name="settings" Type="graph.recycleBinSettings" />
+        <NavigationProperty Name="items" Type="Collection(graph.recycleBinItem)" ContainsTarget="true" />
+      </EntityType>
+      <EntityType Name="recycleBinItem" BaseType="graph.baseItem" OpenType="true">
+        <Property Name="deletedDateTime" Type="Edm.DateTimeOffset" />
+        <Property Name="deletedFromLocation" Type="Edm.String" />
+        <Property Name="size" Type="Edm.Int64" />
+      </EntityType>
       <EntityType Name="referenceAttachment" BaseType="graph.attachment" />
       <EntityType Name="relyingPartyDetailedSummary" BaseType="graph.entity">
         <Property Name="failedSignInCount" Type="Edm.Int64" Nullable="false" />
@@ -12279,6 +12367,9 @@
       </EntityType>
       <EntityType Name="startHoldMusicOperation" BaseType="graph.commsOperation" OpenType="true" />
       <EntityType Name="stopHoldMusicOperation" BaseType="graph.commsOperation" OpenType="true" />
+      <EntityType Name="storage">
+        <NavigationProperty Name="fileStorage" Type="graph.fileStorage" ContainsTarget="true" />
+      </EntityType>
       <EntityType Name="stsPolicy" BaseType="graph.policyBase" Abstract="true">
         <Property Name="definition" Type="Collection(Edm.String)" Nullable="false" />
         <Property Name="isOrganizationDefault" Type="Edm.Boolean" />
@@ -12844,6 +12935,20 @@
         <NavigationProperty Name="teamwork" Type="graph.userTeamwork" ContainsTarget="true" />
         <NavigationProperty Name="todo" Type="graph.todo" ContainsTarget="true" />
         <NavigationProperty Name="transitiveMemberOf" Type="Collection(graph.directoryObject)" />
+        <Annotation Term="Org.OData.Core.V1.AlternateKeys">
+          <Collection>
+            <Record Type="Org.OData.Core.V1.AlternateKey">
+              <PropertyValue Property="Key">
+                <Collection>
+                  <Record Type="Org.OData.Core.V1.PropertyRef">
+                    <PropertyValue Property="Alias" String="userPrincipalName" />
+                    <PropertyValue Property="Name" PropertyPath="userPrincipalName" />
+                  </Record>
+                </Collection>
+              </PropertyValue>
+            </Record>
+          </Collection>
+        </Annotation>
       </EntityType>
       <EntityType Name="userConsentRequest" BaseType="graph.request">
         <Property Name="reason" Type="Edm.String" />
@@ -14091,6 +14196,7 @@
       <EntityType Name="x509CertificateAuthenticationMethodConfiguration" BaseType="graph.authenticationMethodConfiguration">
         <Property Name="authenticationModeConfiguration" Type="graph.x509CertificateAuthenticationModeConfiguration" />
         <Property Name="certificateUserBindings" Type="Collection(graph.x509CertificateUserBinding)" />
+        <Property Name="crlValidationConfiguration" Type="graph.x509CertificateCRLValidationConfiguration" Nullable="false" />
         <NavigationProperty Name="includeTargets" Type="Collection(graph.authenticationMethodTarget)" ContainsTarget="true" />
       </EntityType>
       <EntityType Name="x509CertificateCombinationConfiguration" BaseType="graph.authenticationCombinationConfiguration">
@@ -14158,6 +14264,9 @@
       <Action Name="acquireAccessToken" IsBound="true">
         <Parameter Name="bindingParameter" Type="graph.synchronization" />
         <Parameter Name="credentials" Type="Collection(graph.synchronizationSecretKeyStringValuePair)" />
+      </Action>
+      <Action Name="activate" IsBound="true">
+        <Parameter Name="this" Type="graph.fileStorageContainer" />
       </Action>
       <Action Name="add" IsBound="true">
         <Parameter Name="bindingParameter" Type="Collection(graph.conversationMember)" />
@@ -15271,6 +15380,9 @@
         <Parameter Name="basis" Type="graph.Json" />
         <ReturnType Type="graph.workbookFunctionResult" />
       </Action>
+      <Action Name="discardCheckout" IsBound="true">
+        <Parameter Name="bindingParameter" Type="graph.driveItem" />
+      </Action>
       <Action Name="disconnect" IsBound="true">
         <Parameter Name="bindingParameter" Type="graph.remoteAssistancePartner" />
       </Action>
@@ -15664,154 +15776,340 @@
       <Action Name="getCachedReport" IsBound="true">
         <Parameter Name="bindingParameter" Type="graph.deviceManagementReports" />
         <Parameter Name="id" Type="Edm.String" Unicode="false" />
-        <Parameter Name="select" Type="Collection(Edm.String)" Unicode="false" />
-        <Parameter Name="search" Type="Edm.String" Unicode="false" />
-        <Parameter Name="groupBy" Type="Collection(Edm.String)" Unicode="false" />
-        <Parameter Name="orderBy" Type="Collection(Edm.String)" Unicode="false" />
-        <Parameter Name="skip" Type="Edm.Int32" />
-        <Parameter Name="top" Type="Edm.Int32" />
+        <Parameter Name="select" Type="Collection(Edm.String)" Unicode="false">
+          <Annotation Term="Org.OData.Core.V1.OptionalParameter" />
+        </Parameter>
+        <Parameter Name="groupBy" Type="Collection(Edm.String)" Unicode="false">
+          <Annotation Term="Org.OData.Core.V1.OptionalParameter" />
+        </Parameter>
+        <Parameter Name="orderBy" Type="Collection(Edm.String)" Unicode="false">
+          <Annotation Term="Org.OData.Core.V1.OptionalParameter" />
+        </Parameter>
+        <Parameter Name="search" Type="Edm.String" Unicode="false">
+          <Annotation Term="Org.OData.Core.V1.OptionalParameter" />
+        </Parameter>
+        <Parameter Name="skip" Type="Edm.Int32">
+          <Annotation Term="Org.OData.Core.V1.OptionalParameter" />
+        </Parameter>
+        <Parameter Name="top" Type="Edm.Int32">
+          <Annotation Term="Org.OData.Core.V1.OptionalParameter" />
+        </Parameter>
         <ReturnType Type="Edm.Stream" />
       </Action>
       <Action Name="getCompliancePolicyNonComplianceReport" IsBound="true">
         <Parameter Name="bindingParameter" Type="graph.deviceManagementReports" />
         <Parameter Name="name" Type="Edm.String" Unicode="false" />
-        <Parameter Name="select" Type="Collection(Edm.String)" Unicode="false" />
-        <Parameter Name="search" Type="Edm.String" Unicode="false" />
-        <Parameter Name="groupBy" Type="Collection(Edm.String)" Unicode="false" />
-        <Parameter Name="orderBy" Type="Collection(Edm.String)" Unicode="false" />
-        <Parameter Name="skip" Type="Edm.Int32" />
-        <Parameter Name="top" Type="Edm.Int32" />
-        <Parameter Name="sessionId" Type="Edm.String" Unicode="false" />
-        <Parameter Name="filter" Type="Edm.String" Unicode="false" />
+        <Parameter Name="select" Type="Collection(Edm.String)" Unicode="false">
+          <Annotation Term="Org.OData.Core.V1.OptionalParameter" />
+        </Parameter>
+        <Parameter Name="groupBy" Type="Collection(Edm.String)" Unicode="false">
+          <Annotation Term="Org.OData.Core.V1.OptionalParameter" />
+        </Parameter>
+        <Parameter Name="orderBy" Type="Collection(Edm.String)" Unicode="false">
+          <Annotation Term="Org.OData.Core.V1.OptionalParameter" />
+        </Parameter>
+        <Parameter Name="search" Type="Edm.String" Unicode="false">
+          <Annotation Term="Org.OData.Core.V1.OptionalParameter" />
+        </Parameter>
+        <Parameter Name="skip" Type="Edm.Int32">
+          <Annotation Term="Org.OData.Core.V1.OptionalParameter" />
+        </Parameter>
+        <Parameter Name="top" Type="Edm.Int32">
+          <Annotation Term="Org.OData.Core.V1.OptionalParameter" />
+        </Parameter>
+        <Parameter Name="sessionId" Type="Edm.String" Unicode="false">
+          <Annotation Term="Org.OData.Core.V1.OptionalParameter" />
+        </Parameter>
+        <Parameter Name="filter" Type="Edm.String" Unicode="false">
+          <Annotation Term="Org.OData.Core.V1.OptionalParameter" />
+        </Parameter>
         <ReturnType Type="Edm.Stream" />
       </Action>
       <Action Name="getCompliancePolicyNonComplianceSummaryReport" IsBound="true">
         <Parameter Name="bindingParameter" Type="graph.deviceManagementReports" />
         <Parameter Name="name" Type="Edm.String" Unicode="false" />
-        <Parameter Name="select" Type="Collection(Edm.String)" Unicode="false" />
-        <Parameter Name="search" Type="Edm.String" Unicode="false" />
-        <Parameter Name="groupBy" Type="Collection(Edm.String)" Unicode="false" />
-        <Parameter Name="orderBy" Type="Collection(Edm.String)" Unicode="false" />
-        <Parameter Name="skip" Type="Edm.Int32" />
-        <Parameter Name="top" Type="Edm.Int32" />
-        <Parameter Name="sessionId" Type="Edm.String" Unicode="false" />
-        <Parameter Name="filter" Type="Edm.String" Unicode="false" />
+        <Parameter Name="select" Type="Collection(Edm.String)" Unicode="false">
+          <Annotation Term="Org.OData.Core.V1.OptionalParameter" />
+        </Parameter>
+        <Parameter Name="groupBy" Type="Collection(Edm.String)" Unicode="false">
+          <Annotation Term="Org.OData.Core.V1.OptionalParameter" />
+        </Parameter>
+        <Parameter Name="orderBy" Type="Collection(Edm.String)" Unicode="false">
+          <Annotation Term="Org.OData.Core.V1.OptionalParameter" />
+        </Parameter>
+        <Parameter Name="search" Type="Edm.String" Unicode="false">
+          <Annotation Term="Org.OData.Core.V1.OptionalParameter" />
+        </Parameter>
+        <Parameter Name="skip" Type="Edm.Int32">
+          <Annotation Term="Org.OData.Core.V1.OptionalParameter" />
+        </Parameter>
+        <Parameter Name="top" Type="Edm.Int32">
+          <Annotation Term="Org.OData.Core.V1.OptionalParameter" />
+        </Parameter>
+        <Parameter Name="sessionId" Type="Edm.String" Unicode="false">
+          <Annotation Term="Org.OData.Core.V1.OptionalParameter" />
+        </Parameter>
+        <Parameter Name="filter" Type="Edm.String" Unicode="false">
+          <Annotation Term="Org.OData.Core.V1.OptionalParameter" />
+        </Parameter>
         <ReturnType Type="Edm.Stream" />
       </Action>
       <Action Name="getComplianceSettingNonComplianceReport" IsBound="true">
         <Parameter Name="bindingParameter" Type="graph.deviceManagementReports" />
         <Parameter Name="name" Type="Edm.String" Unicode="false" />
-        <Parameter Name="select" Type="Collection(Edm.String)" Unicode="false" />
-        <Parameter Name="search" Type="Edm.String" Unicode="false" />
-        <Parameter Name="groupBy" Type="Collection(Edm.String)" Unicode="false" />
-        <Parameter Name="orderBy" Type="Collection(Edm.String)" Unicode="false" />
-        <Parameter Name="skip" Type="Edm.Int32" />
-        <Parameter Name="top" Type="Edm.Int32" />
-        <Parameter Name="sessionId" Type="Edm.String" Unicode="false" />
-        <Parameter Name="filter" Type="Edm.String" Unicode="false" />
+        <Parameter Name="select" Type="Collection(Edm.String)" Unicode="false">
+          <Annotation Term="Org.OData.Core.V1.OptionalParameter" />
+        </Parameter>
+        <Parameter Name="groupBy" Type="Collection(Edm.String)" Unicode="false">
+          <Annotation Term="Org.OData.Core.V1.OptionalParameter" />
+        </Parameter>
+        <Parameter Name="orderBy" Type="Collection(Edm.String)" Unicode="false">
+          <Annotation Term="Org.OData.Core.V1.OptionalParameter" />
+        </Parameter>
+        <Parameter Name="search" Type="Edm.String" Unicode="false">
+          <Annotation Term="Org.OData.Core.V1.OptionalParameter" />
+        </Parameter>
+        <Parameter Name="skip" Type="Edm.Int32">
+          <Annotation Term="Org.OData.Core.V1.OptionalParameter" />
+        </Parameter>
+        <Parameter Name="top" Type="Edm.Int32">
+          <Annotation Term="Org.OData.Core.V1.OptionalParameter" />
+        </Parameter>
+        <Parameter Name="sessionId" Type="Edm.String" Unicode="false">
+          <Annotation Term="Org.OData.Core.V1.OptionalParameter" />
+        </Parameter>
+        <Parameter Name="filter" Type="Edm.String" Unicode="false">
+          <Annotation Term="Org.OData.Core.V1.OptionalParameter" />
+        </Parameter>
         <ReturnType Type="Edm.Stream" />
       </Action>
       <Action Name="getConfigurationPolicyNonComplianceReport" IsBound="true">
         <Parameter Name="bindingParameter" Type="graph.deviceManagementReports" />
         <Parameter Name="name" Type="Edm.String" Unicode="false" />
-        <Parameter Name="select" Type="Collection(Edm.String)" Unicode="false" />
-        <Parameter Name="search" Type="Edm.String" Unicode="false" />
-        <Parameter Name="groupBy" Type="Collection(Edm.String)" Unicode="false" />
-        <Parameter Name="orderBy" Type="Collection(Edm.String)" Unicode="false" />
-        <Parameter Name="skip" Type="Edm.Int32" />
-        <Parameter Name="top" Type="Edm.Int32" />
-        <Parameter Name="sessionId" Type="Edm.String" Unicode="false" />
-        <Parameter Name="filter" Type="Edm.String" Unicode="false" />
+        <Parameter Name="select" Type="Collection(Edm.String)" Unicode="false">
+          <Annotation Term="Org.OData.Core.V1.OptionalParameter" />
+        </Parameter>
+        <Parameter Name="groupBy" Type="Collection(Edm.String)" Unicode="false">
+          <Annotation Term="Org.OData.Core.V1.OptionalParameter" />
+        </Parameter>
+        <Parameter Name="orderBy" Type="Collection(Edm.String)" Unicode="false">
+          <Annotation Term="Org.OData.Core.V1.OptionalParameter" />
+        </Parameter>
+        <Parameter Name="search" Type="Edm.String" Unicode="false">
+          <Annotation Term="Org.OData.Core.V1.OptionalParameter" />
+        </Parameter>
+        <Parameter Name="skip" Type="Edm.Int32">
+          <Annotation Term="Org.OData.Core.V1.OptionalParameter" />
+        </Parameter>
+        <Parameter Name="top" Type="Edm.Int32">
+          <Annotation Term="Org.OData.Core.V1.OptionalParameter" />
+        </Parameter>
+        <Parameter Name="sessionId" Type="Edm.String" Unicode="false">
+          <Annotation Term="Org.OData.Core.V1.OptionalParameter" />
+        </Parameter>
+        <Parameter Name="filter" Type="Edm.String" Unicode="false">
+          <Annotation Term="Org.OData.Core.V1.OptionalParameter" />
+        </Parameter>
         <ReturnType Type="Edm.Stream" />
       </Action>
       <Action Name="getConfigurationPolicyNonComplianceSummaryReport" IsBound="true">
         <Parameter Name="bindingParameter" Type="graph.deviceManagementReports" />
         <Parameter Name="name" Type="Edm.String" Unicode="false" />
-        <Parameter Name="select" Type="Collection(Edm.String)" Unicode="false" />
-        <Parameter Name="search" Type="Edm.String" Unicode="false" />
-        <Parameter Name="groupBy" Type="Collection(Edm.String)" Unicode="false" />
-        <Parameter Name="orderBy" Type="Collection(Edm.String)" Unicode="false" />
-        <Parameter Name="skip" Type="Edm.Int32" />
-        <Parameter Name="top" Type="Edm.Int32" />
-        <Parameter Name="sessionId" Type="Edm.String" Unicode="false" />
-        <Parameter Name="filter" Type="Edm.String" Unicode="false" />
+        <Parameter Name="select" Type="Collection(Edm.String)" Unicode="false">
+          <Annotation Term="Org.OData.Core.V1.OptionalParameter" />
+        </Parameter>
+        <Parameter Name="groupBy" Type="Collection(Edm.String)" Unicode="false">
+          <Annotation Term="Org.OData.Core.V1.OptionalParameter" />
+        </Parameter>
+        <Parameter Name="orderBy" Type="Collection(Edm.String)" Unicode="false">
+          <Annotation Term="Org.OData.Core.V1.OptionalParameter" />
+        </Parameter>
+        <Parameter Name="search" Type="Edm.String" Unicode="false">
+          <Annotation Term="Org.OData.Core.V1.OptionalParameter" />
+        </Parameter>
+        <Parameter Name="skip" Type="Edm.Int32">
+          <Annotation Term="Org.OData.Core.V1.OptionalParameter" />
+        </Parameter>
+        <Parameter Name="top" Type="Edm.Int32">
+          <Annotation Term="Org.OData.Core.V1.OptionalParameter" />
+        </Parameter>
+        <Parameter Name="sessionId" Type="Edm.String" Unicode="false">
+          <Annotation Term="Org.OData.Core.V1.OptionalParameter" />
+        </Parameter>
+        <Parameter Name="filter" Type="Edm.String" Unicode="false">
+          <Annotation Term="Org.OData.Core.V1.OptionalParameter" />
+        </Parameter>
         <ReturnType Type="Edm.Stream" />
       </Action>
       <Action Name="getConfigurationSettingNonComplianceReport" IsBound="true">
         <Parameter Name="bindingParameter" Type="graph.deviceManagementReports" />
         <Parameter Name="name" Type="Edm.String" Unicode="false" />
-        <Parameter Name="select" Type="Collection(Edm.String)" Unicode="false" />
-        <Parameter Name="search" Type="Edm.String" Unicode="false" />
-        <Parameter Name="groupBy" Type="Collection(Edm.String)" Unicode="false" />
-        <Parameter Name="orderBy" Type="Collection(Edm.String)" Unicode="false" />
-        <Parameter Name="skip" Type="Edm.Int32" />
-        <Parameter Name="top" Type="Edm.Int32" />
-        <Parameter Name="sessionId" Type="Edm.String" Unicode="false" />
-        <Parameter Name="filter" Type="Edm.String" Unicode="false" />
+        <Parameter Name="select" Type="Collection(Edm.String)" Unicode="false">
+          <Annotation Term="Org.OData.Core.V1.OptionalParameter" />
+        </Parameter>
+        <Parameter Name="groupBy" Type="Collection(Edm.String)" Unicode="false">
+          <Annotation Term="Org.OData.Core.V1.OptionalParameter" />
+        </Parameter>
+        <Parameter Name="orderBy" Type="Collection(Edm.String)" Unicode="false">
+          <Annotation Term="Org.OData.Core.V1.OptionalParameter" />
+        </Parameter>
+        <Parameter Name="search" Type="Edm.String" Unicode="false">
+          <Annotation Term="Org.OData.Core.V1.OptionalParameter" />
+        </Parameter>
+        <Parameter Name="skip" Type="Edm.Int32">
+          <Annotation Term="Org.OData.Core.V1.OptionalParameter" />
+        </Parameter>
+        <Parameter Name="top" Type="Edm.Int32">
+          <Annotation Term="Org.OData.Core.V1.OptionalParameter" />
+        </Parameter>
+        <Parameter Name="sessionId" Type="Edm.String" Unicode="false">
+          <Annotation Term="Org.OData.Core.V1.OptionalParameter" />
+        </Parameter>
+        <Parameter Name="filter" Type="Edm.String" Unicode="false">
+          <Annotation Term="Org.OData.Core.V1.OptionalParameter" />
+        </Parameter>
         <ReturnType Type="Edm.Stream" />
       </Action>
       <Action Name="getDeviceManagementIntentPerSettingContributingProfiles" IsBound="true">
         <Parameter Name="bindingParameter" Type="graph.deviceManagementReports" />
         <Parameter Name="name" Type="Edm.String" Unicode="false" />
-        <Parameter Name="select" Type="Collection(Edm.String)" Unicode="false" />
-        <Parameter Name="search" Type="Edm.String" Unicode="false" />
-        <Parameter Name="groupBy" Type="Collection(Edm.String)" Unicode="false" />
-        <Parameter Name="orderBy" Type="Collection(Edm.String)" Unicode="false" />
-        <Parameter Name="skip" Type="Edm.Int32" />
-        <Parameter Name="top" Type="Edm.Int32" />
-        <Parameter Name="sessionId" Type="Edm.String" Unicode="false" />
-        <Parameter Name="filter" Type="Edm.String" Unicode="false" />
+        <Parameter Name="select" Type="Collection(Edm.String)" Unicode="false">
+          <Annotation Term="Org.OData.Core.V1.OptionalParameter" />
+        </Parameter>
+        <Parameter Name="groupBy" Type="Collection(Edm.String)" Unicode="false">
+          <Annotation Term="Org.OData.Core.V1.OptionalParameter" />
+        </Parameter>
+        <Parameter Name="orderBy" Type="Collection(Edm.String)" Unicode="false">
+          <Annotation Term="Org.OData.Core.V1.OptionalParameter" />
+        </Parameter>
+        <Parameter Name="search" Type="Edm.String" Unicode="false">
+          <Annotation Term="Org.OData.Core.V1.OptionalParameter" />
+        </Parameter>
+        <Parameter Name="skip" Type="Edm.Int32">
+          <Annotation Term="Org.OData.Core.V1.OptionalParameter" />
+        </Parameter>
+        <Parameter Name="top" Type="Edm.Int32">
+          <Annotation Term="Org.OData.Core.V1.OptionalParameter" />
+        </Parameter>
+        <Parameter Name="sessionId" Type="Edm.String" Unicode="false">
+          <Annotation Term="Org.OData.Core.V1.OptionalParameter" />
+        </Parameter>
+        <Parameter Name="filter" Type="Edm.String" Unicode="false">
+          <Annotation Term="Org.OData.Core.V1.OptionalParameter" />
+        </Parameter>
         <ReturnType Type="Edm.Stream" />
       </Action>
       <Action Name="getDeviceManagementIntentSettingsReport" IsBound="true">
         <Parameter Name="bindingParameter" Type="graph.deviceManagementReports" />
         <Parameter Name="name" Type="Edm.String" Unicode="false" />
-        <Parameter Name="select" Type="Collection(Edm.String)" Unicode="false" />
-        <Parameter Name="search" Type="Edm.String" Unicode="false" />
-        <Parameter Name="groupBy" Type="Collection(Edm.String)" Unicode="false" />
-        <Parameter Name="orderBy" Type="Collection(Edm.String)" Unicode="false" />
-        <Parameter Name="skip" Type="Edm.Int32" />
-        <Parameter Name="top" Type="Edm.Int32" />
-        <Parameter Name="sessionId" Type="Edm.String" Unicode="false" />
-        <Parameter Name="filter" Type="Edm.String" Unicode="false" />
+        <Parameter Name="select" Type="Collection(Edm.String)" Unicode="false">
+          <Annotation Term="Org.OData.Core.V1.OptionalParameter" />
+        </Parameter>
+        <Parameter Name="groupBy" Type="Collection(Edm.String)" Unicode="false">
+          <Annotation Term="Org.OData.Core.V1.OptionalParameter" />
+        </Parameter>
+        <Parameter Name="orderBy" Type="Collection(Edm.String)" Unicode="false">
+          <Annotation Term="Org.OData.Core.V1.OptionalParameter" />
+        </Parameter>
+        <Parameter Name="search" Type="Edm.String" Unicode="false">
+          <Annotation Term="Org.OData.Core.V1.OptionalParameter" />
+        </Parameter>
+        <Parameter Name="skip" Type="Edm.Int32">
+          <Annotation Term="Org.OData.Core.V1.OptionalParameter" />
+        </Parameter>
+        <Parameter Name="top" Type="Edm.Int32">
+          <Annotation Term="Org.OData.Core.V1.OptionalParameter" />
+        </Parameter>
+        <Parameter Name="sessionId" Type="Edm.String" Unicode="false">
+          <Annotation Term="Org.OData.Core.V1.OptionalParameter" />
+        </Parameter>
+        <Parameter Name="filter" Type="Edm.String" Unicode="false">
+          <Annotation Term="Org.OData.Core.V1.OptionalParameter" />
+        </Parameter>
         <ReturnType Type="Edm.Stream" />
       </Action>
       <Action Name="getDeviceNonComplianceReport" IsBound="true">
         <Parameter Name="bindingParameter" Type="graph.deviceManagementReports" />
         <Parameter Name="name" Type="Edm.String" Unicode="false" />
-        <Parameter Name="select" Type="Collection(Edm.String)" Unicode="false" />
-        <Parameter Name="search" Type="Edm.String" Unicode="false" />
-        <Parameter Name="groupBy" Type="Collection(Edm.String)" Unicode="false" />
-        <Parameter Name="orderBy" Type="Collection(Edm.String)" Unicode="false" />
-        <Parameter Name="skip" Type="Edm.Int32" />
-        <Parameter Name="top" Type="Edm.Int32" />
-        <Parameter Name="sessionId" Type="Edm.String" Unicode="false" />
-        <Parameter Name="filter" Type="Edm.String" Unicode="false" />
+        <Parameter Name="select" Type="Collection(Edm.String)" Unicode="false">
+          <Annotation Term="Org.OData.Core.V1.OptionalParameter" />
+        </Parameter>
+        <Parameter Name="groupBy" Type="Collection(Edm.String)" Unicode="false">
+          <Annotation Term="Org.OData.Core.V1.OptionalParameter" />
+        </Parameter>
+        <Parameter Name="orderBy" Type="Collection(Edm.String)" Unicode="false">
+          <Annotation Term="Org.OData.Core.V1.OptionalParameter" />
+        </Parameter>
+        <Parameter Name="search" Type="Edm.String" Unicode="false">
+          <Annotation Term="Org.OData.Core.V1.OptionalParameter" />
+        </Parameter>
+        <Parameter Name="skip" Type="Edm.Int32">
+          <Annotation Term="Org.OData.Core.V1.OptionalParameter" />
+        </Parameter>
+        <Parameter Name="top" Type="Edm.Int32">
+          <Annotation Term="Org.OData.Core.V1.OptionalParameter" />
+        </Parameter>
+        <Parameter Name="sessionId" Type="Edm.String" Unicode="false">
+          <Annotation Term="Org.OData.Core.V1.OptionalParameter" />
+        </Parameter>
+        <Parameter Name="filter" Type="Edm.String" Unicode="false">
+          <Annotation Term="Org.OData.Core.V1.OptionalParameter" />
+        </Parameter>
         <ReturnType Type="Edm.Stream" />
       </Action>
       <Action Name="getDevicesWithoutCompliancePolicyReport" IsBound="true">
         <Parameter Name="bindingParameter" Type="graph.deviceManagementReports" />
         <Parameter Name="name" Type="Edm.String" Unicode="false" />
-        <Parameter Name="select" Type="Collection(Edm.String)" Unicode="false" />
-        <Parameter Name="search" Type="Edm.String" Unicode="false" />
-        <Parameter Name="groupBy" Type="Collection(Edm.String)" Unicode="false" />
-        <Parameter Name="orderBy" Type="Collection(Edm.String)" Unicode="false" />
-        <Parameter Name="skip" Type="Edm.Int32" />
-        <Parameter Name="top" Type="Edm.Int32" />
-        <Parameter Name="sessionId" Type="Edm.String" Unicode="false" />
-        <Parameter Name="filter" Type="Edm.String" Unicode="false" />
+        <Parameter Name="select" Type="Collection(Edm.String)" Unicode="false">
+          <Annotation Term="Org.OData.Core.V1.OptionalParameter" />
+        </Parameter>
+        <Parameter Name="groupBy" Type="Collection(Edm.String)" Unicode="false">
+          <Annotation Term="Org.OData.Core.V1.OptionalParameter" />
+        </Parameter>
+        <Parameter Name="orderBy" Type="Collection(Edm.String)" Unicode="false">
+          <Annotation Term="Org.OData.Core.V1.OptionalParameter" />
+        </Parameter>
+        <Parameter Name="search" Type="Edm.String" Unicode="false">
+          <Annotation Term="Org.OData.Core.V1.OptionalParameter" />
+        </Parameter>
+        <Parameter Name="skip" Type="Edm.Int32">
+          <Annotation Term="Org.OData.Core.V1.OptionalParameter" />
+        </Parameter>
+        <Parameter Name="top" Type="Edm.Int32">
+          <Annotation Term="Org.OData.Core.V1.OptionalParameter" />
+        </Parameter>
+        <Parameter Name="sessionId" Type="Edm.String" Unicode="false">
+          <Annotation Term="Org.OData.Core.V1.OptionalParameter" />
+        </Parameter>
+        <Parameter Name="filter" Type="Edm.String" Unicode="false">
+          <Annotation Term="Org.OData.Core.V1.OptionalParameter" />
+        </Parameter>
         <ReturnType Type="Edm.Stream" />
       </Action>
       <Action Name="getHistoricalReport" IsBound="true">
         <Parameter Name="bindingParameter" Type="graph.deviceManagementReports" />
         <Parameter Name="name" Type="Edm.String" Unicode="false" />
-        <Parameter Name="select" Type="Collection(Edm.String)" Unicode="false" />
-        <Parameter Name="search" Type="Edm.String" Unicode="false" />
-        <Parameter Name="groupBy" Type="Collection(Edm.String)" Unicode="false" />
-        <Parameter Name="orderBy" Type="Collection(Edm.String)" Unicode="false" />
-        <Parameter Name="skip" Type="Edm.Int32" />
-        <Parameter Name="top" Type="Edm.Int32" />
-        <Parameter Name="filter" Type="Edm.String" Unicode="false" />
+        <Parameter Name="select" Type="Collection(Edm.String)" Unicode="false">
+          <Annotation Term="Org.OData.Core.V1.OptionalParameter" />
+        </Parameter>
+        <Parameter Name="groupBy" Type="Collection(Edm.String)" Unicode="false">
+          <Annotation Term="Org.OData.Core.V1.OptionalParameter" />
+        </Parameter>
+        <Parameter Name="orderBy" Type="Collection(Edm.String)" Unicode="false">
+          <Annotation Term="Org.OData.Core.V1.OptionalParameter" />
+        </Parameter>
+        <Parameter Name="search" Type="Edm.String" Unicode="false">
+          <Annotation Term="Org.OData.Core.V1.OptionalParameter" />
+        </Parameter>
+        <Parameter Name="skip" Type="Edm.Int32">
+          <Annotation Term="Org.OData.Core.V1.OptionalParameter" />
+        </Parameter>
+        <Parameter Name="top" Type="Edm.Int32">
+          <Annotation Term="Org.OData.Core.V1.OptionalParameter" />
+        </Parameter>
+        <Parameter Name="filter" Type="Edm.String" Unicode="false">
+          <Annotation Term="Org.OData.Core.V1.OptionalParameter" />
+        </Parameter>
         <ReturnType Type="Edm.Stream" />
       </Action>
       <Action Name="getMailTips" IsBound="true">
@@ -15833,53 +16131,117 @@
       <Action Name="getNoncompliantDevicesAndSettingsReport" IsBound="true">
         <Parameter Name="bindingParameter" Type="graph.deviceManagementReports" />
         <Parameter Name="name" Type="Edm.String" Unicode="false" />
-        <Parameter Name="select" Type="Collection(Edm.String)" Unicode="false" />
-        <Parameter Name="search" Type="Edm.String" Unicode="false" />
-        <Parameter Name="groupBy" Type="Collection(Edm.String)" Unicode="false" />
-        <Parameter Name="orderBy" Type="Collection(Edm.String)" Unicode="false" />
-        <Parameter Name="skip" Type="Edm.Int32" />
-        <Parameter Name="top" Type="Edm.Int32" />
-        <Parameter Name="sessionId" Type="Edm.String" Unicode="false" />
-        <Parameter Name="filter" Type="Edm.String" Unicode="false" />
+        <Parameter Name="select" Type="Collection(Edm.String)" Unicode="false">
+          <Annotation Term="Org.OData.Core.V1.OptionalParameter" />
+        </Parameter>
+        <Parameter Name="groupBy" Type="Collection(Edm.String)" Unicode="false">
+          <Annotation Term="Org.OData.Core.V1.OptionalParameter" />
+        </Parameter>
+        <Parameter Name="orderBy" Type="Collection(Edm.String)" Unicode="false">
+          <Annotation Term="Org.OData.Core.V1.OptionalParameter" />
+        </Parameter>
+        <Parameter Name="search" Type="Edm.String" Unicode="false">
+          <Annotation Term="Org.OData.Core.V1.OptionalParameter" />
+        </Parameter>
+        <Parameter Name="skip" Type="Edm.Int32">
+          <Annotation Term="Org.OData.Core.V1.OptionalParameter" />
+        </Parameter>
+        <Parameter Name="top" Type="Edm.Int32">
+          <Annotation Term="Org.OData.Core.V1.OptionalParameter" />
+        </Parameter>
+        <Parameter Name="sessionId" Type="Edm.String" Unicode="false">
+          <Annotation Term="Org.OData.Core.V1.OptionalParameter" />
+        </Parameter>
+        <Parameter Name="filter" Type="Edm.String" Unicode="false">
+          <Annotation Term="Org.OData.Core.V1.OptionalParameter" />
+        </Parameter>
         <ReturnType Type="Edm.Stream" />
       </Action>
       <Action Name="getPolicyNonComplianceMetadata" IsBound="true">
         <Parameter Name="bindingParameter" Type="graph.deviceManagementReports" />
         <Parameter Name="name" Type="Edm.String" Unicode="false" />
-        <Parameter Name="select" Type="Collection(Edm.String)" Unicode="false" />
-        <Parameter Name="search" Type="Edm.String" Unicode="false" />
-        <Parameter Name="groupBy" Type="Collection(Edm.String)" Unicode="false" />
-        <Parameter Name="orderBy" Type="Collection(Edm.String)" Unicode="false" />
-        <Parameter Name="skip" Type="Edm.Int32" />
-        <Parameter Name="top" Type="Edm.Int32" />
-        <Parameter Name="sessionId" Type="Edm.String" Unicode="false" />
-        <Parameter Name="filter" Type="Edm.String" Unicode="false" />
+        <Parameter Name="select" Type="Collection(Edm.String)" Unicode="false">
+          <Annotation Term="Org.OData.Core.V1.OptionalParameter" />
+        </Parameter>
+        <Parameter Name="groupBy" Type="Collection(Edm.String)" Unicode="false">
+          <Annotation Term="Org.OData.Core.V1.OptionalParameter" />
+        </Parameter>
+        <Parameter Name="orderBy" Type="Collection(Edm.String)" Unicode="false">
+          <Annotation Term="Org.OData.Core.V1.OptionalParameter" />
+        </Parameter>
+        <Parameter Name="search" Type="Edm.String" Unicode="false">
+          <Annotation Term="Org.OData.Core.V1.OptionalParameter" />
+        </Parameter>
+        <Parameter Name="skip" Type="Edm.Int32">
+          <Annotation Term="Org.OData.Core.V1.OptionalParameter" />
+        </Parameter>
+        <Parameter Name="top" Type="Edm.Int32">
+          <Annotation Term="Org.OData.Core.V1.OptionalParameter" />
+        </Parameter>
+        <Parameter Name="sessionId" Type="Edm.String" Unicode="false">
+          <Annotation Term="Org.OData.Core.V1.OptionalParameter" />
+        </Parameter>
+        <Parameter Name="filter" Type="Edm.String" Unicode="false">
+          <Annotation Term="Org.OData.Core.V1.OptionalParameter" />
+        </Parameter>
         <ReturnType Type="Edm.Stream" />
       </Action>
       <Action Name="getPolicyNonComplianceReport" IsBound="true">
         <Parameter Name="bindingParameter" Type="graph.deviceManagementReports" />
         <Parameter Name="name" Type="Edm.String" Unicode="false" />
-        <Parameter Name="select" Type="Collection(Edm.String)" Unicode="false" />
-        <Parameter Name="search" Type="Edm.String" Unicode="false" />
-        <Parameter Name="groupBy" Type="Collection(Edm.String)" Unicode="false" />
-        <Parameter Name="orderBy" Type="Collection(Edm.String)" Unicode="false" />
-        <Parameter Name="skip" Type="Edm.Int32" />
-        <Parameter Name="top" Type="Edm.Int32" />
-        <Parameter Name="sessionId" Type="Edm.String" Unicode="false" />
-        <Parameter Name="filter" Type="Edm.String" Unicode="false" />
+        <Parameter Name="select" Type="Collection(Edm.String)" Unicode="false">
+          <Annotation Term="Org.OData.Core.V1.OptionalParameter" />
+        </Parameter>
+        <Parameter Name="groupBy" Type="Collection(Edm.String)" Unicode="false">
+          <Annotation Term="Org.OData.Core.V1.OptionalParameter" />
+        </Parameter>
+        <Parameter Name="orderBy" Type="Collection(Edm.String)" Unicode="false">
+          <Annotation Term="Org.OData.Core.V1.OptionalParameter" />
+        </Parameter>
+        <Parameter Name="search" Type="Edm.String" Unicode="false">
+          <Annotation Term="Org.OData.Core.V1.OptionalParameter" />
+        </Parameter>
+        <Parameter Name="skip" Type="Edm.Int32">
+          <Annotation Term="Org.OData.Core.V1.OptionalParameter" />
+        </Parameter>
+        <Parameter Name="top" Type="Edm.Int32">
+          <Annotation Term="Org.OData.Core.V1.OptionalParameter" />
+        </Parameter>
+        <Parameter Name="sessionId" Type="Edm.String" Unicode="false">
+          <Annotation Term="Org.OData.Core.V1.OptionalParameter" />
+        </Parameter>
+        <Parameter Name="filter" Type="Edm.String" Unicode="false">
+          <Annotation Term="Org.OData.Core.V1.OptionalParameter" />
+        </Parameter>
         <ReturnType Type="Edm.Stream" />
       </Action>
       <Action Name="getPolicyNonComplianceSummaryReport" IsBound="true">
         <Parameter Name="bindingParameter" Type="graph.deviceManagementReports" />
         <Parameter Name="name" Type="Edm.String" Unicode="false" />
-        <Parameter Name="select" Type="Collection(Edm.String)" Unicode="false" />
-        <Parameter Name="search" Type="Edm.String" Unicode="false" />
-        <Parameter Name="groupBy" Type="Collection(Edm.String)" Unicode="false" />
-        <Parameter Name="orderBy" Type="Collection(Edm.String)" Unicode="false" />
-        <Parameter Name="skip" Type="Edm.Int32" />
-        <Parameter Name="top" Type="Edm.Int32" />
-        <Parameter Name="sessionId" Type="Edm.String" Unicode="false" />
-        <Parameter Name="filter" Type="Edm.String" Unicode="false" />
+        <Parameter Name="select" Type="Collection(Edm.String)" Unicode="false">
+          <Annotation Term="Org.OData.Core.V1.OptionalParameter" />
+        </Parameter>
+        <Parameter Name="groupBy" Type="Collection(Edm.String)" Unicode="false">
+          <Annotation Term="Org.OData.Core.V1.OptionalParameter" />
+        </Parameter>
+        <Parameter Name="orderBy" Type="Collection(Edm.String)" Unicode="false">
+          <Annotation Term="Org.OData.Core.V1.OptionalParameter" />
+        </Parameter>
+        <Parameter Name="search" Type="Edm.String" Unicode="false">
+          <Annotation Term="Org.OData.Core.V1.OptionalParameter" />
+        </Parameter>
+        <Parameter Name="skip" Type="Edm.Int32">
+          <Annotation Term="Org.OData.Core.V1.OptionalParameter" />
+        </Parameter>
+        <Parameter Name="top" Type="Edm.Int32">
+          <Annotation Term="Org.OData.Core.V1.OptionalParameter" />
+        </Parameter>
+        <Parameter Name="sessionId" Type="Edm.String" Unicode="false">
+          <Annotation Term="Org.OData.Core.V1.OptionalParameter" />
+        </Parameter>
+        <Parameter Name="filter" Type="Edm.String" Unicode="false">
+          <Annotation Term="Org.OData.Core.V1.OptionalParameter" />
+        </Parameter>
         <ReturnType Type="Edm.Stream" />
       </Action>
       <Action Name="getPositionOfWebPart" IsBound="true">
@@ -15894,14 +16256,30 @@
       <Action Name="getReportFilters" IsBound="true">
         <Parameter Name="bindingParameter" Type="graph.deviceManagementReports" />
         <Parameter Name="name" Type="Edm.String" Unicode="false" />
-        <Parameter Name="select" Type="Collection(Edm.String)" Unicode="false" />
-        <Parameter Name="search" Type="Edm.String" Unicode="false" />
-        <Parameter Name="groupBy" Type="Collection(Edm.String)" Unicode="false" />
-        <Parameter Name="orderBy" Type="Collection(Edm.String)" Unicode="false" />
-        <Parameter Name="skip" Type="Edm.Int32" />
-        <Parameter Name="top" Type="Edm.Int32" />
-        <Parameter Name="sessionId" Type="Edm.String" Unicode="false" />
-        <Parameter Name="filter" Type="Edm.String" Unicode="false" />
+        <Parameter Name="select" Type="Collection(Edm.String)" Unicode="false">
+          <Annotation Term="Org.OData.Core.V1.OptionalParameter" />
+        </Parameter>
+        <Parameter Name="groupBy" Type="Collection(Edm.String)" Unicode="false">
+          <Annotation Term="Org.OData.Core.V1.OptionalParameter" />
+        </Parameter>
+        <Parameter Name="orderBy" Type="Collection(Edm.String)" Unicode="false">
+          <Annotation Term="Org.OData.Core.V1.OptionalParameter" />
+        </Parameter>
+        <Parameter Name="search" Type="Edm.String" Unicode="false">
+          <Annotation Term="Org.OData.Core.V1.OptionalParameter" />
+        </Parameter>
+        <Parameter Name="skip" Type="Edm.Int32">
+          <Annotation Term="Org.OData.Core.V1.OptionalParameter" />
+        </Parameter>
+        <Parameter Name="top" Type="Edm.Int32">
+          <Annotation Term="Org.OData.Core.V1.OptionalParameter" />
+        </Parameter>
+        <Parameter Name="sessionId" Type="Edm.String" Unicode="false">
+          <Annotation Term="Org.OData.Core.V1.OptionalParameter" />
+        </Parameter>
+        <Parameter Name="filter" Type="Edm.String" Unicode="false">
+          <Annotation Term="Org.OData.Core.V1.OptionalParameter" />
+        </Parameter>
         <ReturnType Type="Edm.Stream" />
       </Action>
       <Action Name="getSchedule" IsBound="true">
@@ -15915,14 +16293,30 @@
       <Action Name="getSettingNonComplianceReport" IsBound="true">
         <Parameter Name="bindingParameter" Type="graph.deviceManagementReports" />
         <Parameter Name="name" Type="Edm.String" Unicode="false" />
-        <Parameter Name="select" Type="Collection(Edm.String)" Unicode="false" />
-        <Parameter Name="search" Type="Edm.String" Unicode="false" />
-        <Parameter Name="groupBy" Type="Collection(Edm.String)" Unicode="false" />
-        <Parameter Name="orderBy" Type="Collection(Edm.String)" Unicode="false" />
-        <Parameter Name="skip" Type="Edm.Int32" />
-        <Parameter Name="top" Type="Edm.Int32" />
-        <Parameter Name="sessionId" Type="Edm.String" Unicode="false" />
-        <Parameter Name="filter" Type="Edm.String" Unicode="false" />
+        <Parameter Name="select" Type="Collection(Edm.String)" Unicode="false">
+          <Annotation Term="Org.OData.Core.V1.OptionalParameter" />
+        </Parameter>
+        <Parameter Name="groupBy" Type="Collection(Edm.String)" Unicode="false">
+          <Annotation Term="Org.OData.Core.V1.OptionalParameter" />
+        </Parameter>
+        <Parameter Name="orderBy" Type="Collection(Edm.String)" Unicode="false">
+          <Annotation Term="Org.OData.Core.V1.OptionalParameter" />
+        </Parameter>
+        <Parameter Name="search" Type="Edm.String" Unicode="false">
+          <Annotation Term="Org.OData.Core.V1.OptionalParameter" />
+        </Parameter>
+        <Parameter Name="skip" Type="Edm.Int32">
+          <Annotation Term="Org.OData.Core.V1.OptionalParameter" />
+        </Parameter>
+        <Parameter Name="top" Type="Edm.Int32">
+          <Annotation Term="Org.OData.Core.V1.OptionalParameter" />
+        </Parameter>
+        <Parameter Name="sessionId" Type="Edm.String" Unicode="false">
+          <Annotation Term="Org.OData.Core.V1.OptionalParameter" />
+        </Parameter>
+        <Parameter Name="filter" Type="Edm.String" Unicode="false">
+          <Annotation Term="Org.OData.Core.V1.OptionalParameter" />
+        </Parameter>
         <ReturnType Type="Edm.Stream" />
       </Action>
       <Action Name="getStaffAvailability" IsBound="true">
@@ -16148,6 +16542,9 @@
       <Action Name="instantiate" IsBound="true">
         <Parameter Name="bindingParameter" Type="graph.applicationTemplate" />
         <Parameter Name="displayName" Type="Edm.String" Unicode="false" />
+        <Parameter Name="serviceManagementReference" Type="Edm.String" Unicode="false">
+          <Annotation Term="Org.OData.Core.V1.OptionalParameter" />
+        </Parameter>
         <ReturnType Type="graph.applicationServicePrincipal" />
       </Action>
       <Action Name="int" IsBound="true">
@@ -16317,6 +16714,12 @@
       </Action>
       <Action Name="locateDevice" IsBound="true">
         <Parameter Name="bindingParameter" Type="graph.managedDevice" />
+      </Action>
+      <Action Name="lock" IsBound="true">
+        <Parameter Name="bindingParameter" Type="graph.fileStorageContainer" />
+        <Parameter Name="lockState" Type="graph.siteLockState">
+          <Annotation Term="Org.OData.Core.V1.OptionalParameter" />
+        </Parameter>
       </Action>
       <Action Name="log" IsBound="true">
         <Parameter Name="bindparameter" Type="graph.workbookFunctions" />
@@ -16711,6 +17114,9 @@
         <Parameter Name="significance" Type="graph.Json" />
         <ReturnType Type="graph.workbookFunctionResult" />
       </Action>
+      <Action Name="permanentDelete" IsBound="true">
+        <Parameter Name="bindingParameter" Type="graph.fileStorageContainer" />
+      </Action>
       <Action Name="permut" IsBound="true">
         <Parameter Name="bindparameter" Type="graph.workbookFunctions" />
         <Parameter Name="number" Type="graph.Json" />
@@ -17097,6 +17503,9 @@
       </Action>
       <Action Name="restore" IsBound="true">
         <Parameter Name="bindingParameter" Type="graph.directoryObject" Nullable="false" />
+        <Parameter Name="autoReconcileProxyConflict" Type="Edm.Boolean">
+          <Annotation Term="Org.OData.Core.V1.OptionalParameter" />
+        </Parameter>
         <ReturnType Type="graph.directoryObject" />
       </Action>
       <Action Name="restore" IsBound="true">
@@ -17107,6 +17516,10 @@
         <Parameter Name="parentReference" Type="graph.itemReference" />
         <Parameter Name="name" Type="Edm.String" Unicode="false" />
         <ReturnType Type="graph.driveItem" />
+      </Action>
+      <Action Name="restore" IsBound="true">
+        <Parameter Name="bindingParameter" Type="graph.fileStorageContainer" />
+        <ReturnType Type="graph.fileStorageContainer" />
       </Action>
       <Action Name="restoreFactoryDefaults" IsBound="true">
         <Parameter Name="bindingParameter" Type="graph.printer" />
@@ -17119,6 +17532,19 @@
       </Action>
       <Action Name="retire" IsBound="true">
         <Parameter Name="bindingParameter" Type="graph.managedDevice" />
+      </Action>
+      <Action Name="retrieveDeviceAppInstallationStatusReport" IsBound="true">
+        <Parameter Name="bindingParameter" Type="graph.deviceManagementReports" />
+        <Parameter Name="name" Type="Edm.String" Unicode="false" />
+        <Parameter Name="select" Type="Collection(Edm.String)" Unicode="false" />
+        <Parameter Name="search" Type="Edm.String" Unicode="false" />
+        <Parameter Name="groupBy" Type="Collection(Edm.String)" Unicode="false" />
+        <Parameter Name="orderBy" Type="Collection(Edm.String)" Unicode="false" />
+        <Parameter Name="skip" Type="Edm.Int32" />
+        <Parameter Name="top" Type="Edm.Int32" />
+        <Parameter Name="sessionId" Type="Edm.String" Unicode="false" />
+        <Parameter Name="filter" Type="Edm.String" Unicode="false" />
+        <ReturnType Type="Edm.Stream" />
       </Action>
       <Action Name="revokeSignInSessions" IsBound="true">
         <Parameter Name="bindingParameter" Type="graph.user" Nullable="false" />
@@ -17671,6 +18097,9 @@
         <Parameter Name="text" Type="graph.Json" />
         <ReturnType Type="graph.workbookFunctionResult" />
       </Action>
+      <Action Name="unlock" IsBound="true">
+        <Parameter Name="bindingParameter" Type="graph.fileStorageContainer" />
+      </Action>
       <Action Name="unmerge" IsBound="true">
         <Parameter Name="bindparameter" Type="graph.workbookRange" />
       </Action>
@@ -17812,6 +18241,9 @@
       </Action>
       <Action Name="verify" EntitySetPath="bindingParameter" IsBound="true">
         <Parameter Name="bindingParameter" Type="graph.domain" Nullable="false" />
+        <Parameter Name="forceTakeover" Type="Edm.Boolean">
+          <Annotation Term="Org.OData.Core.V1.OptionalParameter" />
+        </Parameter>
         <ReturnType Type="graph.domain" />
       </Action>
       <Action Name="vlookup" IsBound="true">
@@ -18731,6 +19163,7 @@
         <EntitySet Name="domainDnsRecords" EntityType="microsoft.graph.domainDnsRecord" />
         <EntitySet Name="domains" EntityType="microsoft.graph.domain">
           <NavigationPropertyBinding Path="domainNameReferences" Target="directoryObjects" />
+          <NavigationPropertyBinding Path="rootDomain" Target="domains" />
         </EntitySet>
         <EntitySet Name="drives" EntityType="microsoft.graph.drive" />
         <EntitySet Name="filterOperators" EntityType="microsoft.graph.filterOperatorSchema" />
@@ -18823,6 +19256,7 @@
         <Singleton Name="search" Type="microsoft.graph.searchEntity" />
         <Singleton Name="security" Type="microsoft.graph.security" />
         <Singleton Name="solutions" Type="microsoft.graph.solutionsRoot" />
+        <Singleton Name="storage" Type="microsoft.graph.storage" />
         <Singleton Name="teamwork" Type="microsoft.graph.teamwork" />
         <Singleton Name="tenantRelationships" Type="microsoft.graph.tenantRelationship" />
       </EntityContainer>
@@ -23560,7 +23994,7 @@
         <Annotation Term="Org.OData.Core.V1.Description" String="Partner is unresponsive." />
       </Annotations>
       <Annotations Target="microsoft.graph.deviceManagementReportFileFormat">
-        <Annotation Term="Org.OData.Core.V1.Description" String="Possible values for the file format of a report." />
+        <Annotation Term="Org.OData.Core.V1.Description" String="Possible values for the file format of a report to be exported." />
       </Annotations>
       <Annotations Target="microsoft.graph.deviceManagementReportFileFormat/csv">
         <Annotation Term="Org.OData.Core.V1.Description" String="CSV Format." />
@@ -31854,6 +32288,9 @@
       <Annotations Target="microsoft.graph.win32LobAppAssignmentSettings">
         <Annotation Term="Org.OData.Core.V1.Description" String="Contains properties used to assign an Win32 LOB mobile app to a group." />
       </Annotations>
+      <Annotations Target="microsoft.graph.win32LobAppAssignmentSettings/autoUpdateSettings">
+        <Annotation Term="Org.OData.Core.V1.Description" String="The auto-update settings to apply for this app assignment." />
+      </Annotations>
       <Annotations Target="microsoft.graph.win32LobAppAssignmentSettings/deliveryOptimizationPriority">
         <Annotation Term="Org.OData.Core.V1.Description" String="The delivery optimization priority for this app assignment. This setting is not supported in National Cloud environments." />
       </Annotations>
@@ -31865,6 +32302,12 @@
       </Annotations>
       <Annotations Target="microsoft.graph.win32LobAppAssignmentSettings/restartSettings">
         <Annotation Term="Org.OData.Core.V1.Description" String="The reboot settings to apply for this app assignment." />
+      </Annotations>
+      <Annotations Target="microsoft.graph.win32LobAppAutoUpdateSettings">
+        <Annotation Term="Org.OData.Core.V1.Description" String="Contains properties used to perform the auto-update of an application." />
+      </Annotations>
+      <Annotations Target="microsoft.graph.win32LobAppAutoUpdateSettings/autoUpdateSupersededAppsState">
+        <Annotation Term="Org.OData.Core.V1.Description" String="The auto-update superseded apps state setting for the app assignment. Possible values are notConfigured and enabled. Default value is notConfigured." />
       </Annotations>
       <Annotations Target="microsoft.graph.win32LobAppDeliveryOptimizationPriority">
         <Annotation Term="Org.OData.Core.V1.Description" String="Contains value for delivery optimization priority." />
@@ -32171,6 +32614,18 @@
       </Annotations>
       <Annotations Target="microsoft.graph.win32LobAppRuleType/requirement">
         <Annotation Term="Org.OData.Core.V1.Description" String="Requirement rule." />
+      </Annotations>
+      <Annotations Target="microsoft.graph.win32LobAutoUpdateSupersededAppsState">
+        <Annotation Term="Org.OData.Core.V1.Description" String="Contains value for auto-update superseded apps." />
+      </Annotations>
+      <Annotations Target="microsoft.graph.win32LobAutoUpdateSupersededAppsState/enabled">
+        <Annotation Term="Org.OData.Core.V1.Description" String="Indicates that the auto-update superseded apps state is enabled and the app will auto-update the superseded apps if the superseded apps are installed on the device." />
+      </Annotations>
+      <Annotations Target="microsoft.graph.win32LobAutoUpdateSupersededAppsState/notConfigured">
+        <Annotation Term="Org.OData.Core.V1.Description" String="Indicates that the auto-update superseded apps state is not configured and the app will not auto-update the superseded apps." />
+      </Annotations>
+      <Annotations Target="microsoft.graph.win32LobAutoUpdateSupersededAppsState/unknownFutureValue">
+        <Annotation Term="Org.OData.Core.V1.Description" String="Evolvable enumeration sentinel value. Do not use." />
       </Annotations>
       <Annotations Target="microsoft.graph.windows10CompliancePolicy">
         <Annotation Term="Org.OData.Core.V1.Description" String="This class contains compliance settings for Windows 10." />
@@ -34935,6 +35390,15 @@
         <Member Name="linkedFiles" Value="2" />
         <Member Name="unknownFutureValue" Value="4" />
       </EnumType>
+      <EnumType Name="additionalOptions" IsFlags="true">
+        <Member Name="none" Value="0" />
+        <Member Name="teamsAndYammerConversations" Value="1" />
+        <Member Name="cloudAttachments" Value="2" />
+        <Member Name="allDocumentVersions" Value="4" />
+        <Member Name="subfolderContents" Value="8" />
+        <Member Name="listAttachments" Value="16" />
+        <Member Name="unknownFutureValue" Value="32" />
+      </EnumType>
       <EnumType Name="alertClassification" UnderlyingType="Edm.Byte">
         <Member Name="unknown" Value="0" />
         <Member Name="falsePositive" Value="10" />
@@ -35139,6 +35603,12 @@
         <Member Name="blocked" Value="3" />
         <Member Name="notFound" Value="4" />
         <Member Name="unknownFutureValue" Value="5" />
+        <Member Name="active" Value="6" />
+        <Member Name="pendingApproval" Value="7" />
+        <Member Name="declined" Value="8" />
+        <Member Name="unremediated" Value="9" />
+        <Member Name="running" Value="10" />
+        <Member Name="partiallyRemediated" Value="11" />
       </EnumType>
       <EnumType Name="evidenceRole">
         <Member Name="unknown" Value="0" />
@@ -35165,11 +35635,27 @@
         <Member Name="noThreatsFound" Value="3" />
         <Member Name="unknownFutureValue" Value="4" />
       </EnumType>
+      <EnumType Name="exportCriteria" IsFlags="true">
+        <Member Name="searchHits" Value="1" />
+        <Member Name="partiallyIndexed" Value="2" />
+        <Member Name="unknownFutureValue" Value="4" />
+      </EnumType>
       <EnumType Name="exportFileStructure">
         <Member Name="none" Value="0" />
         <Member Name="directory" Value="1" />
         <Member Name="pst" Value="2" />
         <Member Name="unknownFutureValue" Value="3" />
+      </EnumType>
+      <EnumType Name="exportFormat">
+        <Member Name="pst" Value="0" />
+        <Member Name="msg" Value="1" />
+        <Member Name="eml" Value="2" />
+        <Member Name="unknownFutureValue" Value="3" />
+      </EnumType>
+      <EnumType Name="exportLocation" IsFlags="true">
+        <Member Name="responsiveLocations" Value="1" />
+        <Member Name="nonresponsiveLocations" Value="2" />
+        <Member Name="unknownFutureValue" Value="4" />
       </EnumType>
       <EnumType Name="exportOptions" IsFlags="true">
         <Member Name="originalFiles" Value="1" />
@@ -35850,6 +36336,7 @@
       <EntityType Name="dataSet" BaseType="graph.entity" Abstract="true">
         <Property Name="createdBy" Type="graph.identitySet" />
         <Property Name="createdDateTime" Type="Edm.DateTimeOffset" />
+        <Property Name="description" Type="Edm.String" />
         <Property Name="displayName" Type="Edm.String" />
       </EntityType>
       <EntityType Name="dataSource" BaseType="graph.entity" Abstract="true">
@@ -35945,6 +36432,17 @@
         <NavigationProperty Name="custodianSources" Type="Collection(microsoft.graph.security.dataSource)" />
         <NavigationProperty Name="lastEstimateStatisticsOperation" Type="microsoft.graph.security.ediscoveryEstimateOperation" />
         <NavigationProperty Name="noncustodialSources" Type="Collection(microsoft.graph.security.ediscoveryNoncustodialDataSource)" />
+      </EntityType>
+      <EntityType Name="ediscoverySearchExportOperation" BaseType="microsoft.graph.security.caseOperation">
+        <Property Name="additionalOptions" Type="microsoft.graph.security.additionalOptions" />
+        <Property Name="description" Type="Edm.String" />
+        <Property Name="displayName" Type="Edm.String" />
+        <Property Name="exportCriteria" Type="microsoft.graph.security.exportCriteria" />
+        <Property Name="exportFileMetadata" Type="Collection(microsoft.graph.security.exportFileMetadata)" />
+        <Property Name="exportFormat" Type="microsoft.graph.security.exportFormat" />
+        <Property Name="exportLocation" Type="microsoft.graph.security.exportLocation" />
+        <Property Name="exportSingleItems" Type="Edm.Boolean" />
+        <NavigationProperty Name="search" Type="microsoft.graph.security.ediscoverySearch" />
       </EntityType>
       <EntityType Name="ediscoveryTagOperation" BaseType="microsoft.graph.security.caseOperation" />
       <EntityType Name="filePlanDescriptor" BaseType="graph.entity">
@@ -36115,6 +36613,24 @@
         <Parameter Name="description" Type="Edm.String" Unicode="false" />
         <Parameter Name="exportOptions" Type="microsoft.graph.security.exportOptions" />
         <Parameter Name="exportStructure" Type="microsoft.graph.security.exportFileStructure" />
+      </Action>
+      <Action Name="exportReport" IsBound="true">
+        <Parameter Name="bindingParameter" Type="microsoft.graph.security.ediscoverySearch" />
+        <Parameter Name="displayName" Type="Edm.String" Unicode="false" />
+        <Parameter Name="description" Type="Edm.String" Unicode="false" />
+        <Parameter Name="exportCriteria" Type="microsoft.graph.security.exportCriteria" />
+        <Parameter Name="exportLocation" Type="microsoft.graph.security.exportLocation" />
+        <Parameter Name="additionalOptions" Type="microsoft.graph.security.additionalOptions" />
+      </Action>
+      <Action Name="exportResult" IsBound="true">
+        <Parameter Name="bindingParameter" Type="microsoft.graph.security.ediscoverySearch" />
+        <Parameter Name="displayName" Type="Edm.String" Unicode="false" />
+        <Parameter Name="description" Type="Edm.String" Unicode="false" />
+        <Parameter Name="exportCriteria" Type="microsoft.graph.security.exportCriteria" />
+        <Parameter Name="exportLocation" Type="microsoft.graph.security.exportLocation" />
+        <Parameter Name="additionalOptions" Type="microsoft.graph.security.additionalOptions" />
+        <Parameter Name="exportFormat" Type="microsoft.graph.security.exportFormat" />
+        <Parameter Name="exportSingleItems" Type="Edm.Boolean" />
       </Action>
       <Action Name="purgeData" IsBound="true">
         <Parameter Name="bindingParameter" Type="microsoft.graph.security.ediscoverySearch" />
