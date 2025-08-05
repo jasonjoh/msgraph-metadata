@@ -5,7 +5,7 @@
 .Synopsis
     Runs MetadataParser tool to validate latest XSLT rules don't break downstream parsing of the metadata
 .Description
-    1. tranforms latests snapshots of beta or v1 metadata
+    1. transforms latests snapshots of beta or v1 metadata
     2. validates that the transformed metadata is parsable as OData EDM model and conversion to OpenAPI document is possible
 .Example
     ./scripts/run-metadata-validation.ps1 -repoDirectory C:/github/msgraph-metadata -version "v1.0"
@@ -26,23 +26,26 @@ if([string]::IsNullOrWhiteSpace($platformName))
    $platformName = "openapi"
 }
 
+$hidiResults = dotnet tool list microsoft.openapi.hidi -g --format json | ConvertFrom-json
+if ($hidiResults.data.Length -lt 1) {
+    throw "Hidi tool is not installed. Please install it using the command: dotnet tool install --global Microsoft.OpenApi.Hidi"
+}
+
 $transformCsdlDirectory = Join-Path $repoDirectory "transforms/csdl"
 $transformScript = Join-Path $transformCsdlDirectory "transform.ps1"
 $xsltPath = Join-Path $transformCsdlDirectory "preprocess_csdl.xsl"
 $conversionSettingsDirectory = Join-Path $repoDirectory "conversion-settings"
 
-$snapshot = Join-Path $repoDirectory "schemas" "annotated-$($version)-Prod.csdl"
+$snapshot = Join-Path $repoDirectory "schemas" "$($version)-Prod.csdl"
 
 $transformed = Join-Path $repoDirectory "transformed_$($version)_metadata.xml"
 $yamlFilePath = Join-Path $repoDirectory "transformed_$($version)_$($platformName)_metadata.yml"
 
 try {
-    Write-Host "Tranforming $snapshot metadata using xslt with parameters used in the OpenAPI flow..." -ForegroundColor Green
+    Write-Host "Transforming $snapshot metadata using xslt with parameters used in the OpenAPI flow..." -ForegroundColor Green
     & $transformScript -xslPath $xsltPath -inputPath $snapshot -outputPath $transformed -addInnerErrorDescription $true -removeCapabilityAnnotations $false -csdlVersion $version
 
     Write-Host "Validating $transformed metadata after the transform..." -ForegroundColor Green
-    # pin the hidi version till odata to openApi conversion supports 2.0
-    & dotnet tool install --global Microsoft.OpenApi.Hidi
     & hidi transform --cs $transformed -o $yamlFilePath --co -f Yaml --sp "$conversionSettingsDirectory/$platformName.json"
 
 } catch {

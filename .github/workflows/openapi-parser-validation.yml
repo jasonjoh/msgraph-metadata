@@ -15,11 +15,12 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - id: set-conversion-settings
-        run: echo "::set-output name=matrix::$(ls conversion-settings/*.json | sed 's/.*\///' | sed 's/\.[^.]*$//' | jq -R -s -c 'split("\n")[:-1]')"
+        run: echo "matrix=$(ls conversion-settings/*.json | sed 's/.*\///' | sed 's/\.[^.]*$//' | jq -R -s -c 'split("\n")[:-1]')" >> $GITHUB_OUTPUT
 
   build:
     needs: list-conversion-settings
     strategy:
+      fail-fast: false
       matrix:
         version: ["v1.0", "beta"]
         settings: ${{ fromJson(needs.list-conversion-settings.outputs.matrix) }}
@@ -31,9 +32,13 @@ jobs:
       with:
         submodules: recursive
     - name: Setup .NET
-      uses: actions/setup-dotnet@v4.2.0
+      uses: actions/setup-dotnet@v4.3.1
       with:
-        dotnet-version: 8.0.x
+        dotnet-version: 9.x
+
+    - run: dotnet tool install --global Microsoft.OpenApi.Hidi
+      name: Install  Hidi
+
     - name: Validate latest OpenAPI docs
       run: ./scripts/run-openapi-validation.ps1 -repoDirectory "${{ github.workspace }}" -version "${{ matrix.version }}" -platformName "${{ matrix.settings }}"
       shell: pwsh

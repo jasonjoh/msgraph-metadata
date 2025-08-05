@@ -7,6 +7,141 @@
         <NavigationProperty Name="pendingSteps" Type="Collection(graph.approvalStep)" ContainsTarget="true" />
         <NavigationProperty Name="completedSteps" Type="Collection(graph.approvalStep)" ContainsTarget="true" />
       </EntityType>
+      <EntityType Name="application" BaseType="graph.directoryObject" OpenType="true">
+        <Property Name="appId" Type="Edm.String" />
+        <Property Name="displayName" Type="Edm.String" />
+        <Property Name="publisherDomain" Type="Edm.String" />
+        <Property Name="signInAudience" Type="Edm.String" />
+        <NavigationProperty Name="owners" Type="Collection(graph.directoryObject)" ContainsTarget="true">
+          <Annotation Term="Org.OData.Validation.V1.DerivedTypeConstraint" xmlns:edm="http://docs.oasis-open.org/odata/ns/edm">
+            <Collection>
+              <String>microsoft.graph.appRoleAssignment</String>
+              <String>microsoft.graph.endpoint</String>
+              <String>microsoft.graph.servicePrincipal</String>
+              <String>microsoft.graph.user</String>
+            </Collection>
+          </Annotation>
+          <Annotation Term="Org.OData.Capabilities.V1.NavigationRestrictions">
+            <Record>
+              <PropertyValue Property="Referenceable" Bool="true" />
+            </Record>
+          </Annotation>
+          <Annotation Term="Org.OData.Capabilities.V1.ReadRestrictions">
+            <Record>
+              <PropertyValue Property="CustomHeaders">
+                <Collection>
+                  <Record>
+                    <PropertyValue Property="Name" String="ConsistencyLevel" />
+                    <PropertyValue Property="Description" String="Indicates the requested consistency level." />
+                    <PropertyValue Property="DocumentationURL" String="https://docs.microsoft.com/graph/aad-advanced-queries" />
+                    <PropertyValue Property="Required" Bool="false" />
+                    <PropertyValue Property="ExampleValues">
+                      <Collection>
+                        <Record>
+                          <PropertyValue Property="Value" String="eventual" />
+                          <PropertyValue Property="Description" String="$search and $count queries require the client to set the ConsistencyLevel HTTP header to 'eventual'." />
+                        </Record>
+                      </Collection>
+                    </PropertyValue>
+                  </Record>
+                </Collection>
+              </PropertyValue>
+            </Record>
+          </Annotation>
+        </NavigationProperty>
+        <NavigationProperty Name="appManagementPolicies" Type="Collection(graph.appManagementPolicy)">
+          <Annotation Term="Org.OData.Capabilities.V1.NavigationRestrictions">
+            <Record>
+              <PropertyValue Property="Referenceable" Bool="true" />
+            </Record>
+          </Annotation>
+        </NavigationProperty>
+        <NavigationProperty Name="tokenIssuancePolicies" Type="Collection(graph.tokenIssuancePolicy)">
+          <Annotation Term="Org.OData.Capabilities.V1.NavigationRestrictions">
+            <Record>
+              <PropertyValue Property="Referenceable" Bool="true" />
+            </Record>
+          </Annotation>
+        </NavigationProperty>
+        <NavigationProperty Name="tokenLifetimePolicies" Type="Collection(graph.tokenLifetimePolicy)">
+          <Annotation Term="Org.OData.Capabilities.V1.NavigationRestrictions">
+            <Record>
+              <PropertyValue Property="Referenceable" Bool="true" />
+            </Record>
+          </Annotation>
+        </NavigationProperty>
+      </EntityType>
+      <EntityType Name="servicePrincipal" BaseType="graph.directoryObject" OpenType="true">
+        <Property Name="appId" Type="Edm.String" />
+        <Property Name="displayName" Type="Edm.String" />
+        <Property Name="publisherDomain" Type="Edm.String" />
+        <Property Name="signInAudience" Type="Edm.String" />
+        <NavigationProperty Name="owners" Type="Collection(graph.directoryObject)" ContainsTarget="true">
+          <Annotation Term="Org.OData.Validation.V1.DerivedTypeConstraint" xmlns:edm="http://docs.oasis-open.org/odata/ns/edm">
+            <Collection>
+              <String>microsoft.graph.appRoleAssignment</String>
+              <String>microsoft.graph.endpoint</String>
+              <String>microsoft.graph.servicePrincipal</String>
+              <String>microsoft.graph.user</String>
+            </Collection>
+          </Annotation>
+          <Annotation Term="Org.OData.Capabilities.V1.NavigationRestrictions">
+            <Record>
+              <PropertyValue Property="Referenceable" Bool="true" />
+            </Record>
+          </Annotation>
+          <Annotation Term="Org.OData.Capabilities.V1.ReadRestrictions">
+            <Record>
+              <PropertyValue Property="CustomHeaders">
+                <Collection>
+                  <Record>
+                    <PropertyValue Property="Name" String="ConsistencyLevel" />
+                    <PropertyValue Property="Description" String="Indicates the requested consistency level." />
+                    <PropertyValue Property="DocumentationURL" String="https://docs.microsoft.com/graph/aad-advanced-queries" />
+                    <PropertyValue Property="Required" Bool="false" />
+                    <PropertyValue Property="ExampleValues">
+                      <Collection>
+                        <Record>
+                          <PropertyValue Property="Value" String="eventual" />
+                          <PropertyValue Property="Description" String="$search and $count queries require the client to set the ConsistencyLevel HTTP header to 'eventual'." />
+                        </Record>
+                      </Collection>
+                    </PropertyValue>
+                  </Record>
+                </Collection>
+              </PropertyValue>
+            </Record>
+          </Annotation>
+        </NavigationProperty>
+        <NavigationProperty Name="claimsMappingPolicies" Type="Collection(graph.claimsMappingPolicy)">
+          <Annotation Term="Org.OData.Capabilities.V1.NavigationRestrictions">
+            <Record>
+              <PropertyValue Property="Referenceable" Bool="true" />
+            </Record>
+          </Annotation>
+        </NavigationProperty>
+        <NavigationProperty Name="tokenIssuancePolicies" Type="Collection(graph.tokenIssuancePolicy)">
+          <Annotation Term="Org.OData.Capabilities.V1.NavigationRestrictions">
+            <Record>
+              <PropertyValue Property="Referenceable" Bool="true" />
+            </Record>
+          </Annotation>
+        </NavigationProperty>
+        <NavigationProperty Name="tokenLifetimePolicies" Type="Collection(graph.tokenLifetimePolicy)">
+          <Annotation Term="Org.OData.Capabilities.V1.NavigationRestrictions">
+            <Record>
+              <PropertyValue Property="Referenceable" Bool="true" />
+            </Record>
+          </Annotation>
+        </NavigationProperty>
+        <NavigationProperty Name="homeRealmDiscoveryPolicies" Type="Collection(graph.homeRealmDiscoveryPolicy)">
+          <Annotation Term="Org.OData.Capabilities.V1.NavigationRestrictions">
+            <Record>
+              <PropertyValue Property="Referenceable" Bool="true" />
+            </Record>
+          </Annotation>
+        </NavigationProperty>
+      </EntityType>
       <EntityType Name="plannerUser" BaseType="graph.entity">
         <NavigationProperty Name="tasks" Type="Collection(graph.plannerTask)" ContainsTarget="true" />
         <NavigationProperty Name="plans" Type="Collection(graph.plannerPlan)" ContainsTarget="true" />
@@ -53,6 +188,61 @@
       <EntityType Name="deviceManagementComplianceScheduledActionForRule" BaseType="graph.entity">
         <Property Name="ruleName" Type="Edm.String" />
         <NavigationProperty Name="scheduledActionConfigurations" Type="Collection(graph.deviceManagementComplianceActionItem)" ContainsTarget="true" />
+      </EntityType>
+      <EntityType Name="event" BaseType="graph.outlookItem" OpenType="true">
+        <NavigationProperty Name="exceptionOccurrences" Type="Collection(graph.event)" ContainsTarget="true">
+          <Annotation Term="Org.OData.Capabilities.V1.NavigationRestrictions">
+            <Record>
+              <PropertyValue Property="Navigability">
+                <EnumMember>Org.OData.Capabilities.V1.NavigationType/None</EnumMember>
+              </PropertyValue>
+            </Record>
+          </Annotation>
+        </NavigationProperty>
+        <NavigationProperty Name="instances" Type="Collection(graph.event)" ContainsTarget="true">
+          <Annotation Term="Org.OData.Capabilities.V1.NavigationRestrictions">
+            <Record>
+              <PropertyValue Property="RestrictedProperties">
+                <Collection>
+                  <Record>
+                    <PropertyValue Property="NavigationProperty">
+                      <PropertyPath>instances</PropertyPath>
+                    </PropertyValue>
+                    <PropertyValue Property="ReadRestrictions">
+                      <Record>
+                        <PropertyValue Property="CustomQueryOptions">
+                          <Collection>
+                            <Record>
+                              <PropertyValue Property="Name" String="startDateTime" />
+                              <PropertyValue Property="Description" String="The start date and time of the time range, represented in ISO 8601 format. For example, 2019-11-08T19:00:00-08:00" />
+                              <PropertyValue Property="Required" Bool="true" />
+                            </Record>
+                            <Record>
+                              <PropertyValue Property="Name" String="endDateTime" />
+                              <PropertyValue Property="Description" String="The end date and time of the time range, represented in ISO 8601 format. For example, 2019-11-08T20:00:00-08:00" />
+                              <PropertyValue Property="Required" Bool="true" />
+                            </Record>
+                          </Collection>
+                        </PropertyValue>
+                      </Record>
+                    </PropertyValue>
+                  </Record>
+                </Collection>
+              </PropertyValue>
+            </Record>
+          </Annotation>
+          <Annotation Term="Org.OData.Capabilities.V1.ReadRestrictions">
+            <Record>
+              <PropertyValue Property="Readable" Bool="true" />
+              <PropertyValue Property="ReadByKeyRestrictions">
+                <Record>
+                  <PropertyValue Property="Readable" Bool="false" />
+                </Record>
+              </PropertyValue>
+            </Record>
+          </Annotation>
+          <Annotation Term="Org.OData.Capabilities.V1.IndexableByKey" Bool="false" />
+        </NavigationProperty>
       </EntityType>
       <EntityType Name="plannerPlan" BaseType="graph.entity">
         <Property Name="createdBy" Type="graph.identitySet" />
@@ -217,6 +407,23 @@
             </Record>
           </Annotation>
         </NavigationProperty>
+        <NavigationProperty Name="synchronization" Type="graph.synchronization" ContainsTarget="true" />
+      </EntityType>
+      <EntityType Name="synchronization" BaseType="graph.entity">
+        <Property Name="secrets" Type="Collection(graph.synchronizationSecretKeyStringValuePair)" />
+        <NavigationProperty Name="jobs" Type="Collection(graph.synchronizationJob)" ContainsTarget="true" />
+      </EntityType>
+      <EntityType Name="synchronizationJob" BaseType="graph.entity">
+        <NavigationProperty Name="schema" Type="graph.synchronizationSchema" ContainsTarget="true" />
+      </EntityType>
+      <EntityType Name="schema" BaseType="graph.entity">
+        <Property Name="baseType" Type="Edm.String" Nullable="false" />
+        <Property Name="properties" Type="Collection(graph.property)" />
+      </EntityType>
+      <EntityType Name="synchronizationSchema" BaseType="graph.entity">
+        <Property Name="synchronizationRules" Type="Collection(graph.synchronizationRule)" />
+        <Property Name="version" Type="Edm.String" />
+        <NavigationProperty Name="directories" Type="Collection(graph.directoryDefinition)" ContainsTarget="true" />
       </EntityType>
       <EntityType Name="directoryObject" BaseType="graph.entity" OpenType="true">
         <Property Name="deletedDateTime" Type="Edm.DateTimeOffset" />
@@ -319,6 +526,35 @@
               <String>microsoft.graph.add</String>
               <String>microsoft.graph.remove</String>
             </Collection>
+          </Annotation>
+        </NavigationProperty>
+        <NavigationProperty Name="manager" Type="graph.directoryObject">
+          <Annotation Term="Org.OData.Capabilities.V1.ReadRestrictions">
+            <Record>
+              <PropertyValue Property="CustomHeaders">
+                <Collection>
+                  <Record>
+                    <PropertyValue Property="Name" String="ConsistencyLevel" />
+                    <PropertyValue Property="Description" String="Indicates the requested consistency level." />
+                    <PropertyValue Property="DocumentationURL" String="https://docs.microsoft.com/graph/aad-advanced-queries" />
+                    <PropertyValue Property="Required" Bool="false" />
+                    <PropertyValue Property="ExampleValues">
+                      <Collection>
+                        <Record>
+                          <PropertyValue Property="Value" String="eventual" />
+                          <PropertyValue Property="Description" String="$search and $count queries require the client to set the ConsistencyLevel HTTP header to 'eventual'." />
+                        </Record>
+                      </Collection>
+                    </PropertyValue>
+                  </Record>
+                </Collection>
+              </PropertyValue>
+            </Record>
+          </Annotation>
+          <Annotation Term="Org.OData.Capabilities.V1.NavigationRestrictions">
+            <Record>
+              <PropertyValue Property="Referenceable" Bool="true" />
+            </Record>
           </Annotation>
         </NavigationProperty>
       </EntityType>
@@ -742,6 +978,18 @@
           </Record>
         </Annotation>
       </Annotations>
+      <Annotations Target="microsoft.graph.synchronizationJob/schema">
+        <Annotation Term="Org.OData.Capabilities.V1.UpdateRestrictions">
+          <Record>
+            <PropertyValue Property="Description" String="synchronizationJob: schema" />
+            <PropertyValue Property="LongDescription" String="Update the synchronization schema for a given job or template." />
+            <PropertyValue Property="UpdateMethod">
+              <EnumMember>Org.OData.Capabilities.V1.HttpMethod/PUT</EnumMember>
+            </PropertyValue>
+            <PropertyValue Property="Updatable" Bool="true" />
+          </Record>
+        </Annotation>
+      </Annotations>
       <Annotations Target="microsoft.graph.driveItem/children">
         <Annotation Term="Org.OData.Capabilities.V1.ReadRestrictions">
           <Record>
@@ -937,6 +1185,28 @@
         <Property Name="description" Type="Edm.String" />
         <Property Name="displayName" Type="Edm.String" />
         <NavigationProperty Name="details" Type="Collection(graph.landingPageDetail)" ContainsTarget="true" />
+      </EntityType>
+      <EntityType Name="protectionUnitBase" BaseType="graph.entity">
+        <Property Name="createdDateTime" Type="Edm.DateTimeOffset" />
+        <Property Name="lastModifiedDateTime" Type="Edm.DateTimeOffset" />
+      </EntityType>
+      <EntityType Name="backupRestoreRoot" BaseType="graph.entity">
+        <Property Name="serviceStatus" Type="graph.serviceStatus" />
+        <NavigationProperty Name="protectionUnits" Type="Collection(graph.protectionUnitBase)">
+          <Annotation Term="Org.OData.Validation.V1.DerivedTypeConstraint" xmlns:edm="http://docs.oasis-open.org/odata/ns/edm">
+            <Collection>
+              <String>microsoft.graph.siteProtectionUnit</String>
+              <String>microsoft.graph.mailboxProtectionUnit</String>
+              <String>microsoft.graph.driveProtectionUnit</String>
+            </Collection>
+          </Annotation>
+          <Annotation Term="Org.OData.Core.V1.ExplicitOperationBindings" xmlns:edm="http://docs.oasis-open.org/odata/ns/edm">
+            <Collection>
+              <String>microsoft.graph.cancelOffboard</String>
+              <String>microsoft.graph.offboard</String>
+            </Collection>
+          </Annotation>
+        </NavigationProperty>
       </EntityType>
       <EntityType Name="b2xIdentityUserFlow" BaseType="graph.identityUserFlow">
         <Property Name="apiConnectorConfiguration" Type="graph.userFlowApiConnectorConfiguration" />
@@ -1231,6 +1501,16 @@
       <Action Name="restore" IsBound="true">
         <Parameter Name="bindingParameter" Type="graph.directoryObject" Nullable="false" />
         <ReturnType Type="graph.directoryObject" />
+        <Annotation Term="Org.OData.Core.V1.RequiresExplicitBinding" xmlns:edm="http://docs.oasis-open.org/odata/ns/edm" />
+      </Action>
+      <Action Name="cancelOffboard" IsBound="true">
+        <Parameter Name="bindingParameter" Type="graph.protectionUnitBase" />
+        <ReturnType Type="graph.protectionUnitBase" />
+        <Annotation Term="Org.OData.Core.V1.RequiresExplicitBinding" xmlns:edm="http://docs.oasis-open.org/odata/ns/edm" />
+      </Action>
+      <Action Name="offboard" IsBound="true">
+        <Parameter Name="bindingParameter" Type="graph.protectionUnitBase" />
+        <ReturnType Type="graph.protectionUnitBase" />
         <Annotation Term="Org.OData.Core.V1.RequiresExplicitBinding" xmlns:edm="http://docs.oasis-open.org/odata/ns/edm" />
       </Action>
       <Action Name="add" IsBound="true">
@@ -1602,6 +1882,23 @@
           </Collection>
         </Annotation>
       </Annotations>
+    </Schema>
+    <Schema Namespace="microsoft.graph.security" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+      <EnumType Name="statisticsOptions" IsFlags="true">
+        <Member Name="includeRefiners" Value="1" />
+        <Member Name="includeQueryStats" Value="2" />
+        <Member Name="includeUnindexedStats" Value="4" />
+        <Member Name="advancedIndexing" Value="8" />
+        <Member Name="locationsWithoutHits" Value="16" />
+        <Member Name="unknownFutureValue" Value="32" />
+      </EnumType>
+      <EntityType Name="ediscoverySearch">
+        <Property Name="dummyProperty" Type="string" />
+        <!--  this is partial since we only need the entity type for the action-->
+      </EntityType>
+      <Action Name="estimateStatistics" IsBound="true">
+        <Parameter Name="bindingParameter" Type="microsoft.graph.security.ediscoverySearch" />
+      </Action>
     </Schema>
   </edmx:DataServices>
 </edmx:Edmx>

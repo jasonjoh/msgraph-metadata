@@ -8,6 +8,27 @@
               <NavigationProperty Name="completedSteps" Type="Collection(graph.approvalStep)" ContainsTarget="true" />
               <NavigationProperty Name="request" Type="graph.request" />
             </EntityType>
+            <EntityType Name="application" BaseType="graph.directoryObject" OpenType="true">
+                <Property Name="appId" Type="Edm.String" />
+                <Property Name="displayName" Type="Edm.String" />
+                <Property Name="publisherDomain" Type="Edm.String" />
+                <Property Name="signInAudience" Type="Edm.String" />
+                <NavigationProperty Name="owners" Type="Collection(graph.directoryObject)" ContainsTarget="true"/>
+                <NavigationProperty Name="appManagementPolicies" Type="Collection(graph.appManagementPolicy)"/>
+                <NavigationProperty Name="tokenIssuancePolicies" Type="Collection(graph.tokenIssuancePolicy)"/>
+                <NavigationProperty Name="tokenLifetimePolicies" Type="Collection(graph.tokenLifetimePolicy)"/>
+            </EntityType>
+            <EntityType Name="servicePrincipal" BaseType="graph.directoryObject" OpenType="true">
+                <Property Name="appId" Type="Edm.String" />
+                <Property Name="displayName" Type="Edm.String" />
+                <Property Name="publisherDomain" Type="Edm.String" />
+                <Property Name="signInAudience" Type="Edm.String" />
+                <NavigationProperty Name="owners" Type="Collection(graph.directoryObject)" ContainsTarget="true"/>
+                <NavigationProperty Name="claimsMappingPolicies" Type="Collection(graph.claimsMappingPolicy)"/>
+                <NavigationProperty Name="tokenIssuancePolicies" Type="Collection(graph.tokenIssuancePolicy)"/>
+                <NavigationProperty Name="tokenLifetimePolicies" Type="Collection(graph.tokenLifetimePolicy)"/>
+                <NavigationProperty Name="homeRealmDiscoveryPolicies" Type="Collection(graph.homeRealmDiscoveryPolicy)"/>
+            </EntityType>
             <EntityType Name="plannerUser" BaseType="graph.entity">
                 <NavigationProperty Name="tasks" Type="Collection(graph.plannerTask)" />
                 <NavigationProperty Name="plans" Type="Collection(graph.plannerPlan)" />
@@ -18,6 +39,42 @@
             <EntityType Name="deviceManagementComplianceScheduledActionForRule" BaseType="graph.entity">
                 <Property Name="ruleName" Type="Edm.String" />
                 <NavigationProperty Name="scheduledActionConfigurations" Type="Collection(graph.deviceManagementComplianceActionItem)" />
+            </EntityType>
+            <EntityType Name="event" BaseType="graph.outlookItem" OpenType="true">
+                <NavigationProperty Name="exceptionOccurrences" Type="Collection(graph.event)" ContainsTarget="true" />
+                <NavigationProperty Name="instances" Type="Collection(graph.event)" ContainsTarget="true">
+                  <Annotation Term="Org.OData.Capabilities.V1.NavigationRestrictions">
+                    <Record>
+                      <PropertyValue Property="RestrictedProperties">
+                        <Collection>
+                          <Record>
+                            <PropertyValue Property="NavigationProperty">
+                              <PropertyPath>instances</PropertyPath>
+                            </PropertyValue>
+                            <PropertyValue Property="ReadRestrictions">
+                              <Record>
+                                <PropertyValue Property="CustomQueryOptions">
+                                  <Collection>
+                                    <Record>
+                                      <PropertyValue Property="Name" String="startDateTime" />
+                                      <PropertyValue Property="Description" String="The start date and time of the time range, represented in ISO 8601 format. For example, 2019-11-08T19:00:00-08:00" />
+                                      <PropertyValue Property="Required" Bool="true" />
+                                    </Record>
+                                    <Record>
+                                      <PropertyValue Property="Name" String="endDateTime" />
+                                      <PropertyValue Property="Description" String="The end date and time of the time range, represented in ISO 8601 format. For example, 2019-11-08T20:00:00-08:00" />
+                                      <PropertyValue Property="Required" Bool="true" />
+                                    </Record>
+                                  </Collection>
+                                </PropertyValue>
+                              </Record>
+                            </PropertyValue>
+                          </Record>
+                        </Collection>
+                      </PropertyValue>
+                    </Record>
+                  </Annotation>
+                </NavigationProperty>
             </EntityType>
             <EntityType Name="plannerPlan" BaseType="graph.entity">
                 <Property Name="createdBy" Type="graph.identitySet" />
@@ -47,6 +104,23 @@
             <EntityType Name="servicePrincipal" BaseType="graph.directoryObject" OpenType="true">
                 <Property Name="appId" Type="Edm.String"/>
                 <NavigationProperty Name="owners" Type="Collection(graph.directoryObject)" />
+                <NavigationProperty Name="synchronization" Type="graph.synchronization" ContainsTarget="true"/>
+            </EntityType>
+            <EntityType Name="synchronization" BaseType="graph.entity">
+                <Property Name="secrets" Type="Collection(graph.synchronizationSecretKeyStringValuePair)"/>
+                <NavigationProperty Name="jobs" Type="Collection(graph.synchronizationJob)" ContainsTarget="true"/>
+            </EntityType>
+            <EntityType Name="synchronizationJob" BaseType="graph.entity">
+                <NavigationProperty Name="schema" Type="graph.synchronizationSchema" ContainsTarget="true"/>
+            </EntityType>
+            <EntityType Name="schema" BaseType="graph.entity">
+                <Property Name="baseType" Type="Edm.String" Nullable="false"/>
+                <Property Name="properties" Type="Collection(graph.property)"/>
+            </EntityType>
+            <EntityType Name="synchronizationSchema" BaseType="graph.entity">
+                <Property Name="synchronizationRules" Type="Collection(graph.synchronizationRule)"/>
+                <Property Name="version" Type="Edm.String"/>
+                <NavigationProperty Name="directories" Type="Collection(graph.directoryDefinition)" ContainsTarget="true"/>
             </EntityType>
             <EntityType Name="directoryObject" BaseType="graph.entity" OpenType="true">
                 <Property Name="deletedDateTime" Type="Edm.DateTimeOffset" />
@@ -59,6 +133,7 @@
                 <NavigationProperty Name="messages" Type="Collection(graph.message)" ContainsTarget="true" />
                 <NavigationProperty Name="memberOf" Type="Collection(graph.directoryObject)" />
                 <NavigationProperty Name="followedSites" Type="Collection(graph.site)" />
+                <NavigationProperty Name="manager" Type="graph.directoryObject" />
             </EntityType>
             <EntityType Name="site" BaseType="graph.baseItem">
                 <NavigationProperty Name="analytics" Type="graph.itemAnalytics" ContainsTarget="true">
@@ -236,6 +311,14 @@
                     </Record>
                 </Annotation>
             </Annotations>
+            <Annotations Target="microsoft.graph.synchronizationJob/schema">
+                <Annotation Term="Org.OData.Capabilities.V1.UpdateRestrictions">
+                    <Record>
+                        <PropertyValue Property="Description" String="synchronizationJob: schema" />
+                        <PropertyValue Property="LongDescription" String="Update the synchronization schema for a given job or template." />
+                    </Record>
+                </Annotation>
+            </Annotations>
             <Annotations Target="microsoft.graph.driveItem/children">
                 <Annotation Term="Org.OData.Capabilities.V1.ReadRestrictions">
                     <Record>
@@ -408,6 +491,14 @@
                 <Property Name="displayName" Type="Edm.String" />
                 <NavigationProperty Name="details" Type="Collection(graph.landingPageDetail)" />
             </EntityType>
+            <EntityType Name="protectionUnitBase" BaseType="graph.entity">
+                <Property Name="createdDateTime" Type="Edm.DateTimeOffset" />
+                <Property Name="lastModifiedDateTime" Type="Edm.DateTimeOffset" />
+            </EntityType>
+            <EntityType Name="backupRestoreRoot" BaseType="graph.entity">
+                <Property Name="serviceStatus" Type="graph.serviceStatus" />
+                <NavigationProperty Name="protectionUnits" Type="Collection(graph.protectionUnitBase)" />
+            </EntityType>
             <EntityType Name="b2xIdentityUserFlow" BaseType="graph.identityUserFlow">
                 <Property Name="apiConnectorConfiguration" Type="graph.userFlowApiConnectorConfiguration" />
                 <NavigationProperty Name="identityProviders" Type="Collection(graph.identityProvider)" />                
@@ -434,6 +525,7 @@
               <EntitySet Name="groups" EntityType="microsoft.graph.group" />
               <EntitySet Name="servicePrincipals" EntityType="microsoft.graph.servicePrincipal" />
               <EntitySet Name="directoryObjects" EntityType="microsoft.graph.directoryObject" />
+              <EntitySet Name="appRoleAssignments" EntityType="microsoft.graph.directoryObject" />
               <EntitySet Name="places" EntityType="microsoft.graph.place" />
             </EntityContainer>
             <Function Name="delta" IsBound="true">
@@ -467,7 +559,18 @@
                 <Parameter Name="autoReconcileProxyConflict" Type="Edm.Boolean">
                     <Annotation Term="Org.OData.Core.V1.OptionalParameter" />
                 </Parameter>
+                <Parameter Name="newUserPrincipalName" Type="Edm.String" Unicode="false">
+                    <Annotation Term="Org.OData.Core.V1.OptionalParameter" />
+                </Parameter>
                 <ReturnType Type="graph.directoryObject" />
+            </Action>
+            <Action Name="cancelOffboard" IsBound="true">
+                <Parameter Name="bindingParameter" Type="graph.protectionUnitBase" />
+                <ReturnType Type="graph.protectionUnitBase" />
+            </Action>
+            <Action Name="offboard" IsBound="true">
+                <Parameter Name="bindingParameter" Type="graph.protectionUnitBase" />
+                <ReturnType Type="graph.protectionUnitBase" />
             </Action>
             <Action Name="add" IsBound="true">
                 <Parameter Name="bindingParameter" Type="Collection(graph.site)" />
@@ -612,6 +715,24 @@
                 </Annotation>
                 <Annotation Term="Org.OData.Capabilities.V1.SkipSupported" Bool="false" />
             </Annotations>
+        </Schema>
+        <Schema Namespace="microsoft.graph.security" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+            <EnumType Name="statisticsOptions" IsFlags="true">
+                <Member Name="includeRefiners" Value="1" />
+                <Member Name="includeQueryStats" Value="2" />
+                <Member Name="includeUnindexedStats" Value="4" />
+                <Member Name="advancedIndexing" Value="8" />
+                <Member Name="locationsWithoutHits" Value="16" />
+                <Member Name="unknownFutureValue" Value="32" />
+            </EnumType>
+            <EntityType Name="ediscoverySearch">
+                <Property Name="dummyProperty" Type="string" />
+                <!--  this is partial since we only need the entity type for the action-->
+            </EntityType>
+            <Action Name="estimateStatistics" IsBound="true">
+                <Parameter Name="bindingParameter" Type="microsoft.graph.security.ediscoverySearch" />
+                <Parameter Name="statisticsOptions" Type="microsoft.graph.security.statisticsOptions" />
+            </Action>
         </Schema>
     </edmx:DataServices>
 </edmx:Edmx>

@@ -478,6 +478,8 @@
             </Annotation>
         </xsl:copy>
     </xsl:template>
+    <!-- Remove the appRoleAssignments entityset as it is not directly queriable from the root path -->
+    <xsl:template match="edm:Schema[@Namespace='microsoft.graph']/edm:EntityContainer[@Name='GraphService']/edm:EntitySet[@Name='appRoleAssignments']"/>
     <xsl:template match="edm:Schema[@Namespace='microsoft.graph.ediscovery']/edm:EntityType[@Name='case']/edm:NavigationProperty[@Name='operations']">
         <xsl:copy>
             <xsl:copy-of select="@* | node()" />
@@ -494,6 +496,24 @@
             <Annotation Term="Org.OData.Validation.V1.DerivedTypeConstraint">
                 <Collection>
                     <String>microsoft.graph.externalUsersSelfServiceSignUpEventsFlow</String>
+                </Collection>
+            </Annotation>
+        </xsl:copy>
+    </xsl:template>
+    <xsl:template match="edm:Schema[@Namespace='microsoft.graph']/edm:EntityType[@Name='backupRestoreRoot']/edm:NavigationProperty[@Name='protectionUnits']">
+        <xsl:copy>
+            <xsl:copy-of select="@* | node()" />
+            <Annotation Term="Org.OData.Validation.V1.DerivedTypeConstraint">
+                <Collection>
+					<String>microsoft.graph.siteProtectionUnit</String>
+					<String>microsoft.graph.mailboxProtectionUnit</String>
+					<String>microsoft.graph.driveProtectionUnit</String>
+				</Collection>
+            </Annotation>
+            <Annotation Term="Org.OData.Core.V1.ExplicitOperationBindings">
+                <Collection>
+                    <String>microsoft.graph.cancelOffboard</String>
+                    <String>microsoft.graph.offboard</String>
                 </Collection>
             </Annotation>
         </xsl:copy>
@@ -649,10 +669,13 @@
     <!-- Remove action parameter -->
     <!-- This should be a temp fix, tracking: https://github.com/microsoft/OpenAPI.NET.OData/issues/582 -->
     <xsl:template match="edm:Schema[@Namespace='microsoft.graph']/edm:Action[@Name='restore']/edm:Parameter[@Name='autoReconcileProxyConflict']"/>
+    <xsl:template match="edm:Schema[@Namespace='microsoft.graph']/edm:Action[@Name='restore']/edm:Parameter[@Name='newUserPrincipalName']"/>
 
     <!-- Remove action parameter -->
     <!-- This should be a temp fix, tracking: https://github.com/microsoft/OpenAPI.NET.OData/issues/582 -->
     <xsl:template match="edm:Schema[@Namespace='microsoft.graph']/edm:Action[@Name='verify']/edm:Parameter[@Name='forceTakeover']"/>
+
+    <xsl:template match="edm:Schema[@Namespace='microsoft.graph.security']/edm:Action[@Name='estimateStatistics']/edm:Parameter[@Name='statisticsOptions']"/>
 
     <!-- Remove action parameters -->
     <!-- This should be a temp fix, tracking: https://github.com/microsoftgraph/MSGraph-SDK-Code-Generator/issues/261 -->
@@ -683,6 +706,15 @@
         <Annotation Term="Org.OData.Core.V1.RequiresExplicitBinding"/>
     </xsl:copy>
     </xsl:template>
+
+    <!-- Actions bound to protectionUnitBase should have the 'RequiresExplicitBinding' annotation-->
+    <xsl:template match="edm:Schema[@Namespace='microsoft.graph']/edm:Action[@Name='offboard'][edm:Parameter[@Name='bindingParameter']][edm:Parameter[@Type='graph.protectionUnitBase']] |
+                         edm:Schema[@Namespace='microsoft.graph']/edm:Action[@Name='cancelOffboard'][edm:Parameter[@Name='bindingParameter']][edm:Parameter[@Type='graph.protectionUnitBase']]">
+        <xsl:copy>
+            <xsl:apply-templates select="@* | node()" />
+            <Annotation Term="Org.OData.Core.V1.RequiresExplicitBinding"/>
+        </xsl:copy>
+    </xsl:template>    
     
     <!--Delta function for events need the start and end date parameters-->
     <xsl:template match="edm:Schema[@Namespace='microsoft.graph']/edm:Function[@Name='delta'][edm:Parameter[@Name='bindingparameter']][edm:Parameter[@Type='Collection(graph.event)']]">
@@ -952,6 +984,43 @@
                     </xsl:element>
                 </xsl:element>
             </xsl:element>
+            <!--Add readRestcitions to Instances through annotations. Instances is readble, but not indexable or readableByKey-->
+            <xsl:call-template name="ReadRestrictionsTemplate">
+                <xsl:with-param name="readable">true</xsl:with-param>
+                <xsl:with-param name="readableByKey">false</xsl:with-param>
+            </xsl:call-template>
+            <xsl:call-template name="IndexableByKeyTemplate">
+              <xsl:with-param name="indexableByKey">false</xsl:with-param>
+            </xsl:call-template>
+        </xsl:copy>
+    </xsl:template>
+
+    <!--Add readRestcitions to CalendarView through annotations. CalendarView is readble, but not indexable or readableByKey-->
+    <!--https://github.com/oasis-tcs/odata-vocabularies/blob/main/vocabularies/Org.OData.Capabilities.V1.md#ReadByKeyRestrictionsType-->
+    <!--https://github.com/oasis-tcs/odata-vocabularies/blob/main/vocabularies/Org.OData.Capabilities.V1.md#defaultcapabilitiestype-->
+    <xsl:template match="edm:Schema[@Namespace='microsoft.graph']/edm:EntityType[@Name='bookingBusiness']/edm:NavigationProperty[@Name='calendarView']|
+                         edm:Schema[@Namespace='microsoft.graph']/edm:EntityType[@Name='calendar']/edm:NavigationProperty[@Name='calendarView']|
+                         edm:Schema[@Namespace='microsoft.graph']/edm:EntityType[@Name='group']/edm:NavigationProperty[@Name='calendarView']|
+                         edm:Schema[@Namespace='microsoft.graph']/edm:EntityType[@Name='user']/edm:NavigationProperty[@Name='calendarView']">
+        <xsl:copy>
+            <xsl:apply-templates select="@* | node()"/>
+            <xsl:call-template name="ReadRestrictionsTemplate">
+                <xsl:with-param name="readable">true</xsl:with-param>
+                <xsl:with-param name="readableByKey">false</xsl:with-param>
+            </xsl:call-template>
+            <xsl:call-template name="IndexableByKeyTemplate">
+              <xsl:with-param name="indexableByKey">false</xsl:with-param>
+          </xsl:call-template>
+        </xsl:copy>
+    </xsl:template>
+  <!--Remove exceptionOccurrences from all URI and navigation paths by adding NavigrationRestriction annotations-->
+  <!--https://github.com/oasis-tcs/odata-vocabularies/blob/main/vocabularies/Org.OData.Capabilities.V1.md#navigationrestrictionstype-->
+    <xsl:template match="edm:Schema[@Namespace='microsoft.graph']/edm:EntityType[@Name='event']/edm:NavigationProperty[@Name='exceptionOccurrences']">
+        <xsl:copy>
+            <xsl:copy-of select="@* | node()" />
+                <xsl:call-template name="NavigationRestrictionsTemplate">
+                    <xsl:with-param name="navigability">None</xsl:with-param>
+                </xsl:call-template>
         </xsl:copy>
     </xsl:template>
 
@@ -1358,7 +1427,7 @@
     </xsl:template>
        
     <!-- Add Navigation Restrictions Annotations -->
-    <xsl:template match="edm:Schema[@Namespace='microsoft.graph']">
+    <xsl:template match="edm:Schema[@Namespace='microsoft.graph']"> 
         <xsl:copy>
             <xsl:apply-templates select="@* | node()"/>
             
@@ -2177,6 +2246,22 @@
             </xsl:element>
         </xsl:copy>
     </xsl:template>
+
+    <!-- Update UpdateRestrictions for synchronizationJob/schema navigation property -->
+    <xsl:template match="edm:Schema[@Namespace='microsoft.graph']/edm:Annotations[@Target='microsoft.graph.synchronizationJob/schema']/edm:Annotation[@Term='Org.OData.Capabilities.V1.UpdateRestrictions']">
+        <xsl:copy>
+        <xsl:copy-of select="@*"/>
+            <xsl:element name="Record" namespace="{namespace-uri()}">
+            <xsl:copy-of select="edm:Record/edm:PropertyValue"/>
+                <xsl:call-template name="UpdateMethodTemplate">
+                    <xsl:with-param name="httpMethod">PUT</xsl:with-param>            
+                </xsl:call-template>
+                <xsl:call-template name="UpdatableTemplate">
+                    <xsl:with-param name="updatable">true</xsl:with-param>            
+                </xsl:call-template>   
+            </xsl:element>
+        </xsl:copy>
+    </xsl:template>
     
     <!-- If only the grand-parent "Annotations" tag exists, modify it -->
     <!-- Add UpdateRestrictions for crossTenantAccessPolicyConfigurationPartner/identitySynchronization navigation property -->
@@ -2466,10 +2551,9 @@
     </xsl:template>
 
     <!-- Add Referenceable Annotations (for /$ref paths) -->
-    <xsl:template match="edm:Schema[@Namespace='microsoft.graph']/edm:EntityType[@Name='connectorGroup']/edm:NavigationProperty[@Name='members']|
-                        edm:Schema[@Namespace='microsoft.graph']/edm:EntityType[@Name='educationClass']/edm:NavigationProperty[@Name='members']|
-                        edm:Schema[@Namespace='microsoft.graph']/edm:EntityType[@Name='accessPackage']/edm:NavigationProperty[@Name='incompatibleAccessPackages']|
+    <xsl:template match="edm:Schema[@Namespace='microsoft.graph']/edm:EntityType[@Name='accessPackage']/edm:NavigationProperty[@Name='incompatibleAccessPackages']|
                         edm:Schema[@Namespace='microsoft.graph']/edm:EntityType[@Name='accessPackage']/edm:NavigationProperty[@Name='incompatibleGroups']|
+                        edm:Schema[@Namespace='microsoft.graph']/edm:EntityType[@Name='application']/edm:NavigationProperty[@Name='connectorGroup']|
                         edm:Schema[@Namespace='microsoft.graph']/edm:EntityType[@Name='application']/edm:NavigationProperty[@Name='tokenIssuancePolicies']|
                         edm:Schema[@Namespace='microsoft.graph']/edm:EntityType[@Name='application']/edm:NavigationProperty[@Name='tokenLifetimePolicies']|
                         edm:Schema[@Namespace='microsoft.graph']/edm:EntityType[@Name='application']/edm:NavigationProperty[@Name='appManagementPolicies']|
@@ -2478,26 +2562,28 @@
                         edm:Schema[@Namespace='microsoft.graph']/edm:EntityType[@Name='connectedOrganization']/edm:NavigationProperty[@Name='externalSponsors']|
                         edm:Schema[@Namespace='microsoft.graph']/edm:EntityType[@Name='connectedOrganization']/edm:NavigationProperty[@Name='internalSponsors']|
                         edm:Schema[@Namespace='microsoft.graph']/edm:EntityType[@Name='connector']/edm:NavigationProperty[@Name='memberOf']|
-                        edm:Schema[@Namespace='microsoft.graph']/edm:EntityType[@Name='application']/edm:NavigationProperty[@Name='connectorGroup']|
                         edm:Schema[@Namespace='microsoft.graph']/edm:EntityType[@Name='connector']/edm:NavigationProperty[@Name='registeredUsers']|
-                        edm:Schema[@Namespace='microsoft.graph']/edm:EntityType[@Name='sourceCollection']/edm:NavigationProperty[@Name='custodianSources']|
-                        edm:Schema[@Namespace='microsoft.graph']/edm:EntityType[@Name='sourceCollection']/edm:NavigationProperty[@Name='noncustodialSources']|
+                        edm:Schema[@Namespace='microsoft.graph']/edm:EntityType[@Name='connectorGroup']/edm:NavigationProperty[@Name='members']|
                         edm:Schema[@Namespace='microsoft.graph']/edm:EntityType[@Name='educationAssignment']/edm:NavigationProperty[@Name='categories']|
                         edm:Schema[@Namespace='microsoft.graph']/edm:EntityType[@Name='educationAssignment']/edm:NavigationProperty[@Name='rubric']|
+                        edm:Schema[@Namespace='microsoft.graph']/edm:EntityType[@Name='educationClass']/edm:NavigationProperty[@Name='members']|
                         edm:Schema[@Namespace='microsoft.graph']/edm:EntityType[@Name='educationClass']/edm:NavigationProperty[@Name='teachers']|
                         edm:Schema[@Namespace='microsoft.graph']/edm:EntityType[@Name='educationSchool']/edm:NavigationProperty[@Name='classes']|
                         edm:Schema[@Namespace='microsoft.graph']/edm:EntityType[@Name='educationSchool']/edm:NavigationProperty[@Name='users']|
                         edm:Schema[@Namespace='microsoft.graph']/edm:EntityType[@Name='featureRolloutPolicy']/edm:NavigationProperty[@Name='appliesTo']|
                         edm:Schema[@Namespace='microsoft.graph']/edm:EntityType[@Name='group']/edm:NavigationProperty[@Name='acceptedSenders']|
                         edm:Schema[@Namespace='microsoft.graph']/edm:EntityType[@Name='group']/edm:NavigationProperty[@Name='rejectedSenders']|
+                        edm:Schema[@Namespace='microsoft.graph']/edm:EntityType[@Name='managedDevice']/edm:NavigationProperty[@Name='deviceCategory']|
                         edm:Schema[@Namespace='microsoft.graph']/edm:EntityType[@Name='mobilityManagementPolicy']/edm:NavigationProperty[@Name='includedGroups']|
                         edm:Schema[@Namespace='microsoft.graph']/edm:EntityType[@Name='onPremisesAgent']/edm:NavigationProperty[@Name='agentGroups']|
                         edm:Schema[@Namespace='microsoft.graph']/edm:EntityType[@Name='printerShare']/edm:NavigationProperty[@Name='allowedGroups']|
                         edm:Schema[@Namespace='microsoft.graph']/edm:EntityType[@Name='printerShare']/edm:NavigationProperty[@Name='allowedUsers']|
+                        edm:Schema[@Namespace='microsoft.graph']/edm:EntityType[@Name='servicePrincipal']/edm:NavigationProperty[@Name='tokenIssuancePolicies']|
+                        edm:Schema[@Namespace='microsoft.graph']/edm:EntityType[@Name='servicePrincipal']/edm:NavigationProperty[@Name='tokenLifetimePolicies']|
                         edm:Schema[@Namespace='microsoft.graph']/edm:EntityType[@Name='servicePrincipal']/edm:NavigationProperty[@Name='claimsMappingPolicies']|
                         edm:Schema[@Namespace='microsoft.graph']/edm:EntityType[@Name='servicePrincipal']/edm:NavigationProperty[@Name='homeRealmDiscoveryPolicies']|
-                        edm:Schema[@Namespace='microsoft.graph']/edm:EntityType[@Name='user']/edm:NavigationProperty[@Name='manager']|
-                        edm:Schema[@Namespace='microsoft.graph']/edm:EntityType[@Name='managedDevice']/edm:NavigationProperty[@Name='deviceCategory']|
+                        edm:Schema[@Namespace='microsoft.graph']/edm:EntityType[@Name='sourceCollection']/edm:NavigationProperty[@Name='custodianSources']|
+                        edm:Schema[@Namespace='microsoft.graph']/edm:EntityType[@Name='sourceCollection']/edm:NavigationProperty[@Name='noncustodialSources']|
                         edm:Schema[@Namespace='microsoft.graph']/edm:ComplexType[@Name='userFlowApiConnectorConfiguration']/edm:NavigationProperty[@Name='postAttributeCollection']|
                         edm:Schema[@Namespace='microsoft.graph']/edm:ComplexType[@Name='userFlowApiConnectorConfiguration']/edm:NavigationProperty[@Name='postFederationSignup']">
         <xsl:copy>
@@ -2550,6 +2636,20 @@
                 <xsl:attribute name="Term">Org.OData.Capabilities.V1.ReadRestrictions</xsl:attribute>
                 <xsl:call-template name="ConsistencyLevelHeaderTemplate"/>
             </xsl:element>
+        </xsl:copy>
+    </xsl:template>
+
+    <!-- Add both $ref and consistency level header to manager navigation property-->
+    <xsl:template match="edm:Schema[@Namespace='microsoft.graph']/edm:EntityType[@Name='user']/edm:NavigationProperty[@Name='manager']">
+        <xsl:copy>
+            <xsl:copy-of select="@*|node()"/>
+            <xsl:element name="Annotation">
+                <xsl:attribute name="Term">Org.OData.Capabilities.V1.ReadRestrictions</xsl:attribute>
+                <xsl:call-template name="ConsistencyLevelHeaderTemplate"/>
+            </xsl:element>
+            <xsl:call-template name="ReferenceableRestrictionsTemplate">
+                <xsl:with-param name="referenceable">true</xsl:with-param>
+            </xsl:call-template>
         </xsl:copy>
     </xsl:template>
 
