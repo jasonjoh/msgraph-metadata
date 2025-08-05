@@ -1,3 +1,4 @@
+# cSpell:ignore csdl mooncake hidi
 param(
     [Parameter(Mandatory=$true)][string]$repoDirectory
 )
@@ -21,11 +22,11 @@ foreach($file in $metaDataFiles)
     $openapi = Join-Path $repoDirectory "schemas/openapi/v1.0/$($openapiFile).yml"
     $version = "v1.0"
 
-    Write-Host "Tranforming $csdl metadata using xslt with parameters used in the OpenAPI flow..." -ForegroundColor Green
+    Write-Host "Transforming $csdl metadata using xslt with parameters used in the OpenAPI flow..." -ForegroundColor Green
     & $transformScript -xslPath $xsltPath -inputPath $csdlPath -outputPath $transform -addInnerErrorDescription $true -removeCapabilityAnnotations $false -csdlVersion $version
 
     Write-Host "Converting $transform metadata to OpenAPI..." -ForegroundColor Green
-    & hidi transform --cs $transform -o $openapi --co -f Yaml --sp "$conversionSettingsDirectory/openapi.json"
+    & hidi transform --cs $transform -o $openapi --co -f Yaml --sp "$conversionSettingsDirectory/openapi.json" --version "3.0.1"
 }
 
 foreach($file in $metaDataBetaFiles)
@@ -38,9 +39,9 @@ foreach($file in $metaDataBetaFiles)
     $openapi = Join-Path $repoDirectory "schemas/openapi/beta/$($openapiFile).yml"
     $version = "beta"
 
-    Write-Host "Tranforming $csdl metadata using xslt with parameters used in the OpenAPI flow..." -ForegroundColor Green
+    Write-Host "Transforming $csdl metadata using xslt with parameters used in the OpenAPI flow..." -ForegroundColor Green
     & $transformScript -xslPath $xsltPath -inputPath $csdlPath -outputPath $transform -addInnerErrorDescription $true -removeCapabilityAnnotations $false -csdlVersion $version
 
     Write-Host "Converting $transform metadata to OpenAPI..." -ForegroundColor Green
-    & hidi transform --cs $transform -o $openapi --co -f Yaml --sp "$conversionSettingsDirectory/openapi.json"
+    & hidi transform --cs $transform -o $openapi --co -f Yaml --sp "$conversionSettingsDirectory/openapi.json" --version "3.0.1"
 }
