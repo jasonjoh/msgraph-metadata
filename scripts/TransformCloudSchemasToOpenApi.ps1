@@ -26,7 +26,7 @@ foreach($file in $metaDataFiles)
     & $transformScript -xslPath $xsltPath -inputPath $csdlPath -outputPath $transform -addInnerErrorDescription $true -removeCapabilityAnnotations $false -csdlVersion $version
 
     Write-Host "Converting $transform metadata to OpenAPI..." -ForegroundColor Green
-    & hidi transform --cs $transform -o $openapi --co -f Yaml --sp "$conversionSettingsDirectory/openapi.json" --version "3.0.1"
+    & hidi transform --cs $transform -o $openapi --co -f Yaml --sp "$conversionSettingsDirectory/openapi.json"
 }
 
 foreach($file in $metaDataBetaFiles)
@@ -43,5 +43,5 @@ foreach($file in $metaDataBetaFiles)
     & $transformScript -xslPath $xsltPath -inputPath $csdlPath -outputPath $transform -addInnerErrorDescription $true -removeCapabilityAnnotations $false -csdlVersion $version
 
     Write-Host "Converting $transform metadata to OpenAPI..." -ForegroundColor Green
-    & hidi transform --cs $transform -o $openapi --co -f Yaml --sp "$conversionSettingsDirectory/openapi.json" --version "3.0.1"
+    & hidi transform --cs $transform -o $openapi --co -f Yaml --sp "$conversionSettingsDirectory/openapi.json"
 }
