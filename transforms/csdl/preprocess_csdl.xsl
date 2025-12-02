@@ -474,6 +474,11 @@
                 <Collection>
                     <String>microsoft.graph.room</String>
                     <String>microsoft.graph.roomList</String>
+                    <String>microsoft.graph.building</String>
+                    <String>microsoft.graph.floor</String>
+                    <String>microsoft.graph.desk</String>
+                    <String>microsoft.graph.section</String>
+                    <String>microsoft.graph.workspace</String>
                 </Collection>
             </Annotation>
         </xsl:copy>
@@ -1746,10 +1751,7 @@
                         <xsl:attribute name="Target">microsoft.graph.GraphService/places</xsl:attribute>
                             <xsl:call-template name="ReadRestrictionsTemplate">
                                 <xsl:with-param name="readable">false</xsl:with-param>
-                            </xsl:call-template>
-                            <xsl:call-template name="InsertRestrictionsTemplate">
-                                <xsl:with-param name="insertable">false</xsl:with-param>
-                            </xsl:call-template>                            
+                            </xsl:call-template>            
                     </xsl:element>
                 </xsl:when>
             </xsl:choose>

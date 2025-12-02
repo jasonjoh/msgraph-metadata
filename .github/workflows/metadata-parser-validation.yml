@@ -12,7 +12,7 @@ jobs:
     outputs:
       matrix: ${{ steps.set-conversion-settings.outputs.matrix }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - id: set-conversion-settings
         run: echo "matrix=$(ls conversion-settings/*.json | sed 's/.*\///' | sed 's/\.[^.]*$//' | jq -R -s -c 'split("\n")[:-1]')" >> $GITHUB_OUTPUT
 
@@ -27,16 +27,16 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v5
       with:
         submodules: recursive
 
     - name: Setup .NET
-      uses: actions/setup-dotnet@v4.3.1
+      uses: actions/setup-dotnet@v5.0.0
       with:
         dotnet-version: 9.x
 
-    - run: dotnet tool install --global Microsoft.OpenApi.Hidi
+    - run: dotnet tool install --global Microsoft.OpenApi.Hidi --version 1.6.24
       name: Install  Hidi
 
     - name: Validate latest XSLT rules
@@ -48,7 +48,7 @@ jobs:
       with:
         args: 'lint transformed_${{ matrix.version }}_${{ matrix.settings }}_metadata.yml --skip-rule operation-4xx-response --skip-rule no-server-trailing-slash --skip-rule no-unused-components --skip-rule security-defined --skip-rule info-license-url --skip-rule info-license --skip-rule no-empty-servers --skip-rule operation-summary --skip-rule tag-description --max-problems 1000'
 
-    - uses: actions/upload-artifact@v4
+    - uses: actions/upload-artifact@v5
       if: always()
       with:
         name: ${{ matrix.version }}-${{ matrix.settings }}
