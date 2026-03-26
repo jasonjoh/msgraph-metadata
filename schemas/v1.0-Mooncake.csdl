@@ -1303,6 +1303,18 @@
         <Member Name="failed" Value="3" />
         <Member Name="unknownFutureValue" Value="4" />
       </EnumType>
+      <EnumType Name="mailTipsType" IsFlags="true">
+        <Member Name="automaticReplies" Value="1" />
+        <Member Name="mailboxFullStatus" Value="2" />
+        <Member Name="customMailTip" Value="4" />
+        <Member Name="externalMemberCount" Value="8" />
+        <Member Name="totalMemberCount" Value="16" />
+        <Member Name="maxMessageSize" Value="32" />
+        <Member Name="deliveryRestriction" Value="64" />
+        <Member Name="moderationStatus" Value="128" />
+        <Member Name="recipientScope" Value="256" />
+        <Member Name="recipientSuggestions" Value="512" />
+      </EnumType>
       <EnumType Name="managedAppAvailability">
         <Member Name="global" Value="0" />
         <Member Name="lineOfBusiness" Value="1" />
@@ -1883,6 +1895,13 @@
         <Member Name="parentalGuidance" Value="5" />
         <Member Name="childrenAbove14" Value="6" />
         <Member Name="adults" Value="7" />
+      </EnumType>
+      <EnumType Name="recipientScopeType" IsFlags="true">
+        <Member Name="none" Value="0" />
+        <Member Name="internal" Value="1" />
+        <Member Name="external" Value="2" />
+        <Member Name="externalPartner" Value="4" />
+        <Member Name="externalNonPartner" Value="8" />
       </EnumType>
       <EnumType Name="recurrencePatternType">
         <Member Name="daily" Value="0" />
@@ -2912,6 +2931,11 @@
         <Member Name="enabled" Value="1" />
         <Member Name="unknownFutureValue" Value="2" />
       </EnumType>
+      <EnumType Name="x509CertificateIssuerHintsState">
+        <Member Name="disabled" Value="0" />
+        <Member Name="enabled" Value="1" />
+        <Member Name="unknownFutureValue" Value="2" />
+      </EnumType>
       <EnumType Name="x509CertificateRuleType">
         <Member Name="issuerSubject" Value="0" />
         <Member Name="policyOID" Value="1" />
@@ -3337,6 +3361,12 @@
       </ComplexType>
       <ComplexType Name="authorizationInfo">
         <Property Name="certificateUserIds" Type="Collection(Edm.String)" />
+      </ComplexType>
+      <ComplexType Name="automaticRepliesMailTips">
+        <Property Name="message" Type="Edm.String" />
+        <Property Name="messageLanguage" Type="graph.localeInfo" />
+        <Property Name="scheduledEndTime" Type="graph.dateTimeTimeZone" />
+        <Property Name="scheduledStartTime" Type="graph.dateTimeTimeZone" />
       </ComplexType>
       <ComplexType Name="automaticRepliesSetting">
         <Property Name="externalAudience" Type="graph.externalAudienceScope" />
@@ -4245,6 +4275,10 @@
         <Property Name="inboundAllowed" Type="Edm.Boolean" />
         <Property Name="outboundAllowed" Type="Edm.Boolean" />
       </ComplexType>
+      <ComplexType Name="includeTarget">
+        <Property Name="id" Type="Edm.String" Nullable="false" />
+        <Property Name="targetType" Type="graph.authenticationMethodTargetType" Nullable="false" />
+      </ComplexType>
       <ComplexType Name="incompleteData" OpenType="true">
         <Property Name="missingDataBeforeDateTime" Type="Edm.DateTimeOffset" />
         <Property Name="wasThrottled" Type="Edm.Boolean" />
@@ -4528,6 +4562,24 @@
         <Property Name="timeZone" Type="Edm.String" />
         <Property Name="userPurpose" Type="graph.userPurpose" />
         <Property Name="workingHours" Type="graph.workingHours" />
+      </ComplexType>
+      <ComplexType Name="mailTips">
+        <Property Name="automaticReplies" Type="graph.automaticRepliesMailTips" />
+        <Property Name="customMailTip" Type="Edm.String" />
+        <Property Name="deliveryRestricted" Type="Edm.Boolean" />
+        <Property Name="emailAddress" Type="graph.emailAddress" />
+        <Property Name="error" Type="graph.mailTipsError" />
+        <Property Name="externalMemberCount" Type="Edm.Int32" />
+        <Property Name="isModerated" Type="Edm.Boolean" />
+        <Property Name="mailboxFull" Type="Edm.Boolean" />
+        <Property Name="maxMessageSize" Type="Edm.Int32" />
+        <Property Name="recipientScope" Type="graph.recipientScopeType" />
+        <Property Name="recipientSuggestions" Type="Collection(graph.recipient)" />
+        <Property Name="totalMemberCount" Type="Edm.Int32" />
+      </ComplexType>
+      <ComplexType Name="mailTipsError">
+        <Property Name="code" Type="Edm.String" />
+        <Property Name="message" Type="Edm.String" />
       </ComplexType>
       <ComplexType Name="malware">
         <Property Name="description" Type="Edm.String" />
@@ -4925,6 +4977,11 @@
       <ComplexType Name="profileCardAnnotation">
         <Property Name="displayName" Type="Edm.String" />
         <Property Name="localizations" Type="Collection(graph.displayNameLocalization)" />
+      </ComplexType>
+      <ComplexType Name="profileSourceLocalization">
+        <Property Name="displayName" Type="Edm.String" />
+        <Property Name="languageTag" Type="Edm.String" />
+        <Property Name="webUrl" Type="Edm.String" />
       </ComplexType>
       <ComplexType Name="provisionChannelEmailResult">
         <Property Name="email" Type="Edm.String" />
@@ -6110,9 +6167,17 @@
         <Property Name="x509CertificateAuthenticationDefaultMode" Type="graph.x509CertificateAuthenticationMode" />
         <Property Name="x509CertificateDefaultRequiredAffinityLevel" Type="graph.x509CertificateAffinityLevel" />
       </ComplexType>
+      <ComplexType Name="x509CertificateAuthorityScope">
+        <Property Name="includeTargets" Type="Collection(graph.includeTarget)" />
+        <Property Name="publicKeyInfrastructureIdentifier" Type="Edm.String" />
+        <Property Name="subjectKeyIdentifier" Type="Edm.String" />
+      </ComplexType>
       <ComplexType Name="x509CertificateCRLValidationConfiguration">
         <Property Name="exemptedCertificateAuthoritiesSubjectKeyIdentifiers" Type="Collection(Edm.String)" />
         <Property Name="state" Type="graph.x509CertificateCRLValidationConfigurationState" Nullable="false" />
+      </ComplexType>
+      <ComplexType Name="x509CertificateIssuerHintsConfiguration">
+        <Property Name="state" Type="graph.x509CertificateIssuerHintsState" />
       </ComplexType>
       <ComplexType Name="x509CertificateRule">
         <Property Name="identifier" Type="Edm.String" />
@@ -9302,6 +9367,7 @@
       <EntityType Name="peopleAdminSettings" BaseType="graph.entity">
         <NavigationProperty Name="itemInsights" Type="graph.insightsSettings" ContainsTarget="true" />
         <NavigationProperty Name="profileCardProperties" Type="Collection(graph.profileCardProperty)" ContainsTarget="true" />
+        <NavigationProperty Name="profileSources" Type="Collection(graph.profileSource)" ContainsTarget="true" />
         <NavigationProperty Name="pronouns" Type="graph.pronounsSettings" ContainsTarget="true" />
       </EntityType>
       <EntityType Name="permission" BaseType="graph.entity">
@@ -9485,6 +9551,27 @@
       <EntityType Name="profilePhoto" BaseType="graph.entity" HasStream="true">
         <Property Name="height" Type="Edm.Int32" />
         <Property Name="width" Type="Edm.Int32" />
+      </EntityType>
+      <EntityType Name="profileSource" BaseType="graph.entity">
+        <Property Name="displayName" Type="Edm.String" />
+        <Property Name="kind" Type="Edm.String" />
+        <Property Name="localizations" Type="Collection(graph.profileSourceLocalization)" Nullable="false" />
+        <Property Name="sourceId" Type="Edm.String" />
+        <Property Name="webUrl" Type="Edm.String" />
+        <Annotation Term="Org.OData.Core.V1.AlternateKeys">
+          <Collection>
+            <Record Type="Org.OData.Core.V1.AlternateKey">
+              <PropertyValue Property="Key">
+                <Collection>
+                  <Record Type="Org.OData.Core.V1.PropertyRef">
+                    <PropertyValue Property="Alias" String="sourceId" />
+                    <PropertyValue Property="Name" PropertyPath="sourceId" />
+                  </Record>
+                </Collection>
+              </PropertyValue>
+            </Record>
+          </Collection>
+        </Annotation>
       </EntityType>
       <EntityType Name="pronounsSettings" BaseType="graph.entity">
         <Property Name="isEnabledInOrganization" Type="Edm.Boolean" Nullable="false" />
@@ -11455,8 +11542,10 @@
       </EntityType>
       <EntityType Name="x509CertificateAuthenticationMethodConfiguration" BaseType="graph.authenticationMethodConfiguration">
         <Property Name="authenticationModeConfiguration" Type="graph.x509CertificateAuthenticationModeConfiguration" />
+        <Property Name="certificateAuthorityScopes" Type="Collection(graph.x509CertificateAuthorityScope)" />
         <Property Name="certificateUserBindings" Type="Collection(graph.x509CertificateUserBinding)" />
         <Property Name="crlValidationConfiguration" Type="graph.x509CertificateCRLValidationConfiguration" Nullable="false" />
+        <Property Name="issuerHintsConfiguration" Type="graph.x509CertificateIssuerHintsConfiguration" />
         <NavigationProperty Name="includeTargets" Type="Collection(graph.authenticationMethodTarget)" ContainsTarget="true" />
       </EntityType>
       <EntityType Name="x509CertificateCombinationConfiguration" BaseType="graph.authenticationCombinationConfiguration">
@@ -12224,6 +12313,12 @@
         </Parameter>
         <ReturnType Type="Edm.Stream" />
       </Action>
+      <Action Name="getMailTips" IsBound="true">
+        <Parameter Name="bindingParameter" Type="graph.user" />
+        <Parameter Name="EmailAddresses" Type="Collection(Edm.String)" Nullable="false" Unicode="false" />
+        <Parameter Name="MailTipsOptions" Type="graph.mailTipsType" />
+        <ReturnType Type="Collection(graph.mailTips)" Nullable="false" />
+      </Action>
       <Action Name="getMemberGroups" IsBound="true">
         <Parameter Name="bindingParameter" Type="graph.directoryObject" Nullable="false" />
         <Parameter Name="securityEnabledOnly" Type="Edm.Boolean" />
@@ -12632,6 +12727,12 @@
         <Parameter Name="bindingParameter" Type="graph.message" />
         <Parameter Name="Message" Type="graph.message" />
         <Parameter Name="Comment" Type="Edm.String" Unicode="false" />
+      </Action>
+      <Action Name="replyWithQuote" IsBound="true">
+        <Parameter Name="bindingParameter" Type="Collection(graph.chatMessage)" />
+        <Parameter Name="messageIds" Type="Collection(Edm.String)" Nullable="false" Unicode="false" />
+        <Parameter Name="replyMessage" Type="graph.chatMessage" />
+        <ReturnType Type="graph.chatMessage" />
       </Action>
       <Action Name="reprocess" IsBound="true">
         <Parameter Name="bindingParameter" Type="graph.accessPackageAssignment" />
