@@ -76,6 +76,7 @@
         <Member Name="systemRemove" Value="9" />
         <Member Name="onBehalfAdd" Value="10" />
         <Member Name="unknownFutureValue" Value="11" />
+        <Member Name="approverRemove" Value="12" />
       </EnumType>
       <EnumType Name="accessPackageSubjectType">
         <Member Name="notSpecified" Value="0" />
@@ -1503,6 +1504,13 @@
         <Member Name="selfRenew" Value="9" />
         <Member Name="unknownFutureValue" Value="10" />
       </EnumType>
+      <EnumType Name="scopeCollectionKind">
+        <Member Name="allAllowed" Value="0" />
+        <Member Name="enumerated" Value="1" />
+        <Member Name="none" Value="2" />
+        <Member Name="scopeKindNotSet" Value="3" />
+        <Member Name="unknownFutureValue" Value="4" />
+      </EnumType>
       <EnumType Name="scopeOperatorMultiValuedComparisonType">
         <Member Name="All" Value="0" />
         <Member Name="Any" Value="1" />
@@ -2259,6 +2267,7 @@
         <Property Name="type" Type="Edm.String" />
         <Property Name="value" Type="Edm.String" />
       </ComplexType>
+      <ComplexType Name="allAllowedScopes" BaseType="graph.inheritableScopes" />
       <ComplexType Name="allDeviceRegistrationMembership" BaseType="graph.deviceRegistrationMembership" />
       <ComplexType Name="alternativeSecurityId">
         <Property Name="identityProvider" Type="Edm.String" />
@@ -3165,6 +3174,9 @@
         <Property Name="groups" Type="Collection(Edm.String)" />
         <Property Name="users" Type="Collection(Edm.String)" />
       </ComplexType>
+      <ComplexType Name="enumeratedScopes" BaseType="graph.inheritableScopes">
+        <Property Name="scopes" Type="Collection(Edm.String)" Nullable="false" />
+      </ComplexType>
       <ComplexType Name="evaluateDynamicMembershipResult">
         <Property Name="membershipRule" Type="Edm.String" />
         <Property Name="membershipRuleEvaluationDetails" Type="graph.expressionEvaluationDetails" />
@@ -3382,6 +3394,9 @@
         <Property Name="privacyStatementUrl" Type="Edm.String" />
         <Property Name="supportUrl" Type="Edm.String" />
         <Property Name="termsOfServiceUrl" Type="Edm.String" />
+      </ComplexType>
+      <ComplexType Name="inheritableScopes" Abstract="true">
+        <Property Name="kind" Type="graph.scopeCollectionKind" Nullable="false" />
       </ComplexType>
       <ComplexType Name="initiator" BaseType="graph.identity" OpenType="true">
         <Property Name="initiatorType" Type="graph.initiatorType" />
@@ -3757,6 +3772,7 @@
         <Property Name="urlParameters" Type="Edm.String" />
       </ComplexType>
       <ComplexType Name="noDeviceRegistrationMembership" BaseType="graph.deviceRegistrationMembership" />
+      <ComplexType Name="noScopes" BaseType="graph.inheritableScopes" />
       <ComplexType Name="notifyUserAction" BaseType="graph.dlpActionInfo">
         <Property Name="actionLastModifiedDateTime" Type="Edm.DateTimeOffset" />
         <Property Name="emailText" Type="Edm.String" />
@@ -5330,6 +5346,21 @@
         <NavigationProperty Name="members" Type="Collection(graph.directoryObject)" />
         <NavigationProperty Name="scopedRoleMembers" Type="Collection(graph.scopedRoleMembership)" ContainsTarget="true" />
       </EntityType>
+      <EntityType Name="agentIdentity" BaseType="graph.servicePrincipal" OpenType="true">
+        <Property Name="agentIdentityBlueprintId" Type="Edm.String" Nullable="false" />
+        <Property Name="createdDateTime" Type="Edm.DateTimeOffset" />
+        <NavigationProperty Name="sponsors" Type="Collection(graph.directoryObject)" />
+      </EntityType>
+      <EntityType Name="agentIdentityBlueprint" BaseType="graph.application" OpenType="true">
+        <Property Name="defaultRedirectUri" Type="Edm.String" />
+        <NavigationProperty Name="inheritablePermissions" Type="Collection(graph.inheritablePermission)" ContainsTarget="true" />
+        <NavigationProperty Name="sponsors" Type="Collection(graph.directoryObject)" />
+      </EntityType>
+      <EntityType Name="agentIdentityBlueprintPrincipal" BaseType="graph.servicePrincipal" OpenType="true">
+        <Property Name="signInAudience" Type="Edm.String" />
+        <NavigationProperty Name="sponsors" Type="Collection(graph.directoryObject)" />
+      </EntityType>
+      <EntityType Name="agentUser" BaseType="graph.user" OpenType="true" />
       <EntityType Name="agreement" BaseType="graph.entity">
         <Property Name="displayName" Type="Edm.String" />
         <Property Name="isPerDeviceAcceptanceRequired" Type="Edm.Boolean" />
@@ -5432,6 +5463,7 @@
         <Property Name="applicationTemplateId" Type="Edm.String" />
         <Property Name="appRoles" Type="Collection(graph.appRole)" Nullable="false" />
         <Property Name="authenticationBehaviors" Type="graph.authenticationBehaviors" />
+        <Property Name="createdByAppId" Type="Edm.String" />
         <Property Name="createdDateTime" Type="Edm.DateTimeOffset" />
         <Property Name="description" Type="Edm.String" />
         <Property Name="disabledByMicrosoftStatus" Type="Edm.String" />
@@ -5440,9 +5472,11 @@
         <Property Name="identifierUris" Type="Collection(Edm.String)" Nullable="false" />
         <Property Name="info" Type="graph.informationalUrl" />
         <Property Name="isDeviceOnlyAuthSupported" Type="Edm.Boolean" />
+        <Property Name="isDisabled" Type="Edm.Boolean" />
         <Property Name="isFallbackPublicClient" Type="Edm.Boolean" />
         <Property Name="keyCredentials" Type="Collection(graph.keyCredential)" Nullable="false" />
         <Property Name="logo" Type="Edm.Stream" Nullable="false" />
+        <Property Name="managerApplications" Type="Collection(Edm.Guid)" Nullable="false" />
         <Property Name="notes" Type="Edm.String" />
         <Property Name="oauth2RequirePostResponse" Type="Edm.Boolean" Nullable="false" />
         <Property Name="optionalClaims" Type="graph.optionalClaims" />
@@ -6547,6 +6581,10 @@
         <Property Name="name" Type="Edm.String" Nullable="false" />
         <Property Name="targetObjects" Type="Collection(Edm.String)" Nullable="false" />
       </EntityType>
+      <EntityType Name="externalAuthenticationMethod" BaseType="graph.authenticationMethod">
+        <Property Name="configurationId" Type="Edm.String" Nullable="false" />
+        <Property Name="displayName" Type="Edm.String" Nullable="false" />
+      </EntityType>
       <EntityType Name="externalAuthenticationMethodConfiguration" BaseType="graph.authenticationMethodConfiguration">
         <Property Name="appId" Type="Edm.String" Nullable="false" />
         <Property Name="displayName" Type="Edm.String" Nullable="false" />
@@ -6661,6 +6699,7 @@
         <Property Name="uniqueName" Type="Edm.String" />
         <Property Name="unseenCount" Type="Edm.Int32" />
         <Property Name="visibility" Type="Edm.String" />
+        <Property Name="welcomeMessageEnabled" Type="Edm.Boolean" />
         <NavigationProperty Name="acceptedSenders" Type="Collection(graph.directoryObject)" ContainsTarget="true" />
         <NavigationProperty Name="appRoleAssignments" Type="Collection(graph.appRoleAssignment)" ContainsTarget="true" />
         <NavigationProperty Name="calendar" Type="graph.calendar" ContainsTarget="true" />
@@ -6761,6 +6800,13 @@
         <NavigationProperty Name="dataLossPreventionPolicies" Type="Collection(graph.dataLossPreventionPolicy)" ContainsTarget="true" />
         <NavigationProperty Name="sensitivityLabels" Type="Collection(graph.sensitivityLabel)" ContainsTarget="true" />
         <NavigationProperty Name="sensitivityPolicySettings" Type="graph.sensitivityPolicySettings" ContainsTarget="true" />
+      </EntityType>
+      <EntityType Name="inheritablePermission">
+        <Key>
+          <PropertyRef Name="resourceAppId" />
+        </Key>
+        <Property Name="inheritableScopes" Type="graph.inheritableScopes" />
+        <Property Name="resourceAppId" Type="Edm.String" Nullable="false" />
       </EntityType>
       <EntityType Name="insightsSettings" BaseType="graph.entity">
         <Property Name="disabledForGroup" Type="Edm.String" />
@@ -7136,6 +7182,7 @@
       <EntityType Name="peopleAdminSettings" BaseType="graph.entity">
         <NavigationProperty Name="itemInsights" Type="graph.insightsSettings" ContainsTarget="true" />
         <NavigationProperty Name="profileCardProperties" Type="Collection(graph.profileCardProperty)" ContainsTarget="true" />
+        <NavigationProperty Name="profilePropertySettings" Type="Collection(graph.profilePropertySetting)" ContainsTarget="true" />
         <NavigationProperty Name="profileSources" Type="Collection(graph.profileSource)" ContainsTarget="true" />
         <NavigationProperty Name="pronouns" Type="graph.pronounsSettings" ContainsTarget="true" />
       </EntityType>
@@ -7350,6 +7397,11 @@
       <EntityType Name="profilePhoto" BaseType="graph.entity" HasStream="true">
         <Property Name="height" Type="Edm.Int32" />
         <Property Name="width" Type="Edm.Int32" />
+      </EntityType>
+      <EntityType Name="profilePropertySetting" BaseType="graph.entity">
+        <Property Name="displayName" Type="Edm.String" />
+        <Property Name="name" Type="Edm.String" />
+        <Property Name="prioritizedSourceUrls" Type="Collection(Edm.String)" Nullable="false" />
       </EntityType>
       <EntityType Name="profileSource" BaseType="graph.entity">
         <Property Name="displayName" Type="Edm.String" />
@@ -7654,12 +7706,14 @@
         <Property Name="appOwnerOrganizationId" Type="Edm.Guid" />
         <Property Name="appRoleAssignmentRequired" Type="Edm.Boolean" Nullable="false" />
         <Property Name="appRoles" Type="Collection(graph.appRole)" Nullable="false" />
+        <Property Name="createdByAppId" Type="Edm.String" />
         <Property Name="customSecurityAttributes" Type="graph.customSecurityAttributeValue" />
         <Property Name="description" Type="Edm.String" />
         <Property Name="disabledByMicrosoftStatus" Type="Edm.String" />
         <Property Name="displayName" Type="Edm.String" />
         <Property Name="homepage" Type="Edm.String" />
         <Property Name="info" Type="graph.informationalUrl" />
+        <Property Name="isDisabled" Type="Edm.Boolean" />
         <Property Name="keyCredentials" Type="Collection(graph.keyCredential)" Nullable="false" />
         <Property Name="loginUrl" Type="Edm.String" />
         <Property Name="logoutUrl" Type="Edm.String" />
@@ -8309,6 +8363,7 @@
         <Property Name="givenName" Type="Edm.String" />
         <Property Name="hireDate" Type="Edm.DateTimeOffset" Nullable="false" />
         <Property Name="identities" Type="Collection(graph.objectIdentity)" />
+        <Property Name="identityParentId" Type="Edm.String" />
         <Property Name="imAddresses" Type="Collection(Edm.String)" />
         <Property Name="interests" Type="Collection(Edm.String)" />
         <Property Name="isManagementRestricted" Type="Edm.Boolean" />
@@ -12893,6 +12948,7 @@
         <EntitySet Name="applications" EntityType="microsoft.graph.application">
           <NavigationPropertyBinding Path="appManagementPolicies" Target="policies/appManagementPolicies" />
           <NavigationPropertyBinding Path="createdOnBehalfOf" Target="directoryObjects" />
+          <NavigationPropertyBinding Path="microsoft.graph.agentIdentityBlueprint/sponsors" Target="directoryObjects" />
           <NavigationPropertyBinding Path="owners" Target="directoryObjects" />
         </EntitySet>
         <EntitySet Name="applicationTemplates" EntityType="microsoft.graph.applicationTemplate" />
@@ -12949,6 +13005,8 @@
           <NavigationPropertyBinding Path="appManagementPolicies" Target="policies/appManagementPolicies" />
           <NavigationPropertyBinding Path="createdObjects" Target="directoryObjects" />
           <NavigationPropertyBinding Path="memberOf" Target="directoryObjects" />
+          <NavigationPropertyBinding Path="microsoft.graph.agentIdentity/sponsors" Target="directoryObjects" />
+          <NavigationPropertyBinding Path="microsoft.graph.agentIdentityBlueprintPrincipal/sponsors" Target="directoryObjects" />
           <NavigationPropertyBinding Path="oauth2PermissionGrants" Target="oauth2PermissionGrants" />
           <NavigationPropertyBinding Path="ownedObjects" Target="directoryObjects" />
           <NavigationPropertyBinding Path="owners" Target="directoryObjects" />
@@ -13411,6 +13469,9 @@
           </Record>
         </Annotation>
       </Annotations>
+      <Annotations Target="microsoft.graph.agentIdentity/agentIdentityBlueprintId">
+        <Annotation Term="Org.OData.Core.V1.Immutable" Bool="true" />
+      </Annotations>
       <Annotations Target="microsoft.graph.agreement">
         <Annotation Term="Org.OData.Capabilities.V1.CountRestrictions">
           <Record>
@@ -13586,6 +13647,9 @@
             <PropertyValue Property="Supported" Bool="true" />
           </Record>
         </Annotation>
+      </Annotations>
+      <Annotations Target="microsoft.graph.application/createdByAppId">
+        <Annotation Term="Org.OData.Core.V1.Immutable" Bool="true" />
       </Annotations>
       <Annotations Target="microsoft.graph.application/federatedIdentityCredentials">
         <Annotation Term="Org.OData.Capabilities.V1.UpdateRestrictions">
@@ -16022,6 +16086,9 @@
           </Record>
         </Annotation>
       </Annotations>
+      <Annotations Target="microsoft.graph.servicePrincipal/createdByAppId">
+        <Annotation Term="Org.OData.Core.V1.Immutable" Bool="true" />
+      </Annotations>
       <Annotations Target="microsoft.graph.servicePrincipalRiskDetection">
         <Annotation Term="Org.OData.Capabilities.V1.CountRestrictions">
           <Record>
@@ -17645,7 +17712,9 @@
         <NavigationProperty Name="dataSource" Type="microsoft.graph.security.dataSource" ContainsTarget="true" />
         <NavigationProperty Name="lastIndexOperation" Type="microsoft.graph.security.ediscoveryIndexOperation" />
       </EntityType>
-      <EntityType Name="ediscoveryPurgeDataOperation" BaseType="microsoft.graph.security.caseOperation" />
+      <EntityType Name="ediscoveryPurgeDataOperation" BaseType="microsoft.graph.security.caseOperation">
+        <Property Name="reportFileMetadata" Type="Collection(microsoft.graph.security.reportFileMetadata)" />
+      </EntityType>
       <EntityType Name="ediscoveryReviewSet" BaseType="microsoft.graph.security.dataSet">
         <NavigationProperty Name="queries" Type="Collection(microsoft.graph.security.ediscoveryReviewSetQuery)" ContainsTarget="true" />
       </EntityType>

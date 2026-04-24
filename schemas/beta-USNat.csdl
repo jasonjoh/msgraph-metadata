@@ -3002,12 +3002,12 @@
         <Property Name="audiences" Type="graph.audiencesConfiguration" />
         <Property Name="identifierUris" Type="graph.identifierUriConfiguration" />
       </ComplexType>
-      <ComplexType Name="appManagementConfiguration">
-        <NavigationProperty Name="keyCredentials" Type="Collection(graph.keyCredentialConfiguration)" ContainsTarget="true" />
-        <NavigationProperty Name="passwordCredentials" Type="Collection(graph.passwordCredentialConfiguration)" ContainsTarget="true" />
+      <ComplexType Name="appManagementConfiguration" Abstract="true">
+        <Property Name="keyCredentials" Type="Collection(graph.keyCredentialConfiguration)" Nullable="false" />
+        <Property Name="passwordCredentials" Type="Collection(graph.passwordCredentialConfiguration)" Nullable="false" />
       </ComplexType>
       <ComplexType Name="appManagementPolicyActorExemptions">
-        <NavigationProperty Name="customSecurityAttributes" Type="Collection(graph.customSecurityAttributeExemption)" ContainsTarget="true" />
+        <Property Name="customSecurityAttributes" Type="Collection(graph.customSecurityAttributeExemption)" />
       </ComplexType>
       <ComplexType Name="appManagementServicePrincipalConfiguration" BaseType="graph.appManagementConfiguration" />
       <ComplexType Name="appMetadata">
@@ -3518,6 +3518,11 @@
         <Property Name="code" Type="Edm.String" />
         <Property Name="errorDateTime" Type="Edm.DateTimeOffset" />
       </ComplexType>
+      <ComplexType Name="classificationLimit">
+        <Property Name="allowedLimit" Type="Edm.Int32" />
+        <Property Name="code" Type="Edm.String" />
+        <Property Name="impactedSensitiveTypeIds" Type="Collection(Edm.String)" Nullable="false" />
+      </ComplexType>
       <ComplexType Name="cloudAppSecuritySessionControl" BaseType="graph.conditionalAccessSessionControl">
         <Property Name="cloudAppSecurityType" Type="graph.cloudAppSecuritySessionControlType" />
       </ComplexType>
@@ -3832,6 +3837,13 @@
       <ComplexType Name="customExtensionOverwriteConfiguration">
         <Property Name="clientConfiguration" Type="graph.customExtensionClientConfiguration" />
       </ComplexType>
+      <ComplexType Name="customSecurityAttributeExemption" Abstract="true">
+        <Property Name="id" Type="Edm.String" Nullable="false" />
+        <Property Name="operator" Type="graph.customSecurityAttributeComparisonOperator" Nullable="false" />
+      </ComplexType>
+      <ComplexType Name="customSecurityAttributeStringValueExemption" BaseType="graph.customSecurityAttributeExemption">
+        <Property Name="value" Type="Edm.String" />
+      </ComplexType>
       <ComplexType Name="customSecurityAttributeValue" OpenType="true" />
       <ComplexType Name="customTimeZone" BaseType="graph.timeZoneBase">
         <Property Name="bias" Type="Edm.Int32" />
@@ -3956,6 +3968,7 @@
         <Property Name="restrictionAction" Type="graph.restrictionAction" />
         <Property Name="triggers" Type="Collection(graph.restrictionTrigger)" />
       </ComplexType>
+      <ComplexType Name="diagnosticMetadata" />
       <ComplexType Name="Dictionary" OpenType="true" />
       <ComplexType Name="directorySizeQuota">
         <Property Name="total" Type="Edm.Int32" />
@@ -4127,6 +4140,12 @@
         <Property Name="discoveredSensitiveTypes" Type="Collection(graph.discoveredSensitiveType)" />
       </ComplexType>
       <ComplexType Name="eventMessageDetail" Abstract="true" />
+      <ComplexType Name="exactDataMatchStoreColumn">
+        <Property Name="ignoredDelimiters" Type="Collection(Edm.String)" />
+        <Property Name="isCaseInsensitive" Type="Edm.Boolean" />
+        <Property Name="isSearchable" Type="Edm.Boolean" />
+        <Property Name="name" Type="Edm.String" />
+      </ComplexType>
       <ComplexType Name="exactMatchClassificationRequest">
         <Property Name="contentClassifications" Type="Collection(graph.contentClassification)" />
         <Property Name="sensitiveTypeIds" Type="Collection(Edm.String)" />
@@ -4138,6 +4157,11 @@
         <Property Name="errors" Type="Collection(graph.classificationError)" />
       </ComplexType>
       <ComplexType Name="exactMatchDetectedSensitiveContent" BaseType="graph.detectedSensitiveContentBase" />
+      <ComplexType Name="exactMatchDiagnostic">
+        <Property Name="classificationId" Type="Edm.Guid" Nullable="false" />
+        <Property Name="classificationLimits" Type="Collection(graph.classificationLimit)" Nullable="false" />
+        <Property Name="unmatchedItems" Type="Collection(graph.unmatched)" Nullable="false" />
+      </ComplexType>
       <ComplexType Name="excludeTarget">
         <Property Name="id" Type="Edm.String" Nullable="false" />
         <Property Name="targetType" Type="graph.authenticationMethodTargetType" Nullable="false" />
@@ -4301,11 +4325,6 @@
         <Property Name="source" Type="Edm.String" />
         <Property Name="type" Type="Edm.String" />
         <Property Name="version" Type="Edm.String" />
-      </ComplexType>
-      <ComplexType Name="governancePermission">
-        <Property Name="accessLevel" Type="Edm.String" />
-        <Property Name="isActive" Type="Edm.Boolean" />
-        <Property Name="isEligible" Type="Edm.Boolean" />
       </ComplexType>
       <ComplexType Name="governancePolicy">
         <Property Name="decisionMakerCriteria" Type="Collection(graph.governanceCriteria)" />
@@ -4545,6 +4564,13 @@
         <Property Name="startDateTime" Type="Edm.DateTimeOffset" />
         <Property Name="type" Type="Edm.String" />
         <Property Name="usage" Type="Edm.String" />
+      </ComplexType>
+      <ComplexType Name="keyCredentialConfiguration">
+        <Property Name="certificateBasedApplicationConfigurationIds" Type="Collection(Edm.String)" />
+        <Property Name="maxLifetime" Type="Edm.Duration" />
+        <Property Name="restrictForAppsCreatedAfterDateTime" Type="Edm.DateTimeOffset" />
+        <Property Name="restrictionType" Type="graph.appKeyCredentialRestrictionType" />
+        <Property Name="state" Type="graph.appManagementRestrictionState" />
       </ComplexType>
       <ComplexType Name="keyValue">
         <Property Name="key" Type="Edm.String" />
@@ -5111,6 +5137,12 @@
         <Property Name="keyId" Type="Edm.Guid" />
         <Property Name="secretText" Type="Edm.String" />
         <Property Name="startDateTime" Type="Edm.DateTimeOffset" />
+      </ComplexType>
+      <ComplexType Name="passwordCredentialConfiguration">
+        <Property Name="maxLifetime" Type="Edm.Duration" />
+        <Property Name="restrictForAppsCreatedAfterDateTime" Type="Edm.DateTimeOffset" />
+        <Property Name="restrictionType" Type="graph.appCredentialRestrictionType" />
+        <Property Name="state" Type="graph.appManagementRestrictionState" />
       </ComplexType>
       <ComplexType Name="passwordProfile">
         <Property Name="forceChangePasswordNextSignIn" Type="Edm.Boolean" />
@@ -6563,6 +6595,13 @@
         <Property Name="condition" Type="Edm.String" />
         <Property Name="excludedResourceActions" Type="Collection(Edm.String)" />
       </ComplexType>
+      <ComplexType Name="unmatched">
+        <Property Name="code" Type="Edm.String" />
+        <Property Name="corroborativeEvidences" Type="Collection(Edm.String)" Nullable="false" />
+        <Property Name="idMatch" Type="Edm.String" />
+        <Property Name="length" Type="Edm.Int32" />
+        <Property Name="offset" Type="Edm.Int32" />
+      </ComplexType>
       <ComplexType Name="unrestrictedAudience" BaseType="graph.signInAudienceRestrictionsBase" />
       <ComplexType Name="updateAllowedCombinationsResult">
         <Property Name="additionalInformation" Type="Edm.String" />
@@ -7352,6 +7391,7 @@
         <Property Name="identifierUris" Type="Collection(Edm.String)" Nullable="false" />
         <Property Name="info" Type="graph.informationalUrl" />
         <Property Name="isDeviceOnlyAuthSupported" Type="Edm.Boolean" />
+        <Property Name="isDisabled" Type="Edm.Boolean" />
         <Property Name="isFallbackPublicClient" Type="Edm.Boolean" />
         <Property Name="keyCredentials" Type="Collection(graph.keyCredential)" Nullable="false" />
         <Property Name="logo" Type="Edm.Stream" Nullable="false" />
@@ -7524,6 +7564,7 @@
         <Property Name="requirements" Type="graph.strongAuthenticationRequirements" />
         <Property Name="signInPreferences" Type="graph.signInPreferences" />
         <NavigationProperty Name="emailMethods" Type="Collection(graph.emailAuthenticationMethod)" ContainsTarget="true" />
+        <NavigationProperty Name="externalAuthenticationMethods" Type="Collection(graph.externalAuthenticationMethod)" ContainsTarget="true" />
         <NavigationProperty Name="fido2Methods" Type="Collection(graph.fido2AuthenticationMethod)" ContainsTarget="true" />
         <NavigationProperty Name="methods" Type="Collection(graph.authenticationMethod)" ContainsTarget="true" />
         <NavigationProperty Name="microsoftAuthenticatorMethods" Type="Collection(graph.microsoftAuthenticatorAuthenticationMethod)" ContainsTarget="true" />
@@ -8183,12 +8224,6 @@
         <Property Name="usePreDefinedValuesOnly" Type="Edm.Boolean" />
         <NavigationProperty Name="allowedValues" Type="Collection(graph.allowedValue)" ContainsTarget="true" />
       </EntityType>
-      <EntityType Name="customSecurityAttributeExemption" BaseType="graph.entity" Abstract="true">
-        <Property Name="operator" Type="graph.customSecurityAttributeComparisonOperator" />
-      </EntityType>
-      <EntityType Name="customSecurityAttributeStringValueExemption" BaseType="graph.customSecurityAttributeExemption">
-        <Property Name="value" Type="Edm.String" />
-      </EntityType>
       <EntityType Name="dataClassificationService" BaseType="graph.entity">
         <NavigationProperty Name="classifyFileJobs" Type="Collection(graph.jobResponseBase)" ContainsTarget="true" />
         <NavigationProperty Name="classifyTextJobs" Type="Collection(graph.jobResponseBase)" ContainsTarget="true" />
@@ -8604,11 +8639,14 @@
         <Property Name="proposedNewTime" Type="graph.timeSlot" />
         <Property Name="responseType" Type="graph.responseType" />
       </EntityType>
-      <EntityType Name="exactMatchDataStore" BaseType="graph.entity">
+      <EntityType Name="exactMatchDataStore" BaseType="graph.exactMatchDataStoreBase">
+        <NavigationProperty Name="sessions" Type="Collection(graph.exactMatchSession)" ContainsTarget="true" />
+      </EntityType>
+      <EntityType Name="exactMatchDataStoreBase" BaseType="graph.entity">
+        <Property Name="columns" Type="Collection(graph.exactDataMatchStoreColumn)" />
         <Property Name="dataLastUpdatedDateTime" Type="Edm.DateTimeOffset" />
         <Property Name="description" Type="Edm.String" />
         <Property Name="displayName" Type="Edm.String" />
-        <NavigationProperty Name="sessions" Type="Collection(graph.exactMatchSession)" ContainsTarget="true" />
       </EntityType>
       <EntityType Name="exactMatchJobBase" BaseType="graph.entity" Abstract="true">
         <Property Name="completionDateTime" Type="Edm.DateTimeOffset" />
@@ -8621,23 +8659,25 @@
         <Property Name="state" Type="Edm.String" />
         <NavigationProperty Name="matchingRows" Type="Collection(graph.lookupResultRow)" ContainsTarget="true" />
       </EntityType>
-      <EntityType Name="exactMatchSession" BaseType="graph.exactMatchJobBase">
+      <EntityType Name="exactMatchSession" BaseType="graph.exactMatchSessionBase">
         <Property Name="checksum" Type="Edm.String" />
-        <Property Name="datastoreId" Type="Edm.String" />
         <Property Name="dataUploadURI" Type="Edm.String" />
         <Property Name="fields" Type="Collection(Edm.String)" />
         <Property Name="fileName" Type="Edm.String" />
+        <Property Name="rowsPerBlock" Type="Edm.Int32" />
+        <Property Name="salt" Type="Edm.String" />
+        <Property Name="uploadAgentId" Type="Edm.String" />
+        <NavigationProperty Name="uploadAgent" Type="graph.exactMatchUploadAgent" ContainsTarget="true" />
+      </EntityType>
+      <EntityType Name="exactMatchSessionBase" BaseType="graph.exactMatchJobBase">
+        <Property Name="dataStoreId" Type="Edm.String" />
         <Property Name="processingCompletionDateTime" Type="Edm.DateTimeOffset" />
         <Property Name="remainingBlockCount" Type="Edm.Int32" />
         <Property Name="remainingJobCount" Type="Edm.Int32" />
-        <Property Name="rowsPerBlock" Type="Edm.Int32" />
-        <Property Name="salt" Type="Edm.String" />
         <Property Name="state" Type="Edm.String" />
         <Property Name="totalBlockCount" Type="Edm.Int32" />
         <Property Name="totalJobCount" Type="Edm.Int32" />
-        <Property Name="uploadAgentId" Type="Edm.String" />
         <Property Name="uploadCompletionDateTime" Type="Edm.DateTimeOffset" />
-        <NavigationProperty Name="uploadAgent" Type="graph.exactMatchUploadAgent" ContainsTarget="true" />
       </EntityType>
       <EntityType Name="exactMatchUploadAgent" BaseType="graph.entity">
         <Property Name="creationDateTime" Type="Edm.DateTimeOffset" />
@@ -8650,6 +8690,10 @@
         <Property Name="isSyncedFromOnPremises" Type="Edm.Boolean" />
         <Property Name="name" Type="Edm.String" Nullable="false" />
         <Property Name="targetObjects" Type="Collection(Edm.String)" Nullable="false" />
+      </EntityType>
+      <EntityType Name="externalAuthenticationMethod" BaseType="graph.authenticationMethod">
+        <Property Name="configurationId" Type="Edm.String" Nullable="false" />
+        <Property Name="displayName" Type="Edm.String" Nullable="false" />
       </EntityType>
       <EntityType Name="externalAuthenticationMethodConfiguration" BaseType="graph.authenticationMethodConfiguration">
         <Property Name="appId" Type="Edm.String" Nullable="false" />
@@ -8904,6 +8948,7 @@
         <Property Name="onPremisesSamAccountName" Type="Edm.String" />
         <Property Name="onPremisesSecurityIdentifier" Type="Edm.String" />
         <Property Name="onPremisesSyncEnabled" Type="Edm.Boolean" />
+        <Property Name="organizationId" Type="Edm.String" />
         <Property Name="preferredDataLocation" Type="Edm.String" />
         <Property Name="preferredLanguage" Type="Edm.String" />
         <Property Name="proxyAddresses" Type="Collection(Edm.String)" Nullable="false" />
@@ -8919,6 +8964,7 @@
         <Property Name="unseenCount" Type="Edm.Int32" />
         <Property Name="unseenMessagesCount" Type="Edm.Int32" />
         <Property Name="visibility" Type="Edm.String" />
+        <Property Name="welcomeMessageEnabled" Type="Edm.Boolean" />
         <NavigationProperty Name="acceptedSenders" Type="Collection(graph.directoryObject)" ContainsTarget="true" />
         <NavigationProperty Name="appRoleAssignments" Type="Collection(graph.appRoleAssignment)" ContainsTarget="true" />
         <NavigationProperty Name="calendar" Type="graph.calendar" ContainsTarget="true" />
@@ -9171,16 +9217,6 @@
         <Property Name="status" Type="Edm.String" />
         <Property Name="tenantId" Type="Edm.String" />
         <Property Name="type" Type="Edm.String" />
-      </EntityType>
-      <EntityType Name="keyCredentialConfiguration">
-        <Key>
-          <PropertyRef Name="restrictionType" />
-        </Key>
-        <Property Name="certificateBasedApplicationConfigurationIds" Type="Collection(Edm.String)" />
-        <Property Name="maxLifetime" Type="Edm.Duration" />
-        <Property Name="restrictForAppsCreatedAfterDateTime" Type="Edm.DateTimeOffset" />
-        <Property Name="restrictionType" Type="graph.appKeyCredentialRestrictionType" Nullable="false" />
-        <Property Name="state" Type="graph.appManagementRestrictionState" />
       </EntityType>
       <EntityType Name="labelContentRight" BaseType="graph.entity">
         <Property Name="cid" Type="Edm.String" />
@@ -9652,15 +9688,6 @@
       <EntityType Name="passkeyAuthenticationMethodTarget" BaseType="graph.authenticationMethodTarget" />
       <EntityType Name="passwordAuthenticationMethod" BaseType="graph.authenticationMethod">
         <Property Name="password" Type="Edm.String" />
-      </EntityType>
-      <EntityType Name="passwordCredentialConfiguration">
-        <Key>
-          <PropertyRef Name="restrictionType" />
-        </Key>
-        <Property Name="maxLifetime" Type="Edm.Duration" />
-        <Property Name="restrictForAppsCreatedAfterDateTime" Type="Edm.DateTimeOffset" />
-        <Property Name="restrictionType" Type="graph.appCredentialRestrictionType" Nullable="false" />
-        <Property Name="state" Type="graph.appManagementRestrictionState" />
       </EntityType>
       <EntityType Name="passwordlessMicrosoftAuthenticatorAuthenticationMethod" BaseType="graph.authenticationMethod">
         <Property Name="creationDateTime" Type="Edm.DateTimeOffset" />
@@ -10620,6 +10647,7 @@
         <Property Name="errorUrl" Type="Edm.String" />
         <Property Name="homepage" Type="Edm.String" />
         <Property Name="info" Type="graph.informationalUrl" />
+        <Property Name="isDisabled" Type="Edm.Boolean" />
         <Property Name="keyCredentials" Type="Collection(graph.keyCredential)" Nullable="false" />
         <Property Name="loginUrl" Type="Edm.String" />
         <Property Name="logoutUrl" Type="Edm.String" />
@@ -11692,6 +11720,7 @@
         <Property Name="identities" Type="Collection(graph.objectIdentity)" />
         <Property Name="identityParentId" Type="Edm.String" />
         <Property Name="imAddresses" Type="Collection(Edm.String)" />
+        <Property Name="infoCatalogs" Type="Collection(Edm.String)" Nullable="false" />
         <Property Name="interests" Type="Collection(Edm.String)" />
         <Property Name="isManagementRestricted" Type="Edm.Boolean" />
         <Property Name="isResourceAccount" Type="Edm.Boolean" />
@@ -21334,6 +21363,81 @@
         </Annotation>
         <Annotation Term="Org.OData.Capabilities.V1.TopSupported" Bool="true" />
       </Annotations>
+      <Annotations Target="microsoft.graph.security.ediscoveryExportOperation/azureBlobContainer">
+        <Annotation Term="Org.OData.Core.V1.Revisions">
+          <Collection>
+            <Record>
+              <PropertyValue Property="Date" Date="2023-01-19" />
+              <PropertyValue Property="Description" String="The azureBlobContainer will be deprecated on April 30, 2023." />
+              <PropertyValue Property="Kind">
+                <EnumMember>Org.OData.Core.V1.RevisionKind/Deprecated</EnumMember>
+              </PropertyValue>
+              <PropertyValue Property="RemovalDate" Date="2023-04-30" />
+              <PropertyValue Property="Version" String="2023-01/azureBlobContainer" />
+            </Record>
+          </Collection>
+        </Annotation>
+      </Annotations>
+      <Annotations Target="microsoft.graph.security.ediscoveryExportOperation/azureBlobToken">
+        <Annotation Term="Org.OData.Core.V1.Revisions">
+          <Collection>
+            <Record>
+              <PropertyValue Property="Date" Date="2023-01-19" />
+              <PropertyValue Property="Description" String="The azureBlobToken will be deprecated on April 30, 2023." />
+              <PropertyValue Property="Kind">
+                <EnumMember>Org.OData.Core.V1.RevisionKind/Deprecated</EnumMember>
+              </PropertyValue>
+              <PropertyValue Property="RemovalDate" Date="2023-04-30" />
+              <PropertyValue Property="Version" String="2023-01/azureBlobToken" />
+            </Record>
+          </Collection>
+        </Annotation>
+      </Annotations>
+      <Annotations Target="microsoft.graph.security.ediscoveryExportOperation/outputFolderId">
+        <Annotation Term="Org.OData.Core.V1.Revisions">
+          <Collection>
+            <Record>
+              <PropertyValue Property="Date" Date="2023-01-19" />
+              <PropertyValue Property="Description" String="The outputFolderId will be deprecated on April 30, 2023." />
+              <PropertyValue Property="Kind">
+                <EnumMember>Org.OData.Core.V1.RevisionKind/Deprecated</EnumMember>
+              </PropertyValue>
+              <PropertyValue Property="RemovalDate" Date="2023-04-30" />
+              <PropertyValue Property="Version" String="2023-01/outputFolderId" />
+            </Record>
+          </Collection>
+        </Annotation>
+      </Annotations>
+      <Annotations Target="microsoft.graph.security.exportOptions/fileInfo">
+        <Annotation Term="Org.OData.Core.V1.Revisions">
+          <Collection>
+            <Record>
+              <PropertyValue Property="Date" Date="2023-01-19" />
+              <PropertyValue Property="Description" String="The fileInfo will be deprecated on April 30, 2023." />
+              <PropertyValue Property="Kind">
+                <EnumMember>Org.OData.Core.V1.RevisionKind/Deprecated</EnumMember>
+              </PropertyValue>
+              <PropertyValue Property="RemovalDate" Date="2023-04-30" />
+              <PropertyValue Property="Version" String="2023-01/fileInfo" />
+            </Record>
+          </Collection>
+        </Annotation>
+      </Annotations>
+      <Annotations Target="microsoft.graph.security.getDownloadUrl(microsoft.graph.security.ediscoveryExportOperation)">
+        <Annotation Term="Org.OData.Core.V1.Revisions">
+          <Collection>
+            <Record>
+              <PropertyValue Property="Date" Date="2023-01-19" />
+              <PropertyValue Property="Description" String="The getDownloadUrl endpoint will be deprecated on April 30, 2023. Please use exportFilesMetadata API instead." />
+              <PropertyValue Property="Kind">
+                <EnumMember>Org.OData.Core.V1.RevisionKind/Deprecated</EnumMember>
+              </PropertyValue>
+              <PropertyValue Property="RemovalDate" Date="2023-04-30" />
+              <PropertyValue Property="Version" String="2023-01/getDownloadUrl" />
+            </Record>
+          </Collection>
+        </Annotation>
+      </Annotations>
       <Annotations Target="microsoft.graph.security.incident">
         <Annotation Term="Org.OData.Capabilities.V1.CountRestrictions">
           <Record>
@@ -22530,12 +22634,13 @@
         <Member Name="originalFiles" Value="1" />
         <Member Name="text" Value="2" />
         <Member Name="pdfReplacement" Value="4" />
+        <Member Name="fileInfo" Value="8" />
         <Member Name="tags" Value="16" />
-        <Member Name="unknownFutureValue" Value="32" />
-        <Member Name="splitSource" Value="64" />
-        <Member Name="includeFolderAndPath" Value="128" />
-        <Member Name="friendlyName" Value="256" />
-        <Member Name="condensePaths" Value="512" />
+        <Member Name="unknownFutureValue" Value="64" />
+        <Member Name="splitSource" Value="128" />
+        <Member Name="includeFolderAndPath" Value="256" />
+        <Member Name="friendlyName" Value="512" />
+        <Member Name="condensePaths" Value="1024" />
       </EnumType>
       <EnumType Name="fileEntityIdentifier" IsFlags="true">
         <Member Name="sha1" Value="1" />
@@ -22551,6 +22656,27 @@
         <Member Name="sha256" Value="3" />
         <Member Name="sha256ac" Value="4" />
         <Member Name="unknownFutureValue" Value="5" />
+      </EnumType>
+      <EnumType Name="fileProcessingStatus">
+        <Member Name="success" Value="0" />
+        <Member Name="internalError" Value="1" />
+        <Member Name="unknownError" Value="2" />
+        <Member Name="processingTimeout" Value="3" />
+        <Member Name="invalidFileId" Value="4" />
+        <Member Name="fileSizeIsZero" Value="5" />
+        <Member Name="fileSizeIsTooLarge" Value="6" />
+        <Member Name="fileDepthLimitExceeded" Value="7" />
+        <Member Name="fileBodyIsTooLong" Value="8" />
+        <Member Name="fileTypeIsUnknown" Value="9" />
+        <Member Name="fileTypeIsNotSupported" Value="10" />
+        <Member Name="malformedFile" Value="11" />
+        <Member Name="protectedFile" Value="12" />
+        <Member Name="poisonFile" Value="13" />
+        <Member Name="noReviewSetSummaryGenerated" Value="14" />
+        <Member Name="extractionException" Value="15" />
+        <Member Name="ocrProcessingTimeout" Value="16" />
+        <Member Name="ocrFileSizeExceedsLimit" Value="17" />
+        <Member Name="unknownFutureValue" Value="18" />
       </EnumType>
       <EnumType Name="forceUserPasswordResetEntityIdentifier" IsFlags="true">
         <Member Name="accountSid" Value="1" />
@@ -22659,6 +22785,12 @@
         <Member Name="canBeOnboarded" Value="2" />
         <Member Name="unsupported" Value="3" />
         <Member Name="unknownFutureValue" Value="31" />
+      </EnumType>
+      <EnumType Name="policyStatus">
+        <Member Name="pending" Value="0" />
+        <Member Name="error" Value="1" />
+        <Member Name="success" Value="2" />
+        <Member Name="unknownFutureValue" Value="3" />
       </EnumType>
       <EnumType Name="protocolType">
         <Member Name="tcp" Value="0" />
@@ -23468,6 +23600,7 @@
         <Property Name="externalId" Type="Edm.String" />
         <NavigationProperty Name="caseMembers" Type="Collection(microsoft.graph.security.ediscoveryCaseMember)" ContainsTarget="true" />
         <NavigationProperty Name="custodians" Type="Collection(microsoft.graph.security.ediscoveryCustodian)" ContainsTarget="true" />
+        <NavigationProperty Name="legalHolds" Type="Collection(microsoft.graph.security.ediscoveryHoldPolicy)" ContainsTarget="true" />
         <NavigationProperty Name="noncustodialDataSources" Type="Collection(microsoft.graph.security.ediscoveryNoncustodialDataSource)" ContainsTarget="true" />
         <NavigationProperty Name="operations" Type="Collection(microsoft.graph.security.caseOperation)" ContainsTarget="true" />
         <NavigationProperty Name="reviewSets" Type="Collection(microsoft.graph.security.ediscoveryReviewSet)" ContainsTarget="true" />
@@ -23507,15 +23640,29 @@
         <NavigationProperty Name="search" Type="microsoft.graph.security.ediscoverySearch" />
       </EntityType>
       <EntityType Name="ediscoveryExportOperation" BaseType="microsoft.graph.security.caseOperation">
+        <Property Name="azureBlobContainer" Type="Edm.String" />
+        <Property Name="azureBlobToken" Type="Edm.String" />
         <Property Name="description" Type="Edm.String" />
         <Property Name="exportFileMetadata" Type="Collection(microsoft.graph.security.exportFileMetadata)" />
         <Property Name="exportOptions" Type="microsoft.graph.security.exportOptions" />
         <Property Name="exportStructure" Type="microsoft.graph.security.exportFileStructure" />
+        <Property Name="outputFolderId" Type="Edm.String" />
         <Property Name="outputName" Type="Edm.String" />
         <NavigationProperty Name="reviewSet" Type="microsoft.graph.security.ediscoveryReviewSet" />
         <NavigationProperty Name="reviewSetQuery" Type="microsoft.graph.security.ediscoveryReviewSetQuery" />
       </EntityType>
+      <EntityType Name="ediscoveryFile" BaseType="microsoft.graph.security.file">
+        <NavigationProperty Name="custodian" Type="microsoft.graph.security.ediscoveryCustodian" />
+        <NavigationProperty Name="tags" Type="Collection(microsoft.graph.security.ediscoveryReviewTag)" />
+      </EntityType>
       <EntityType Name="ediscoveryHoldOperation" BaseType="microsoft.graph.security.caseOperation" />
+      <EntityType Name="ediscoveryHoldPolicy" BaseType="microsoft.graph.security.policyBase">
+        <Property Name="contentQuery" Type="Edm.String" />
+        <Property Name="errors" Type="Collection(Edm.String)" />
+        <Property Name="isEnabled" Type="Edm.Boolean" />
+        <NavigationProperty Name="siteSources" Type="Collection(microsoft.graph.security.siteSource)" ContainsTarget="true" />
+        <NavigationProperty Name="userSources" Type="Collection(microsoft.graph.security.userSource)" ContainsTarget="true" />
+      </EntityType>
       <EntityType Name="ediscoveryHoldPolicySyncOperation" BaseType="microsoft.graph.security.caseOperation">
         <Property Name="reportFileMetadata" Type="Collection(microsoft.graph.security.reportFileMetadata)" />
       </EntityType>
@@ -23524,8 +23671,11 @@
         <NavigationProperty Name="dataSource" Type="microsoft.graph.security.dataSource" ContainsTarget="true" />
         <NavigationProperty Name="lastIndexOperation" Type="microsoft.graph.security.ediscoveryIndexOperation" />
       </EntityType>
-      <EntityType Name="ediscoveryPurgeDataOperation" BaseType="microsoft.graph.security.caseOperation" />
+      <EntityType Name="ediscoveryPurgeDataOperation" BaseType="microsoft.graph.security.caseOperation">
+        <Property Name="reportFileMetadata" Type="Collection(microsoft.graph.security.reportFileMetadata)" />
+      </EntityType>
       <EntityType Name="ediscoveryReviewSet" BaseType="microsoft.graph.security.dataSet">
+        <NavigationProperty Name="files" Type="Collection(microsoft.graph.security.ediscoveryFile)" ContainsTarget="true" />
         <NavigationProperty Name="queries" Type="Collection(microsoft.graph.security.ediscoveryReviewSetQuery)" ContainsTarget="true" />
       </EntityType>
       <EntityType Name="ediscoveryReviewSetQuery" BaseType="microsoft.graph.security.search" />
@@ -23556,6 +23706,20 @@
         <NavigationProperty Name="search" Type="microsoft.graph.security.ediscoverySearch" />
       </EntityType>
       <EntityType Name="ediscoveryTagOperation" BaseType="microsoft.graph.security.caseOperation" />
+      <EntityType Name="file" BaseType="graph.entity">
+        <Property Name="content" Type="Edm.Stream" />
+        <Property Name="dateTime" Type="Edm.DateTimeOffset" />
+        <Property Name="extension" Type="Edm.String" />
+        <Property Name="extractedTextContent" Type="Edm.Stream" />
+        <Property Name="mediaType" Type="Edm.String" />
+        <Property Name="name" Type="Edm.String" />
+        <Property Name="otherProperties" Type="microsoft.graph.security.stringValueDictionary" />
+        <Property Name="processingStatus" Type="microsoft.graph.security.fileProcessingStatus" />
+        <Property Name="senderOrAuthors" Type="Collection(Edm.String)" />
+        <Property Name="size" Type="Edm.Int64" />
+        <Property Name="sourceType" Type="microsoft.graph.security.sourceType" />
+        <Property Name="subjectTitle" Type="Edm.String" />
+      </EntityType>
       <EntityType Name="incident" BaseType="graph.entity">
         <Property Name="assignedTo" Type="Edm.String" />
         <Property Name="classification" Type="microsoft.graph.security.alertClassification" />
@@ -23578,6 +23742,15 @@
         <Property Name="systemTags" Type="Collection(Edm.String)" />
         <Property Name="tenantId" Type="Edm.String" />
         <NavigationProperty Name="alerts" Type="Collection(microsoft.graph.security.alert)" />
+      </EntityType>
+      <EntityType Name="policyBase" BaseType="graph.entity" Abstract="true">
+        <Property Name="createdBy" Type="graph.identitySet" />
+        <Property Name="createdDateTime" Type="Edm.DateTimeOffset" />
+        <Property Name="description" Type="Edm.String" />
+        <Property Name="displayName" Type="Edm.String" />
+        <Property Name="lastModifiedBy" Type="graph.identitySet" />
+        <Property Name="lastModifiedDateTime" Type="Edm.DateTimeOffset" />
+        <Property Name="status" Type="microsoft.graph.security.policyStatus" />
       </EntityType>
       <EntityType Name="protectionRule" BaseType="graph.entity" Abstract="true">
         <Property Name="createdBy" Type="Edm.String" Nullable="false" />
@@ -23658,6 +23831,8 @@
         <Parameter Name="bindingParameter" Type="microsoft.graph.security.ediscoveryReviewSet" />
         <Parameter Name="outputName" Type="Edm.String" Unicode="false" />
         <Parameter Name="description" Type="Edm.String" Unicode="false" />
+        <Parameter Name="azureBlobContainer" Type="Edm.String" Unicode="false" />
+        <Parameter Name="azureBlobToken" Type="Edm.String" Unicode="false" />
         <Parameter Name="exportOptions" Type="microsoft.graph.security.exportOptions" />
         <Parameter Name="exportStructure" Type="microsoft.graph.security.exportFileStructure" />
       </Action>
@@ -23665,6 +23840,8 @@
         <Parameter Name="bindingParameter" Type="microsoft.graph.security.ediscoveryReviewSetQuery" />
         <Parameter Name="outputName" Type="Edm.String" Unicode="false" />
         <Parameter Name="description" Type="Edm.String" Unicode="false" />
+        <Parameter Name="azureBlobContainer" Type="Edm.String" Unicode="false" />
+        <Parameter Name="azureBlobToken" Type="Edm.String" Unicode="false" />
         <Parameter Name="exportOptions" Type="microsoft.graph.security.exportOptions" />
         <Parameter Name="exportStructure" Type="microsoft.graph.security.exportFileStructure" />
       </Action>
@@ -23750,6 +23927,9 @@
       <Action Name="resetToDefault" IsBound="true">
         <Parameter Name="bindingParameter" Type="microsoft.graph.security.ediscoveryCaseSettings" />
       </Action>
+      <Action Name="retryPolicy" IsBound="true">
+        <Parameter Name="bindingParameter" Type="microsoft.graph.security.ediscoveryHoldPolicy" />
+      </Action>
       <Action Name="runHuntingQuery" IsBound="true">
         <Parameter Name="bindingParameter" Type="graph.security" />
         <Parameter Name="query" Type="Edm.String" Unicode="false" />
@@ -23767,6 +23947,14 @@
       <Function Name="asHierarchy" IsBound="true">
         <Parameter Name="bindingParameter" Type="Collection(microsoft.graph.security.ediscoveryReviewTag)" />
         <ReturnType Type="Collection(microsoft.graph.security.ediscoveryReviewTag)" />
+      </Function>
+      <Function Name="getDownloadUrl" IsBound="true">
+        <Parameter Name="bindingParameter" Type="microsoft.graph.security.ediscoveryExportOperation" />
+        <ReturnType Type="Edm.String" Unicode="false" />
+      </Function>
+      <Function Name="run" IsBound="true">
+        <Parameter Name="bindingParameter" Type="microsoft.graph.security.ediscoveryReviewSetQuery" />
+        <ReturnType Type="Collection(microsoft.graph.security.ediscoveryFile)" />
       </Function>
     </Schema>
     <Schema Namespace="microsoft.graph.termStore" xmlns="http://docs.oasis-open.org/odata/ns/edm">
