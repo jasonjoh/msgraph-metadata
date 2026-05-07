@@ -1922,6 +1922,7 @@
         <Member Name="userChangedPasswordOnPremises" Value="15" />
         <Member Name="adminDismissedRiskForSignIn" Value="16" />
         <Member Name="adminConfirmedAccountSafe" Value="17" />
+        <Member Name="microsoftRevokedSessions" Value="18" />
       </EnumType>
       <EnumType Name="riskDetectionTimingType">
         <Member Name="notDefined" Value="0" />
@@ -21747,6 +21748,21 @@
         </Annotation>
         <Annotation Term="Org.OData.Capabilities.V1.TopSupported" Bool="true" />
       </Annotations>
+      <Annotations Target="microsoft.graph.security.alert/category">
+        <Annotation Term="Org.OData.Core.V1.Revisions">
+          <Collection>
+            <Record>
+              <PropertyValue Property="Date" Date="2026-03-18" />
+              <PropertyValue Property="Description" String="Alert category property is deprecated and replaced with alert categories" />
+              <PropertyValue Property="Kind">
+                <EnumMember>Org.OData.Core.V1.RevisionKind/Deprecated</EnumMember>
+              </PropertyValue>
+              <PropertyValue Property="RemovalDate" Date="2028-03-18" />
+              <PropertyValue Property="Version" String="2026-03/Tasks_And_Plans" />
+            </Record>
+          </Collection>
+        </Annotation>
+      </Annotations>
       <Annotations Target="microsoft.graph.security.ediscoveryExportOperation/azureBlobContainer">
         <Annotation Term="Org.OData.Core.V1.Revisions">
           <Collection>
@@ -23893,6 +23909,7 @@
         <Property Name="alertPolicyId" Type="Edm.String" />
         <Property Name="alertWebUrl" Type="Edm.String" />
         <Property Name="assignedTo" Type="Edm.String" />
+        <Property Name="categories" Type="Collection(Edm.String)" />
         <Property Name="category" Type="Edm.String" />
         <Property Name="classification" Type="microsoft.graph.security.alertClassification" />
         <Property Name="comments" Type="Collection(microsoft.graph.security.alertComment)" />
