@@ -1,5 +1,10 @@
 {
   "microsoft.graph": {
+    "accessEntityType": [
+      "group",
+      "unknownFutureValue",
+      "user"
+    ],
     "accessPackageAssignmentFilterByCurrentUserOptions": [
       "createdBy",
       "target",
@@ -82,11 +87,29 @@
       "userRemove",
       "userUpdate"
     ],
+    "accessPackageSubjectLifecycle": [
+      "governed",
+      "notDefined",
+      "notGoverned",
+      "unknownFutureValue"
+    ],
     "accessPackageSubjectType": [
       "notSpecified",
       "servicePrincipal",
       "unknownFutureValue",
       "user"
+    ],
+    "accessPackageSuggestionFilterByCurrentUserOptions": [
+      "assignmentHistory",
+      "none",
+      "relatedPeopleAssignments",
+      "unknownFutureValue"
+    ],
+    "accessPackageSuggestionRelatedPeopleInsightLevel": [
+      "count",
+      "countAndNames",
+      "disabled",
+      "unknownFutureValue"
     ],
     "accessReviewExpirationBehavior": [
       "acceptAccessRecommendation",
@@ -265,6 +288,15 @@
       "asymmetricKeyLifetime",
       "unknownFutureValue"
     ],
+    "applicationDataType": [
+      "codingFiles",
+      "creditCards",
+      "databaseFiles",
+      "documents",
+      "mediaFiles",
+      "none",
+      "unknownFutureValue"
+    ],
     "applicationGuardBlockClipboardSharingType": [
       "blockBoth",
       "blockContainerToHost",
@@ -327,6 +359,12 @@
       "createdBy",
       "target",
       "unknownFutureValue"
+    ],
+    "approverInformationVisibility": [
+      "default",
+      "notVisible",
+      "unknownFutureValue",
+      "visible"
     ],
     "appsUpdateChannelType": [
       "current",
@@ -1318,6 +1356,16 @@
       "unknownFutureValue",
       "user"
     ],
+    "csaStarLevel": [
+      "attestation",
+      "certification",
+      "continuousMonitoring",
+      "cStarAssessment",
+      "none",
+      "notSupported",
+      "selfAssessment",
+      "unknownFutureValue"
+    ],
     "customExtensionCalloutInstanceStatus": [
       "callbackReceived",
       "callbackTimedOut",
@@ -1326,11 +1374,32 @@
       "unknownFutureValue",
       "waitingForCallback"
     ],
+    "customSecurityAttributeComparisonOperator": [
+      "equals",
+      "unknownFutureValue"
+    ],
     "dataPolicyOperationStatus": [
       "complete",
       "failed",
       "notStarted",
       "running",
+      "unknownFutureValue"
+    ],
+    "dataProtection": [
+      "impactAssessments",
+      "none",
+      "officers",
+      "secureCrossBorderDataTransfer",
+      "unknownFutureValue"
+    ],
+    "dataRetentionLevel": [
+      "dataRetained",
+      "deletedImmediately",
+      "deletedWithin1Month",
+      "deletedWithin2Weeks",
+      "deletedWithin3Months",
+      "deletedWithinMoreThan3Months",
+      "none",
       "unknownFutureValue"
     ],
     "dataSubjectType": [
@@ -1967,6 +2036,15 @@
       "rejectMfaByFederatedIdp",
       "unknownFutureValue"
     ],
+    "fedRampLevel": [
+      "high",
+      "liSaas",
+      "low",
+      "moderate",
+      "none",
+      "notSupported",
+      "unknownFutureValue"
+    ],
     "fido2RestrictionEnforcementType": [
       "allow",
       "block",
@@ -2065,9 +2143,22 @@
       "strict",
       "unknownFutureValue"
     ],
+    "groupAccessType": [
+      "none",
+      "private",
+      "public",
+      "secret",
+      "unknownFutureValue"
+    ],
     "groupType": [
       "azureAD",
       "unifiedGroups",
+      "unknownFutureValue"
+    ],
+    "holdType": [
+      "none",
+      "private",
+      "public",
       "unknownFutureValue"
     ],
     "horizontalSectionLayoutType": [
@@ -2649,6 +2740,19 @@
       "unknown",
       "unknownFutureValue"
     ],
+    "notificationEventsType": [
+      "none",
+      "restoreAndPolicyUpdates",
+      "unknownFutureValue"
+    ],
+    "notificationRecipientsType": [
+      "allAdmins",
+      "backupAdmins",
+      "custom",
+      "globalAdmins",
+      "none",
+      "unknownFutureValue"
+    ],
     "notificationTemplateBrandingOptions": [
       "includeCompanyLogo",
       "includeCompanyName",
@@ -2796,6 +2900,19 @@
       "unknownFutureValue",
       "user"
     ],
+    "packageStatus": [
+      "all",
+      "none",
+      "some",
+      "unknownFutureValue"
+    ],
+    "packageType": [
+      "custom",
+      "external",
+      "microsoft",
+      "shared",
+      "unknownFutureValue"
+    ],
     "pageLayoutType": [
       "article",
       "home",
@@ -2825,6 +2942,15 @@
     "passkeyTypes": [
       "deviceBound",
       "synced",
+      "unknownFutureValue"
+    ],
+    "passwordPolicy": [
+      "changePasswordPeriod",
+      "charactersCombination",
+      "none",
+      "passwordHistoryAndReuse",
+      "passwordLengthLimit",
+      "personalInformationUse",
       "unknownFutureValue"
     ],
     "payloadBrand": [
@@ -2921,6 +3047,13 @@
       "upgradeMailboxStorage",
       "verifyMailbox",
       "voicemail"
+    ],
+    "pciVersion": [
+      "none",
+      "notSupported",
+      "unknownFutureValue",
+      "v3_2_1",
+      "v4"
     ],
     "permissionClassificationType": [
       "high",
@@ -4458,6 +4591,17 @@
       "organizer",
       "tentativelyAccepted"
     ],
+    "restEncryptionType": [
+      "aes",
+      "bitlocker",
+      "blowfish",
+      "des",
+      "none",
+      "notSupported",
+      "rc4",
+      "rsa",
+      "unknownFutureValue"
+    ],
     "restorableArtifact": [
       "message",
       "unknownFutureValue"
@@ -4602,6 +4746,22 @@
       "approver",
       "createdBy",
       "principal",
+      "unknownFutureValue"
+    ],
+    "roleType": [
+      "active",
+      "application",
+      "delegated",
+      "eligible",
+      "unknownFutureValue"
+    ],
+    "rootDomains": [
+      "all",
+      "allFederated",
+      "allManaged",
+      "allManagedAndEnumeratedFederated",
+      "enumerated",
+      "none",
       "unknownFutureValue"
     ],
     "routingMode": [
@@ -4979,6 +5139,16 @@
     ],
     "socialIdentitySourceType": [
       "facebook",
+      "unknownFutureValue"
+    ],
+    "sslVersion": [
+      "none",
+      "notSupported",
+      "ssl3_0",
+      "tls1_0",
+      "tls1_1",
+      "tls1_2",
+      "tls1_3",
       "unknownFutureValue"
     ],
     "stagedFeatureName": [
@@ -5520,6 +5690,18 @@
       "signIn",
       "signUp",
       "signUpOrSignIn",
+      "unknownFutureValue"
+    ],
+    "userOwnership": [
+      "lawfulBasisForProcessing",
+      "none",
+      "rightsRelatedToAutomatedDecisionMaking",
+      "rightToAccess",
+      "rightToBeInformed",
+      "rightToDataPortability",
+      "rightToObject",
+      "rightToRectification",
+      "rightToRestrictionOfProcessing",
       "unknownFutureValue"
     ],
     "userPurpose": [
@@ -6367,6 +6549,7 @@
       "personSkills",
       "personWebAccounts",
       "personWebSite",
+      "personWorkPositions",
       "priority",
       "priorityNormalized",
       "reportedBy",
@@ -6439,12 +6622,25 @@
       "completedWithErrors",
       "failed",
       "inProgress",
+      "quarantined",
       "queued",
+      "unknownFutureValue"
+    ],
+    "matchMode": [
+      "all",
+      "any",
       "unknownFutureValue"
     ],
     "membershipChangeType": [
       "add",
       "remove",
+      "unknownFutureValue"
+    ],
+    "quarantineType": [
+      "countBasedThresholdExceeded",
+      "multipleConditionsExceeded",
+      "notQuarantined",
+      "percentageBasedThresholdExceeded",
       "unknownFutureValue"
     ],
     "valueType": [
@@ -6457,6 +6653,7 @@
     "workflowExecutionType": [
       "activatedWithScope",
       "onDemand",
+      "preview",
       "scheduled",
       "unknownFutureValue"
     ],
@@ -6508,6 +6705,7 @@
       "advancedIndexing",
       "allItemsInFolder",
       "allVersions",
+      "cloudNativeHtmlConversion",
       "htmlTranscripts",
       "linkedFiles",
       "listAttachments",
@@ -6576,6 +6774,13 @@
       "inProgress",
       "new",
       "resolved",
+      "unknown",
+      "unknownFutureValue"
+    ],
+    "antispamDirectionality": [
+      "inbound",
+      "intraOrg",
+      "outbound",
       "unknown",
       "unknownFutureValue"
     ],
@@ -6654,6 +6859,26 @@
       "text",
       "unknownFutureValue"
     ],
+    "correlationReason": [
+      "eventCasualSequence",
+      "eventSequence",
+      "lateralMovementPath",
+      "networkProximity",
+      "repeatedAlertOccurrence",
+      "sameActor",
+      "sameAsset",
+      "sameCampaign",
+      "sameGeography",
+      "sameNetworkSegment",
+      "sameTargetedAsset",
+      "sameThreatSource",
+      "sharedIndicators",
+      "similarArtifacts",
+      "similarTTPsOrBehavior",
+      "temporalProximity",
+      "timeFrame",
+      "unknownFutureValue"
+    ],
     "dataSourceContainerStatus": [
       "active",
       "released",
@@ -6688,6 +6913,26 @@
       "unknown",
       "unknownFutureValue",
       "updated"
+    ],
+    "deliveryAction": [
+      "blocked",
+      "delivered",
+      "deliveredToJunk",
+      "replaced",
+      "unknown",
+      "unknownFutureValue"
+    ],
+    "deliveryLocation": [
+      "deletedFolder",
+      "dropped",
+      "failed",
+      "inbox_folder",
+      "junkFolder",
+      "onprem_external",
+      "others",
+      "quarantine",
+      "unknown",
+      "unknownFutureValue"
     ],
     "deploymentStatus": [
       "disconnected",
@@ -6778,6 +7023,12 @@
       "none",
       "success",
       "unknownFutureValue"
+    ],
+    "eventSource": [
+      "admin",
+      "system",
+      "unknownFutureValue",
+      "user"
     ],
     "eventStatusType": [
       "error",
@@ -7030,6 +7281,21 @@
       "unknownFutureValue",
       "user"
     ],
+    "remediationAction": [
+      "hardDelete",
+      "moveToDeletedItems",
+      "moveToInbox",
+      "moveToJunk",
+      "moveToQuarantine",
+      "softDelete",
+      "unknownFutureValue"
+    ],
+    "remediationSeverity": [
+      "high",
+      "low",
+      "medium",
+      "unknownFutureValue"
+    ],
     "retentionTrigger": [
       "dateCreated",
       "dateLabeled",
@@ -7080,6 +7346,7 @@
       "microsoftDefenderForIdentity",
       "microsoftDefenderForOffice365",
       "microsoftInsiderRiskManagement",
+      "microsoftSecurityForAI",
       "microsoftSentinel",
       "microsoftThreatIntelligence",
       "unknown",
@@ -7121,6 +7388,38 @@
       "replaced",
       "unknown",
       "unknownFutureValue"
+    ],
+    "threatType": [
+      "malware",
+      "none",
+      "phish",
+      "spam",
+      "unknown",
+      "unknownFutureValue"
+    ],
+    "timelineEventType": [
+      "air",
+      "dynamicDelivery",
+      "originalDelivery",
+      "quarantineRelease",
+      "reprocessed",
+      "systemTimeTravel",
+      "unknown",
+      "unknownFutureValue",
+      "userUrlClick",
+      "zap"
+    ],
+    "verdictCategory": [
+      "decryptionFailed",
+      "malware",
+      "none",
+      "phish",
+      "siteUnavailable",
+      "spam",
+      "undefined",
+      "unknownFutureValue",
+      "unsupportedFileType",
+      "unsupportedUriScheme"
     ],
     "vmCloudProvider": [
       "azure",

@@ -45,6 +45,7 @@
     "accessPackageApprovalStage": {
       "navigationProperties": [],
       "properties": [
+        "approverInformationVisibility",
         "durationBeforeAutomaticDenial",
         "durationBeforeEscalation",
         "escalationApprovers",
@@ -166,6 +167,24 @@
     "accessPackageResourceAttributeSource": {
       "navigationProperties": [],
       "properties": []
+    },
+    "accessPackageSuggestionReason": {
+      "navigationProperties": [],
+      "properties": []
+    },
+    "accessPackageSuggestionRelatedPeopleBased": {
+      "navigationProperties": [],
+      "properties": [
+        "relatedPeople",
+        "relatedPeopleAssignmentCount"
+      ]
+    },
+    "accessPackageSuggestionSelfAssignmentHistoryBased": {
+      "navigationProperties": [],
+      "properties": [
+        "lastAssignmentDateTime",
+        "pastAssignmentCount"
+      ]
     },
     "accessPackageUserDirectoryAttributeStore": {
       "navigationProperties": [],
@@ -484,6 +503,10 @@
       "navigationProperties": [],
       "properties": []
     },
+    "allDomains": {
+      "navigationProperties": [],
+      "properties": []
+    },
     "allLicensedUsersAssignmentTarget": {
       "navigationProperties": [],
       "properties": []
@@ -592,6 +615,145 @@
       "navigationProperties": [],
       "properties": []
     },
+    "applicationLocation": {
+      "navigationProperties": [],
+      "properties": [
+        "dataCenter",
+        "headquarters"
+      ]
+    },
+    "applicationRiskFactorCertificateInfo": {
+      "navigationProperties": [],
+      "properties": [
+        "hasBadCommonName",
+        "hasInsecureSignature",
+        "hasNoChainOfTrust",
+        "isDenylisted",
+        "isHostnameMismatch",
+        "isNotAfter",
+        "isNotBefore",
+        "isRevoked",
+        "isSelfSigned"
+      ]
+    },
+    "applicationRiskFactorGeneralInfo": {
+      "navigationProperties": [],
+      "properties": [
+        "consumerPopularity",
+        "domainRegistrationDate",
+        "founded",
+        "hasDisasterRecoveryPlan",
+        "hold",
+        "hostingCompanyName",
+        "location",
+        "privacyPolicy",
+        "processedDataTypes",
+        "termsOfService"
+      ]
+    },
+    "applicationRiskFactorLegalInfo": {
+      "navigationProperties": [],
+      "properties": [
+        "dataRetention",
+        "gdpr",
+        "hasDataOwnership",
+        "hasDmca"
+      ]
+    },
+    "applicationRiskFactorLegalInfoGdpr": {
+      "navigationProperties": [],
+      "properties": [
+        "dataProtection",
+        "hasRightToErasure",
+        "isReportingDataBreaches",
+        "statementUrl",
+        "userOwnership"
+      ]
+    },
+    "applicationRiskFactors": {
+      "navigationProperties": [],
+      "properties": [
+        "compliance",
+        "general",
+        "legal",
+        "security"
+      ]
+    },
+    "applicationRiskFactorSecurityInfo": {
+      "navigationProperties": [],
+      "properties": [
+        "certificate",
+        "domainToCheck",
+        "hasAdminAuditTrail",
+        "hasAnonymousUsage",
+        "hasDataAuditTrail",
+        "hasDataClassification",
+        "hasDataEncrypted",
+        "hasEnforceTransportEnc",
+        "hasIpRestriction",
+        "hasMFA",
+        "hasPenTest",
+        "hasRememberPassword",
+        "hasSamlSupport",
+        "hasUserAuditLogs",
+        "hasUserDataUpload",
+        "hasUserRolesSupport",
+        "hasValidCertName",
+        "httpsSecurityHeaders",
+        "isCertTrusted",
+        "isDrownVulnerable",
+        "isHeartbleedProof",
+        "lastBreachDate",
+        "latestValidSSL",
+        "passwordPolicy",
+        "restEncryptionType"
+      ]
+    },
+    "applicationRiskScore": {
+      "navigationProperties": [],
+      "properties": [
+        "compliance",
+        "legal",
+        "provider",
+        "security",
+        "total"
+      ]
+    },
+    "applicationSecurityCompliance": {
+      "navigationProperties": [],
+      "properties": [
+        "cobit",
+        "coppa",
+        "csaStar",
+        "fedRamp",
+        "ferpa",
+        "ffiec",
+        "finra",
+        "fisma",
+        "gaap",
+        "gapp",
+        "glba",
+        "hipaa",
+        "hitrust",
+        "isae3402",
+        "iso27001",
+        "iso27002",
+        "iso27017",
+        "iso27018",
+        "itar",
+        "jerichoForumCommandments",
+        "pci",
+        "privacyShield",
+        "safeHarbor",
+        "soc1",
+        "soc2",
+        "soc3",
+        "sox",
+        "sp800_53",
+        "ssae16",
+        "ustr"
+      ]
+    },
     "applicationServicePrincipal": {
       "navigationProperties": [
         "application",
@@ -628,13 +790,21 @@
     },
     "appManagementApplicationConfiguration": {
       "navigationProperties": [],
-      "properties": []
+      "properties": [
+        "identifierUris"
+      ]
     },
     "appManagementConfiguration": {
       "navigationProperties": [],
       "properties": [
         "keyCredentials",
         "passwordCredentials"
+      ]
+    },
+    "appManagementPolicyActorExemptions": {
+      "navigationProperties": [],
+      "properties": [
+        "customSecurityAttributes"
       ]
     },
     "appManagementServicePrincipalConfiguration": {
@@ -2386,9 +2556,17 @@
         "locale"
       ]
     },
+    "customAppManagementApplicationConfiguration": {
+      "navigationProperties": [],
+      "properties": [
+        "identifierUris"
+      ]
+    },
     "customAppManagementConfiguration": {
       "navigationProperties": [],
-      "properties": []
+      "properties": [
+        "applicationRestrictions"
+      ]
     },
     "customExtensionAuthenticationConfiguration": {
       "navigationProperties": [],
@@ -2455,6 +2633,19 @@
     "customMetadataDictionary": {
       "navigationProperties": [],
       "properties": []
+    },
+    "customSecurityAttributeExemption": {
+      "navigationProperties": [],
+      "properties": [
+        "id",
+        "operator"
+      ]
+    },
+    "customSecurityAttributeStringValueExemption": {
+      "navigationProperties": [],
+      "properties": [
+        "value"
+      ]
     },
     "customSecurityAttributeValue": {
       "navigationProperties": [],
@@ -3321,6 +3512,12 @@
         "users"
       ]
     },
+    "enumeratedDomains": {
+      "navigationProperties": [],
+      "properties": [
+        "domainNames"
+      ]
+    },
     "enumeratedScopes": {
       "navigationProperties": [],
       "properties": [
@@ -3682,6 +3879,24 @@
       "navigationProperties": [],
       "properties": [
         "isPicture"
+      ]
+    },
+    "identifierUriConfiguration": {
+      "navigationProperties": [],
+      "properties": [
+        "nonDefaultUriAddition",
+        "uriAdditionWithoutUniqueTenantIdentifier"
+      ]
+    },
+    "identifierUriRestriction": {
+      "navigationProperties": [],
+      "properties": [
+        "excludeActors",
+        "excludeAppsReceivingV2Tokens",
+        "excludeSaml",
+        "isStateSetByMicrosoft",
+        "restrictForAppsCreatedAfterDateTime",
+        "state"
       ]
     },
     "identity": {
@@ -4121,6 +4336,7 @@
     "keyCredentialConfiguration": {
       "navigationProperties": [],
       "properties": [
+        "excludeActors",
         "maxLifetime",
         "restrictForAppsCreatedAfterDateTime",
         "restrictionType",
@@ -4825,6 +5041,13 @@
         "oneNoteWebUrl"
       ]
     },
+    "notificationRecipients": {
+      "navigationProperties": [],
+      "properties": [
+        "customRecipients",
+        "role"
+      ]
+    },
     "noTrainingNotificationSetting": {
       "navigationProperties": [],
       "properties": [
@@ -5146,6 +5369,7 @@
     "onPremisesDirectorySynchronizationFeature": {
       "navigationProperties": [],
       "properties": [
+        "allowOnPremUpdateOfOnPremisesObjectIdentifierEnabled",
         "blockCloudObjectTakeoverThroughHardMatchEnabled",
         "blockSoftMatchEnabled",
         "bypassDirSyncOverridesEnabled",
@@ -5336,6 +5560,27 @@
         "type"
       ]
     },
+    "packageAccessEntity": {
+      "navigationProperties": [],
+      "properties": [
+        "resourceId",
+        "resourceType"
+      ]
+    },
+    "packageElement": {
+      "navigationProperties": [],
+      "properties": [
+        "definition",
+        "id"
+      ]
+    },
+    "packageElementDetail": {
+      "navigationProperties": [],
+      "properties": [
+        "elements",
+        "elementType"
+      ]
+    },
     "pageLinks": {
       "navigationProperties": [],
       "properties": [
@@ -5390,6 +5635,7 @@
     "passwordCredentialConfiguration": {
       "navigationProperties": [],
       "properties": [
+        "excludeActors",
         "maxLifetime",
         "restrictForAppsCreatedAfterDateTime",
         "restrictionType",
@@ -8358,6 +8604,12 @@
         "workLocationType"
       ]
     },
+    "validatingDomains": {
+      "navigationProperties": [],
+      "properties": [
+        "rootDomains"
+      ]
+    },
     "verifiedDomain": {
       "navigationProperties": [],
       "properties": [
@@ -9463,6 +9715,12 @@
         "triggerAttributes"
       ]
     },
+    "countBasedQuarantineCondition": {
+      "navigationProperties": [],
+      "properties": [
+        "threshold"
+      ]
+    },
     "customTaskExtensionCallbackConfiguration": {
       "navigationProperties": [
         "authorizedApps"
@@ -9506,6 +9764,40 @@
         "name",
         "values",
         "valueType"
+      ]
+    },
+    "percentageBasedQuarantineCondition": {
+      "navigationProperties": [],
+      "properties": [
+        "percentage"
+      ]
+    },
+    "previewFailedTask": {
+      "navigationProperties": [],
+      "properties": [
+        "definitionId",
+        "failureReason",
+        "name",
+        "taskId"
+      ]
+    },
+    "quarantineCondition": {
+      "navigationProperties": [],
+      "properties": []
+    },
+    "quarantineConfiguration": {
+      "navigationProperties": [],
+      "properties": [
+        "conditions",
+        "matchMode"
+      ]
+    },
+    "quarantineDetails": {
+      "navigationProperties": [],
+      "properties": [
+        "quarantinedDateTime",
+        "quarantineReason",
+        "quarantineType"
       ]
     },
     "ruleBasedSubjectSet": {
@@ -9615,6 +9907,12 @@
     "workflowExecutionTrigger": {
       "navigationProperties": [],
       "properties": []
+    },
+    "workflowSetting": {
+      "navigationProperties": [],
+      "properties": [
+        "quarantineConfiguration"
+      ]
     },
     "workflowsInsightsByCategory": {
       "navigationProperties": [],
@@ -9743,6 +10041,83 @@
         "resourceType"
       ]
     },
+    "analyzedEmailAttachment": {
+      "navigationProperties": [],
+      "properties": [
+        "detonationDetails",
+        "fileExtension",
+        "fileName",
+        "fileSize",
+        "fileType",
+        "malwareFamily",
+        "sha256",
+        "tenantAllowBlockListDetailInfo",
+        "threatType"
+      ]
+    },
+    "analyzedEmailAuthenticationDetail": {
+      "navigationProperties": [],
+      "properties": [
+        "compositeAuthentication",
+        "dkim",
+        "dmarc",
+        "senderPolicyFramework"
+      ]
+    },
+    "analyzedEmailDeliveryDetail": {
+      "navigationProperties": [],
+      "properties": [
+        "action",
+        "latestThreats",
+        "location",
+        "originalThreats"
+      ]
+    },
+    "analyzedEmailDlpRuleInfo": {
+      "navigationProperties": [],
+      "properties": [
+        "name",
+        "ruleId"
+      ]
+    },
+    "analyzedEmailExchangeTransportRuleInfo": {
+      "navigationProperties": [],
+      "properties": [
+        "name",
+        "ruleId"
+      ]
+    },
+    "analyzedEmailRecipientDetail": {
+      "navigationProperties": [],
+      "properties": [
+        "ccRecipients",
+        "domainName"
+      ]
+    },
+    "analyzedEmailSenderDetail": {
+      "navigationProperties": [],
+      "properties": [
+        "displayName",
+        "domainCreationDateTime",
+        "domainName",
+        "domainOwner",
+        "fromAddress",
+        "ipv4",
+        "location",
+        "mailFromAddress",
+        "mailFromDomainName"
+      ]
+    },
+    "analyzedEmailUrl": {
+      "navigationProperties": [],
+      "properties": [
+        "detectionMethod",
+        "detonationDetails",
+        "tenantAllowBlockListDetailInfo",
+        "threatType",
+        "url"
+      ]
+    },
     "analyzedMessageEvidence": {
       "navigationProperties": [],
       "properties": [
@@ -9832,6 +10207,13 @@
         "userAgent"
       ]
     },
+    "compromiseIndicator": {
+      "navigationProperties": [],
+      "properties": [
+        "value",
+        "verdict"
+      ]
+    },
     "containerEvidence": {
       "navigationProperties": [],
       "properties": [
@@ -9870,6 +10252,53 @@
       "navigationProperties": [],
       "properties": [
         "deploymentAccessKey"
+      ]
+    },
+    "detonationBehaviourDetails": {
+      "navigationProperties": [],
+      "properties": [
+        "actionStatus",
+        "behaviourCapability",
+        "behaviourGroup",
+        "details",
+        "eventDateTime",
+        "operation",
+        "processId",
+        "processName",
+        "target"
+      ]
+    },
+    "detonationChain": {
+      "navigationProperties": [],
+      "properties": [
+        "childNodes",
+        "value"
+      ]
+    },
+    "detonationDetails": {
+      "navigationProperties": [],
+      "properties": [
+        "analysisDateTime",
+        "compromiseIndicators",
+        "detonationBehaviourDetails",
+        "detonationBehaviourDetailsV2",
+        "detonationChain",
+        "detonationObservables",
+        "detonationScreenshotUri",
+        "detonationVerdict",
+        "detonationVerdictReason",
+        "entityMetadata",
+        "mitreTechniques",
+        "staticAnalysis",
+        "submissionSource"
+      ]
+    },
+    "detonationObservables": {
+      "navigationProperties": [],
+      "properties": [
+        "contactedIps",
+        "contactedUrls",
+        "droppedfiles"
       ]
     },
     "deviceEvidence": {
@@ -10328,6 +10757,12 @@
         "processes"
       ]
     },
+    "mergeResponse": {
+      "navigationProperties": [],
+      "properties": [
+        "targetIncidentId"
+      ]
+    },
     "networkConnectionEvidence": {
       "navigationProperties": [],
       "properties": [
@@ -10571,6 +11006,25 @@
         "urls"
       ]
     },
+    "threatDetectionDetail": {
+      "navigationProperties": [],
+      "properties": [
+        "confidenceLevel",
+        "priorityAccountProtection",
+        "threats"
+      ]
+    },
+    "timelineEvent": {
+      "navigationProperties": [],
+      "properties": [
+        "eventDateTime",
+        "eventDetails",
+        "eventResult",
+        "eventSource",
+        "eventThreats",
+        "eventType"
+      ]
+    },
     "topicModelingSettings": {
       "navigationProperties": [],
       "properties": [
@@ -10595,6 +11049,7 @@
         "displayName",
         "domainName",
         "resourceAccessEvents",
+        "tenantId",
         "userPrincipalName",
         "userSid"
       ]
