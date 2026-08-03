@@ -140,7 +140,8 @@
       "navigationProperties": [
         "environment",
         "roles",
-        "scopes"
+        "scopes",
+        "uploadSessions"
       ],
       "properties": [
         "attributes",
@@ -2087,6 +2088,15 @@
       "navigationProperties": [],
       "properties": []
     },
+    "cloudPcServicePlan": {
+      "navigationProperties": [],
+      "properties": [
+        "displayName",
+        "ramInGB",
+        "storageInGB",
+        "vCpuCount"
+      ]
+    },
     "cloudPcUserSetting": {
       "navigationProperties": [
         "assignments"
@@ -2514,6 +2524,7 @@
         "appId",
         "assetId",
         "availableTo",
+        "createdDateTime",
         "deployedTo",
         "displayName",
         "elementTypes",
@@ -2539,7 +2550,8 @@
         "categories",
         "elementDetails",
         "longDescription",
-        "sensitivity"
+        "sensitivity",
+        "sharedWithUsersAndGroups"
       ]
     },
     "copilotReportRoot": {
@@ -2632,6 +2644,37 @@
         "description",
         "displayName",
         "endpointConfiguration"
+      ]
+    },
+    "customDataProvidedResource": {
+      "navigationProperties": [],
+      "properties": [
+        "notificationEndpointConfiguration"
+      ]
+    },
+    "customDataProvidedResourceAccessReviewUploadSession": {
+      "navigationProperties": [],
+      "properties": []
+    },
+    "customDataProvidedResourceFile": {
+      "navigationProperties": [],
+      "properties": [
+        "name",
+        "size",
+        "uploadedDateTime"
+      ]
+    },
+    "customDataProvidedResourceUploadSession": {
+      "navigationProperties": [
+        "files"
+      ],
+      "properties": [
+        "createdDateTime",
+        "data",
+        "isUploadDone",
+        "referenceId",
+        "stats",
+        "status"
       ]
     },
     "customExtensionStageSetting": {
@@ -2802,7 +2845,8 @@
         "displayDeviceName",
         "heightAdjustableState",
         "mailboxDetails",
-        "mode"
+        "mode",
+        "servicePlans"
       ]
     },
     "detectedApp": {
@@ -3371,6 +3415,8 @@
         "federationConfigurations",
         "onPremisesSynchronization",
         "publicKeyInfrastructure",
+        "recovery",
+        "remoteTenantGroups",
         "subscriptions"
       ],
       "properties": []
@@ -4750,6 +4796,7 @@
       "navigationProperties": [
         "accessReviews",
         "appConsent",
+        "catalogs",
         "entitlementManagement",
         "lifecycleWorkflows",
         "privilegedAccess",
@@ -5406,6 +5453,7 @@
         "drive",
         "items",
         "operations",
+        "permissions",
         "subscriptions"
       ],
       "properties": [
@@ -5421,6 +5469,7 @@
         "documentSetVersions",
         "driveItem",
         "fields",
+        "permissions",
         "versions"
       ],
       "properties": [
@@ -6573,6 +6622,7 @@
         "audioConferencing",
         "chatInfo",
         "chatRestrictions",
+        "cloudVideoInteropInfo",
         "expiryDateTime",
         "isEndToEndEncryptionEnabled",
         "isEntryExitAnnounced",
@@ -6582,6 +6632,7 @@
         "lobbyBypassSettings",
         "meetingOptionsWebUrl",
         "meetingSpokenLanguageTag",
+        "meetingType",
         "recordAutomatically",
         "sensitivityLabelAssignment",
         "shareMeetingChatHistoryDefault",
@@ -7017,6 +7068,7 @@
         "label",
         "parentId",
         "phone",
+        "placeId",
         "tags"
       ]
     },
@@ -7813,6 +7865,16 @@
         "isRemoteDesktopProtocolEnabled"
       ]
     },
+    "remoteTenantGroup": {
+      "navigationProperties": [],
+      "properties": [
+        "remoteGroupDisplayName",
+        "remoteGroupId",
+        "remoteTenantDisplayName",
+        "remoteTenantId",
+        "remoteTenantPrimaryDomain"
+      ]
+    },
     "reportRoot": {
       "navigationProperties": [
         "authenticationMethods",
@@ -8050,7 +8112,6 @@
         "floorLabel",
         "floorNumber",
         "nickname",
-        "placeId",
         "teamsEnabledState",
         "videoDeviceName"
       ]
@@ -8224,6 +8285,7 @@
         "alerts",
         "alerts_v2",
         "attackSimulation",
+        "auditLog",
         "cases",
         "collaboration",
         "dataSecurityAndGovernance",
@@ -8688,23 +8750,29 @@
         "appDisplayName",
         "appId",
         "appliedConditionalAccessPolicies",
+        "authenticationAppDeviceDetails",
         "clientAppUsed",
         "conditionalAccessStatus",
         "correlationId",
         "createdDateTime",
         "deviceDetail",
+        "homeTenantId",
         "ipAddress",
         "isInteractive",
         "location",
         "resourceDisplayName",
         "resourceId",
+        "resourceTenantId",
         "riskDetail",
         "riskEventTypes",
         "riskEventTypes_v2",
         "riskLevelAggregated",
         "riskLevelDuringSignIn",
         "riskState",
+        "servicePrincipalId",
+        "servicePrincipalName",
         "status",
+        "userAgent",
         "userDisplayName",
         "userId",
         "userPrincipalName"
@@ -10501,6 +10569,7 @@
         "onPremisesConnections",
         "provisioningPolicies",
         "report",
+        "servicePlans",
         "userSettings"
       ],
       "properties": []
@@ -10516,6 +10585,7 @@
         "displayName",
         "endDateTime",
         "externalEventInformation",
+        "isRegistrationRequired",
         "settings",
         "startDateTime",
         "status"
@@ -10553,6 +10623,8 @@
       ],
       "properties": [
         "capacity",
+        "isManualApprovalEnabled",
+        "isWaitlistEnabled",
         "registrationWebUrl"
       ]
     },
@@ -10579,6 +10651,7 @@
     "virtualEventSession": {
       "navigationProperties": [],
       "properties": [
+        "capacity",
         "endDateTime",
         "startDateTime",
         "videoOnDemandWebUrl"
@@ -10593,13 +10666,21 @@
       "properties": []
     },
     "virtualEventTownhall": {
-      "navigationProperties": [],
+      "navigationProperties": [
+        "registrationConfiguration",
+        "registrations"
+      ],
       "properties": [
         "audience",
+        "capacity",
         "coOrganizers",
         "invitedAttendees",
         "isInviteOnly"
       ]
+    },
+    "virtualEventTownhallRegistrationConfiguration": {
+      "navigationProperties": [],
+      "properties": []
     },
     "virtualEventWebinar": {
       "navigationProperties": [
@@ -10613,10 +10694,7 @@
     },
     "virtualEventWebinarRegistrationConfiguration": {
       "navigationProperties": [],
-      "properties": [
-        "isManualApprovalEnabled",
-        "isWaitlistEnabled"
-      ]
+      "properties": []
     },
     "voiceAuthenticationMethodConfiguration": {
       "navigationProperties": [
@@ -11938,8 +12016,7 @@
         "displayDeviceName",
         "emailAddress",
         "mode",
-        "nickname",
-        "placeId"
+        "nickname"
       ]
     },
     "x509CertificateAuthenticationMethodConfiguration": {
@@ -12019,6 +12096,58 @@
         "isTest",
         "modalities",
         "startDateTime"
+      ]
+    }
+  },
+  "microsoft.graph.entraRecoveryServices": {
+    "recovery": {
+      "navigationProperties": [
+        "jobs",
+        "snapshots"
+      ],
+      "properties": []
+    },
+    "recoveryChangeObjectBase": {
+      "navigationProperties": [],
+      "properties": [
+        "displayName",
+        "entityTypeName",
+        "failureMessage",
+        "recoveryAction"
+      ]
+    },
+    "recoveryJob": {
+      "navigationProperties": [],
+      "properties": [
+        "totalFailedChanges",
+        "totalLinksModified",
+        "totalObjectsModified"
+      ]
+    },
+    "recoveryJobBase": {
+      "navigationProperties": [],
+      "properties": [
+        "filteringCriteria",
+        "jobCompletionDateTime",
+        "jobStartDateTime",
+        "status",
+        "targetStateDateTime",
+        "totalChangedLinksCalculated",
+        "totalChangedObjectsCalculated"
+      ]
+    },
+    "recoveryPreviewJob": {
+      "navigationProperties": [],
+      "properties": []
+    },
+    "snapshot": {
+      "navigationProperties": [
+        "recoveryJobs",
+        "recoveryPreviewJobs"
+      ],
+      "properties": [
+        "createdDateTime",
+        "totalChangedObjects"
       ]
     }
   },
@@ -12525,6 +12654,48 @@
     "artifact": {
       "navigationProperties": [],
       "properties": []
+    },
+    "auditCoreRoot": {
+      "navigationProperties": [
+        "queries"
+      ],
+      "properties": []
+    },
+    "auditLogQuery": {
+      "navigationProperties": [
+        "records"
+      ],
+      "properties": [
+        "administrativeUnitIdFilters",
+        "displayName",
+        "filterEndDateTime",
+        "filterStartDateTime",
+        "ipAddressFilters",
+        "keywordFilter",
+        "objectIdFilters",
+        "operationFilters",
+        "recordTypeFilters",
+        "serviceFilters",
+        "status",
+        "userPrincipalNameFilters"
+      ]
+    },
+    "auditLogRecord": {
+      "navigationProperties": [],
+      "properties": [
+        "administrativeUnits",
+        "auditData",
+        "auditLogRecordType",
+        "clientIp",
+        "createdDateTime",
+        "objectId",
+        "operation",
+        "organizationId",
+        "service",
+        "userId",
+        "userPrincipalName",
+        "userType"
+      ]
     },
     "authorityTemplate": {
       "navigationProperties": [],

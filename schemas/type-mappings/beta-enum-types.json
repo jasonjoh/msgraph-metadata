@@ -1896,6 +1896,12 @@
       "reactionRemoved",
       "unknownFutureValue"
     ],
+    "chatMessageBodyContentType": [
+      "html",
+      "markdown",
+      "text",
+      "unknownFutureValue"
+    ],
     "chatMessageImportance": [
       "high",
       "normal",
@@ -4949,6 +4955,12 @@
     "escrowBehavior": [
       "Default",
       "IgnoreLookupReferenceResolutionFailure"
+    ],
+    "evaluationScopeType": [
+      "agent",
+      "anonymousUser",
+      "tenant",
+      "unknownFutureValue"
     ],
     "eventType": [
       "exception",
@@ -9482,6 +9494,7 @@
       "externalItem",
       "oneDriveBusiness",
       "sharePoint",
+      "sharePointEmbedded",
       "unknownFutureValue"
     ],
     "retrievalEntityType": [
@@ -9956,6 +9969,12 @@
       "enabled",
       "unknownFutureValue"
     ],
+    "servicePrincipalLockScope": [
+      "everywhere",
+      "foreignTenantOnly",
+      "notConfigured",
+      "unknownFutureValue"
+    ],
     "serviceStartType": [
       "automatic",
       "disabled",
@@ -10354,6 +10373,14 @@
       "delete",
       "export",
       "tagForAction",
+      "unknownFutureValue"
+    ],
+    "syncComponentStatus": [
+      "failure",
+      "inProgress",
+      "none",
+      "partialSuccess",
+      "success",
       "unknownFutureValue"
     ],
     "synchronizationDisposition": [
@@ -13208,6 +13235,7 @@
     "clientFallbackAction": [
       "block",
       "bypass",
+      "default",
       "unknownFutureValue"
     ],
     "cloudFirewallAction": [
@@ -15572,6 +15600,100 @@
       "clientRenewProhibited",
       "clientTransferProhibited",
       "clientUpdateProhibited",
+      "unknownFutureValue"
+    ]
+  },
+  "microsoft.graph.security.caseManagement": {
+    "attachmentOriginType": [
+      "case",
+      "comment",
+      "task",
+      "unknownFutureValue"
+    ],
+    "attachmentScanResult": [
+      "malicious",
+      "noThreatsFound",
+      "unknownFutureValue",
+      "unscanned"
+    ],
+    "auditAction": [
+      "create",
+      "delete",
+      "download",
+      "fileUploadMalwareDetected",
+      "link",
+      "unknownFutureValue",
+      "unlink",
+      "update",
+      "upload"
+    ],
+    "caseTaskCategory": [
+      "contain",
+      "investigate",
+      "prevent",
+      "remediate",
+      "triage",
+      "uncategorized",
+      "unknownFutureValue"
+    ],
+    "caseTaskPriority": [
+      "critical",
+      "high",
+      "low",
+      "medium",
+      "notSet",
+      "unknownFutureValue",
+      "veryLow"
+    ],
+    "incidentClassification": [
+      "falsePositive",
+      "informationalExpectedActivity",
+      "truePositive",
+      "unknown",
+      "unknownFutureValue"
+    ],
+    "incidentDetermination": [
+      "apt",
+      "compromisedAccount",
+      "confirmedActivity",
+      "lineOfBusinessApplication",
+      "maliciousUserActivity",
+      "malware",
+      "multiStagedAttack",
+      "notEnoughDataToValidate",
+      "notMalicious",
+      "other",
+      "phishing",
+      "securityPersonnel",
+      "securityTesting",
+      "unknown",
+      "unknownFutureValue",
+      "unwantedSoftware"
+    ],
+    "incidentSeverity": [
+      "high",
+      "informational",
+      "low",
+      "medium",
+      "unknown",
+      "unknownFutureValue"
+    ],
+    "taskStatus": [
+      "completed",
+      "failed",
+      "inProgress",
+      "new",
+      "notSet",
+      "partiallyCompleted",
+      "skipped",
+      "unknownFutureValue"
+    ],
+    "thirdPartyWorkItemProvider": [
+      "serviceNow",
+      "unknownFutureValue"
+    ],
+    "thirdPartyWorkItemType": [
+      "incident",
       "unknownFutureValue"
     ]
   },

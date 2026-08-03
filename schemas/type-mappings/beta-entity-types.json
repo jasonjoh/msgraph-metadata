@@ -427,7 +427,8 @@
         "definitions",
         "historyDefinitions",
         "instances",
-        "policy"
+        "policy",
+        "unified"
       ],
       "properties": []
     },
@@ -4410,6 +4411,7 @@
         "imageDisplayName",
         "isDisasterRecoveryActive",
         "lastLoginResult",
+        "lastLogoffDateTime",
         "lastModifiedDateTime",
         "lastRemoteActionResult",
         "managedDeviceId",
@@ -6416,7 +6418,8 @@
         "displayDeviceName",
         "heightAdjustableState",
         "mailboxDetails",
-        "mode"
+        "mode",
+        "servicePlans"
       ]
     },
     "detectedApp": {
@@ -8102,6 +8105,7 @@
         "recommendationConfiguration",
         "recommendations",
         "recovery",
+        "remoteTenantGroups",
         "sharedEmailDomains",
         "subscriptions",
         "templates",
@@ -9527,6 +9531,7 @@
       "properties": [
         "acl",
         "content",
+        "informationProtectionLabel",
         "properties"
       ]
     },
@@ -13649,6 +13654,34 @@
         "isEnabledForAllMicrosoftApplications"
       ]
     },
+    "microsoftAppsFileStorageContainerAppUsage": {
+      "navigationProperties": [],
+      "properties": [
+        "activeContainerCount",
+        "activeStorageUsedInBytes",
+        "appId",
+        "displayName"
+      ]
+    },
+    "microsoftAppsFileStorageContainerGeoUsage": {
+      "navigationProperties": [
+        "usageByApp"
+      ],
+      "properties": [
+        "activeContainerCount",
+        "activeStorageUsedInBytes",
+        "dataLocationCode"
+      ]
+    },
+    "microsoftAppsFileStorageContainerUsage": {
+      "navigationProperties": [
+        "usageByDataLocation"
+      ],
+      "properties": [
+        "totalActiveContainerCount",
+        "totalActiveStorageUsedInBytes"
+      ]
+    },
     "microsoftAuthenticatorAuthenticationMethod": {
       "navigationProperties": [
         "device"
@@ -15603,6 +15636,7 @@
         "label",
         "parentId",
         "phone",
+        "placeId",
         "tags"
       ]
     },
@@ -17110,6 +17144,16 @@
         "isRemoteDesktopProtocolEnabled"
       ]
     },
+    "remoteTenantGroup": {
+      "navigationProperties": [],
+      "properties": [
+        "remoteGroupDisplayName",
+        "remoteGroupId",
+        "remoteTenantDisplayName",
+        "remoteTenantId",
+        "remoteTenantPrimaryDomain"
+      ]
+    },
     "removeFromLobbyOperation": {
       "navigationProperties": [],
       "properties": []
@@ -17129,6 +17173,7 @@
         "dailyPrintUsageSummariesByUser",
         "healthMonitoring",
         "identityAnalytics",
+        "microsoftAppsFileStorageContainerUsageSummary",
         "monthlyPrintUsageByPrinter",
         "monthlyPrintUsageByUser",
         "monthlyPrintUsageSummariesByPrinter",
@@ -17484,7 +17529,6 @@
         "floorNumber",
         "isTeamsEnabled",
         "nickname",
-        "placeId",
         "teamsEnabledState",
         "videoDeviceName"
       ]
@@ -17990,6 +18034,7 @@
         "alerts_v2",
         "attackSimulation",
         "auditLog",
+        "caseManagement",
         "cases",
         "cloudAppSecurityProfiles",
         "collaboration",
@@ -20738,12 +20783,22 @@
         "roleDefinitionId"
       ]
     },
+    "unifiedRoot": {
+      "navigationProperties": [
+        "decisions",
+        "definitions",
+        "instances"
+      ],
+      "properties": []
+    },
     "unifiedStorageQuota": {
       "navigationProperties": [
         "services"
       ],
       "properties": [
         "deleted",
+        "familyMembersUsage",
+        "isPooledStorageEnabled",
         "manageWebUrl",
         "remaining",
         "state",
@@ -22183,6 +22238,7 @@
         "includeTargets"
       ],
       "properties": [
+        "callerIdNumber",
         "isOfficePhoneAllowed"
       ]
     },
@@ -22203,6 +22259,7 @@
     "vppToken": {
       "navigationProperties": [],
       "properties": [
+        "appleDeviceAppDeliveryProtocolType",
         "appleId",
         "automaticallyUpdateApps",
         "claimTokenManagementFromExternalMdm",
@@ -24843,8 +24900,7 @@
         "floorLabel",
         "floorNumber",
         "mode",
-        "nickname",
-        "placeId"
+        "nickname"
       ]
     },
     "x509CertificateAuthenticationMethodConfiguration": {
@@ -24975,6 +25031,7 @@
         "allottedUnits",
         "assignableTo",
         "consumedUnits",
+        "externalServiceIdentifier",
         "services",
         "skuId",
         "skuPartNumber",
@@ -25008,6 +25065,7 @@
         "assignments"
       ],
       "properties": [
+        "externalServiceIdentifier",
         "services",
         "skuId",
         "skuPartNumber"
@@ -25424,6 +25482,7 @@
       "properties": [
         "acl",
         "content",
+        "informationProtectionLabel",
         "properties"
       ]
     },
@@ -27492,6 +27551,12 @@
         "status"
       ]
     },
+    "caseManagementRoot": {
+      "navigationProperties": [
+        "cases"
+      ],
+      "properties": []
+    },
     "caseOperation": {
       "navigationProperties": [],
       "properties": [
@@ -28728,6 +28793,164 @@
       ]
     }
   },
+  "microsoft.graph.security.caseManagement": {
+    "activity": {
+      "navigationProperties": [],
+      "properties": []
+    },
+    "attachment": {
+      "navigationProperties": [],
+      "properties": [
+        "content",
+        "description",
+        "displayName",
+        "fileExtension",
+        "fileSize",
+        "origin",
+        "scanResult"
+      ]
+    },
+    "auditLog": {
+      "navigationProperties": [],
+      "properties": [
+        "action",
+        "details",
+        "modifiedProperties"
+      ]
+    },
+    "case": {
+      "navigationProperties": [
+        "activities",
+        "attachments",
+        "relations",
+        "tasks"
+      ],
+      "properties": [
+        "customFields",
+        "displayName",
+        "status"
+      ]
+    },
+    "caseManagementEntity": {
+      "navigationProperties": [],
+      "properties": [
+        "createdBy",
+        "createdDateTime",
+        "lastModifiedBy",
+        "lastModifiedDateTime"
+      ]
+    },
+    "comment": {
+      "navigationProperties": [],
+      "properties": [
+        "message"
+      ]
+    },
+    "exposureCase": {
+      "navigationProperties": [],
+      "properties": [
+        "assignedTo",
+        "automation",
+        "description",
+        "dueDateTime",
+        "emailNotificationRecipients",
+        "github",
+        "isGracePeriodEnabled",
+        "priority",
+        "seemplicity",
+        "thirdPartyWorkItem"
+      ]
+    },
+    "genericCase": {
+      "navigationProperties": [],
+      "properties": [
+        "assignedTo",
+        "closingNotes",
+        "description",
+        "dueDateTime",
+        "priority"
+      ]
+    },
+    "incidentCase": {
+      "navigationProperties": [],
+      "properties": [
+        "aiAgentIds",
+        "alertCounts",
+        "alertPolicyIds",
+        "assignedTo",
+        "associatedThreatIds",
+        "categories",
+        "classification",
+        "cloudScopes",
+        "dataSensitivityLabels",
+        "dataStreams",
+        "detectionSources",
+        "determination",
+        "dueDateTime",
+        "emailNotificationRecipients",
+        "firstEventTime",
+        "impactedAssets",
+        "incidentId",
+        "incidentWebUrl",
+        "investigation",
+        "investigationIds",
+        "investigationStates",
+        "lastEventTime",
+        "machineGroupIds",
+        "osPlatforms",
+        "policyNames",
+        "priorityScore",
+        "productNames",
+        "redirectCaseId",
+        "redirectIncidentId",
+        "serviceSources",
+        "severity",
+        "summary",
+        "systemTags",
+        "topRiskScore",
+        "workspaceIds"
+      ]
+    },
+    "incidentRelation": {
+      "navigationProperties": [],
+      "properties": []
+    },
+    "recommendationRelation": {
+      "navigationProperties": [],
+      "properties": [
+        "recommendationType",
+        "resourceGroupName",
+        "subscriptionId"
+      ]
+    },
+    "relation": {
+      "navigationProperties": [],
+      "properties": [
+        "relatedResourceId"
+      ]
+    },
+    "task": {
+      "navigationProperties": [],
+      "properties": [
+        "assignedTo",
+        "category",
+        "closingNotes",
+        "description",
+        "displayName",
+        "dueDateTime",
+        "priority",
+        "status"
+      ]
+    },
+    "workspaceIndicatorRelation": {
+      "navigationProperties": [],
+      "properties": [
+        "resourceGroupName",
+        "subscriptionId",
+        "workspaceName"
+      ]
+    }
+  },
   "microsoft.graph.security.dlp": {
     "baseAuditRecord": {
       "navigationProperties": [],
@@ -28951,9 +29174,18 @@
     }
   },
   "microsoft.graph.tenantGovernanceServices": {
+    "actionStep": {
+      "navigationProperties": [],
+      "properties": [
+        "actionUrl",
+        "stepNumber",
+        "text"
+      ]
+    },
     "b2bRegistrationMetrics": {
       "navigationProperties": [
         "initial",
+        "investigationHints",
         "recent"
       ],
       "properties": []
@@ -28981,6 +29213,7 @@
     "b2BSignInActivityMetrics": {
       "navigationProperties": [
         "initial",
+        "investigationHints",
         "recent"
       ],
       "properties": []
@@ -29010,6 +29243,7 @@
     "billingMetrics": {
       "navigationProperties": [
         "initial",
+        "investigationHints",
         "recent"
       ],
       "properties": []
@@ -29104,6 +29338,7 @@
     "multiTenantApplicationMetrics": {
       "navigationProperties": [
         "initial",
+        "investigationHints",
         "recent"
       ],
       "properties": []
